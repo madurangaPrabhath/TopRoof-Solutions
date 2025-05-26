@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProductCard from '../components/ProductCard';
-//import HeroImage from '../assets/images/hero.jpg';
+import HeroImage from '../assets/images/hero.jpg';
 
 const Home = () => {
     const featuredProducts = [
