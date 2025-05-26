@@ -1,57 +1,65 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import ProductCard from '../components/ProductCard';
+import Newsletter from '../components/Newsletter';
+import Testimonials from '../components/Testimonials';
+import ProductSection from '../components/ProductSection';
 
 const Home = () => {
-    const featuredProducts = [
-        {
-            id: 1,
-            name: 'Galvanized Roofing Sheet',
-            price: 4500,
-            image: 'roofing-sheet.jpg'
-        },
-        {
-            id: 2,
-            name: 'PVC Gutter System',
-            price: 3800,
-            image: 'gutter-system.jpg'
-        },
-        {
-            id: 3,
-            name: 'Roofing Nails',
-            price: 1200,
-            image: 'roofing-nails.jpg'
-        }
-    ];
+  return (
+    <div className="home-page">
+      <Header />
+      
+      {/* Hero Section */}
+      <section className="hero">
+        <h1>WELCOME TO<br/>TopRoof Solutions</h1>
+      </section>
 
-    return (
-        <div className="home-page">
-            <Header />
-            
-            <section className="hero">
-                <div className="hero-content">
-                    <h1>Premium Roofing Solutions for Sri Lanka</h1>
-                    <p>High-quality gutters and roofing sheets for all your construction needs</p>
-                    <Link to="/products" className="cta-button">Shop Now</Link>
-                </div>
-            </section>
-            
-            <section className="featured-products">
-                <div className="container">
-                    <h2>Top Selling Products</h2>
-                    <div className="product-grid">
-                        {featuredProducts.map(product => (
-                            <ProductCard key={product.id} product={product} />
-                        ))}
-                    </div>
-                </div>
-            </section>
-            
-            <Footer />
-        </div>
-    );
+      {/* Roofing Products */}
+      <ProductSection 
+        title="Roofing Products"
+        category="roofing"
+      />
+
+      {/* Top Selling Products */}
+      <ProductSection 
+        title="Top Selling Products"
+        category="top-selling"
+      />
+
+      {/* About Us */}
+      <section className="about-section">
+        <h2>About Us</h2>
+        {/* Content will go here */}
+      </section>
+
+      {/* Accessories Products */}
+      <ProductSection 
+        title="Accessories Products"
+        category="accessories"
+      />
+
+      {/* Showrooms */}
+      <section className="showrooms-section">
+        <h2>Showrooms</h2>
+        {/* Content will go here */}
+      </section>
+
+      {/* Testimonials */}
+      <Testimonials />
+
+      {/* Our Supporters */}
+      <section className="supporters-section">
+        <h2>Our Supporters</h2>
+        {/* Logos will go here */}
+      </section>
+
+      {/* Newsletter */}
+      <Newsletter />
+
+      <Footer />
+    </div>
+  );
 };
 
 export default Home;
