@@ -1,12 +1,21 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { FaCartPlus } from 'react-icons/fa';
 
 const ProductCard = ({ product }) => {
     return (
         <div className="product-card">
-            <img src={product.image} alt={product.name} />
-            <h3>{product.name}</h3>
-            <p className="price">LKR {product.price}</p>
-            <button className="add-to-cart">Add to Cart</button>
+            <div className="product-image">
+                <img src={`/images/products/${product.image}`} alt={product.name} />
+                <button className="quick-view">Quick View</button>
+            </div>
+            <div className="product-info">
+                <h3>{product.name}</h3>
+                <p className="price">LKR {product.price.toLocaleString()}</p>
+                <button className="add-to-cart">
+                    <FaCartPlus /> Add to Cart
+                </button>
+            </div>
         </div>
     );
 };
