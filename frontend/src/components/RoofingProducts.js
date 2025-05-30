@@ -1,5 +1,5 @@
 import React from 'react';
-import './RoofingProducts.css';
+import '../assets/styles/RoofingProducts.css';
 
 const products = [
   { name: 'Caulfield Green', price: 'Rs.2,000+', image: '/assets/caulfield-green.jpg' },
