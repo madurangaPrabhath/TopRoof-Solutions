@@ -1,11 +1,17 @@
 import React from 'react';
 import '../assets/styles/TopSellingProducts.css';
 
+// Import your local product images
+import ColorbondSheet from '../assets/images/colorbond-roofing-sheet.jpg';
+import SquareGutter from '../assets/images/square-gutter.jpg';
+import DownspoutPipe from '../assets/images/downspout-pipe.jpg';
+import RoofRidgeCap from '../assets/images/roof-ridge-cap.jpg';
+
 const topSelling = [
-  { name: 'Colorbond Roofing Sheet', price: 'Rs.2,200+', image: 'https://via.placeholder.com/200x150' },
-  { name: 'Square Gutter', price: 'Rs.1,500+', image: 'https://via.placeholder.com/200x150' },
-  { name: 'Downspout Pipe', price: 'Rs.950+', image: 'https://via.placeholder.com/200x150' },
-  { name: 'Roof Ridge Cap', price: 'Rs.1,800+', image: 'https://via.placeholder.com/200x150' },
+  { name: 'Colorbond Roofing Sheet', price: 'Rs.2,200+', image: ColorbondSheet },
+  { name: 'Square Gutter', price: 'Rs.1,500+', image: SquareGutter },
+  { name: 'Downspout Pipe', price: 'Rs.950+', image: DownspoutPipe },
+  { name: 'Roof Ridge Cap', price: 'Rs.1,800+', image: RoofRidgeCap },
 ];
 
 const TopSellingProducts = () => {

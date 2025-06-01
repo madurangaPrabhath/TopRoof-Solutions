@@ -1,60 +1,68 @@
 .roofing-products {
   padding: 50px 30px;
-  background-color: #f3f3f3;
+  background-color: #f2f4f8;
   text-align: center;
 }
 
 .roofing-products h2 {
-  font-size: 2rem;
+  font-size: 32px;
+  font-weight: bold;
   margin-bottom: 30px;
-  position: relative;
-  display: inline-block;
+  color: #0f3c78;
 }
 
-.roofing-products h2::after {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 4px;
-  background-color: #ffc107;
-  margin: 10px auto 0;
-  border-radius: 2px;
-}
-
-.product-grid {
+.roofing-grid {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 30px;
-  margin-top: 20px;
 }
 
-.product-card {
-  background-color: white;
-  border-radius: 10px;
-  padding: 15px;
-  width: 200px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out;
+.roofing-card {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  width: 220px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
 }
 
-.product-card:hover {
+.roofing-card:hover {
   transform: translateY(-5px);
 }
 
-.product-card img {
+.roofing-card img {
   width: 100%;
-  height: auto;
-  object-fit: contain;
-  margin-bottom: 10px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 15px;
 }
 
-.product-card h3 {
+.roofing-card h3 {
   font-size: 1rem;
-  margin: 5px 0;
+  margin-bottom: 5px;
+  color: #333;
 }
 
-.product-card p {
-  color: #555;
+.roofing-card p {
   font-weight: bold;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.roofing-card button {
+  background-color: #0f3c78;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.roofing-card button:hover {
+  background-color: #0c2f5d;
 }

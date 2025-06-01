@@ -10,19 +10,20 @@ const products = [
   { name: 'Caulfield Green', price: 'Rs.2,000+', image: CaulfieldGreen },
   { name: 'Bronze', price: 'Rs.7,500+', image: Bronze },
   { name: 'Autumn Red', price: 'Rs.2,210+', image: AutumnRed },
-  { name: 'Colorup Roof Tile', price: 'Rs.4,100+', image: RoofTile },
+  { name: 'Roof Tile', price: 'Rs.4,100+', image: RoofTile },
 ];
 
 const RoofingProducts = () => {
   return (
     <section className="roofing-products">
       <h2>Roofing Products</h2>
-      <div className="product-grid">
-        {products.map((product, idx) => (
-          <div className="product-card" key={idx}>
+      <div className="roofing-grid">
+        {products.map((product, index) => (
+          <div className="roofing-card" key={index}>
             <img src={product.image} alt={product.name} />
             <h3>{product.name}</h3>
             <p>{product.price}</p>
+            <button>Add to Cart</button>
           </div>
         ))}
       </div>
