@@ -16,9 +16,9 @@ const Home = () => {
       <RoofingProducts />
       <TopSellingProducts />
       <AboutUs />
-      {/* <AccessoriesProducts />
+      <AccessoriesProducts />
       <Showrooms />
-      <Testimonials />
+      {/* <Testimonials />
       <Supporters />
       <NewsletterSection /> */}
     </div>

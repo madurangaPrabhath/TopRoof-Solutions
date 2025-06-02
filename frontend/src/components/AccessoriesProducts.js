@@ -16,7 +16,7 @@ const accessories = [
 const AccessoriesProducts = () => {
   return (
     <section className="accessories-section">
-      <h2>Roofing Accessories</h2>
+      <h2>Accessories Products</h2>
       <div className="accessories-grid">
         {accessories.map((item, index) => (
           <div className="accessory-box" key={index}>

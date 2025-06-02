@@ -1,0 +1,112 @@
+.showrooms-section {
+  background-color: #ffffff;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1a1a1a;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.section-title .underline {
+  display: block;
+  width: 80px;
+  height: 5px;
+  background-color: #ffeb99;
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+.showrooms-grid {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: nowrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.showroom-card {
+  flex: 1;
+  min-width: 280px;
+  border-radius: 12px;
+  padding: 25px 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  transition: transform 0.3s ease;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1rem;
+}
+
+.showroom-card h3 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+
+.highlight-title {
+  color: #ffd700; /* Bright yellow for Kadawatha name */
+}
+
+.highlight-text {
+  color: #ffffff; /* White details inside Kadawatha card */
+}
+
+.showroom-card p {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.showroom-card a {
+  color: #0a58ca;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.highlight-card a {
+  color: #87cefa;
+}
+
+.showroom-card:hover {
+  transform: translateY(-4px);
+}
+
+.light-card {
+  background-color: #a8ecf0;
+  color: #000;
+}
+
+.highlight-card {
+  background-color: #05295f;
+}
+
+.contact-button {
+  margin-top: 14px;
+  background-color: #0a58ca;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.highlight-card .contact-button {
+  background-color: #4e91ff;
+}
+
+.contact-button:hover {
+  background-color: #004ba0;
+}
+
+i.fas {
+  font-size: 1rem;
+  color: inherit;
+}
