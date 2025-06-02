@@ -25,13 +25,13 @@
   display: flex;
   justify-content: center;
   gap: 30px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .showroom-card {
-  flex: 1;
+  flex: 1 1 300px;
   min-width: 280px;
   border-radius: 12px;
   padding: 25px 20px;
@@ -109,4 +109,33 @@
 i.fas {
   font-size: 1rem;
   color: inherit;
+}
+
+@media screen and (max-width: 992px) {
+  .showrooms-grid {
+    gap: 20px;
+  }
+
+  .showroom-card {
+    flex: 1 1 45%; /* two cards per row on tablets */
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .showroom-card {
+    flex: 1 1 100%; /* full width on small screens */
+    max-width: 100%;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .showroom-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .contact-button {
+    width: 100%;
+  }
 }

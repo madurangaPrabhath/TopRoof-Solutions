@@ -13,7 +13,7 @@ const showrooms = [
     name: 'Kadawatha',
     address: 'No. 585/3A, Eldeniya, Kadawatha.',
     tel: ['0112 928 743', '0773 642 939'],
-    email: 'is.@roofing.lk',
+    email: 'info.@roofing.lk',
     theme: 'highlight',
   },
   {
