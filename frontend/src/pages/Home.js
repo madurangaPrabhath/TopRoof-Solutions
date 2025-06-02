@@ -15,8 +15,8 @@ const Home = () => {
       <HeroSection />
       <RoofingProducts />
       <TopSellingProducts />
-      {/* <AboutUs />
-      <AccessoriesProducts />
+      <AboutUs />
+      {/* <AccessoriesProducts />
       <Showrooms />
       <Testimonials />
       <Supporters />
