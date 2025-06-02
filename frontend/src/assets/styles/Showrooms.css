@@ -49,11 +49,11 @@
 }
 
 .highlight-title {
-  color: #ffd700; /* Bright yellow for Kadawatha name */
+  color: #ffd700;
 }
 
 .highlight-text {
-  color: #ffffff; /* White details inside Kadawatha card */
+  color: #ffffff;
 }
 
 .showroom-card p {
@@ -117,13 +117,13 @@ i.fas {
   }
 
   .showroom-card {
-    flex: 1 1 45%; /* two cards per row on tablets */
+    flex: 1 1 45%;
   }
 }
 
 @media screen and (max-width: 600px) {
   .showroom-card {
-    flex: 1 1 100%; /* full width on small screens */
+    flex: 1 1 100%;
     max-width: 100%;
   }
 
