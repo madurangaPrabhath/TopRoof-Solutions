@@ -21,6 +21,7 @@ const Home = () => {
       <Testimonials />
       <Supporters />
       <NewsletterSection />
+      <Footer.js />
     </div>
   );
 };
