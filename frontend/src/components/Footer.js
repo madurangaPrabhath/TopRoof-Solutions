@@ -7,6 +7,7 @@ const Footer = () => {
     <footer className="footer-section">
       <div className="footer-top">
         <div className="footer-col brand">
+          <img src="/assets/logo.png" alt="TopRoof Logo" className="footer-logo" />
           <h3>TopRoof Solutions</h3>
           <p>Head Office<br />752, Baseline Road,<br />Colombo 09,<br />Sri Lanka</p>
         </div>
