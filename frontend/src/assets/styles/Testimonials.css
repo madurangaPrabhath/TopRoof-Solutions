@@ -114,3 +114,78 @@
 .dot.active {
   background-color: #fff;
 }
+
+@media (max-width: 1024px) {
+  .testimonial-cards {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .testimonial-card {
+    flex: 0 1 45%;
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .testimonial-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .testimonial-card {
+    width: 90%;
+    max-width: 500px;
+  }
+
+  .testimonial-title {
+    font-size: 1.5rem;
+  }
+
+  .quote {
+    font-size: 1rem;
+  }
+
+  .testimonial-footer h4 {
+    font-size: 1rem;
+  }
+
+  .testimonial-footer p {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonial-section {
+    padding: 40px 10px;
+  }
+
+  .testimonial-title {
+    font-size: 1.25rem;
+  }
+
+  .testimonial-card {
+    padding: 20px;
+  }
+
+  .quote {
+    font-size: 0.95rem;
+  }
+
+  .testimonial-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .testimonial-footer img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .dot {
+    height: 8px;
+    width: 8px;
+  }
+}
