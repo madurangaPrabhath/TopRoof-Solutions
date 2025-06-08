@@ -1,5 +1,5 @@
 import React from 'react';
-//import '../assets/styles/NewsletterSection.css';
+import '../assets/styles/NewsletterSection.css';
 import { FaArrowRight } from 'react-icons/fa';
 
 const NewsletterSection = () => {
