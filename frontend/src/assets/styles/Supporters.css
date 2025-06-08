@@ -25,12 +25,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 40px;
+  gap: 60px;
   flex-wrap: wrap;
 }
 
 .supporters-logos img {
-  max-height: 80px;
+  max-height: 160px;
   object-fit: contain;
   transition: transform 0.3s ease;
 }
