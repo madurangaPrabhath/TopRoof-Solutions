@@ -26,6 +26,7 @@ const AccessoriesProducts = () => {
             <img src={item.image} alt={item.name} />
             <h3>{item.name}</h3>
             <p>{item.price}</p>
+            <button className="add-to-cart-btn">Add to Cart</button>
           </div>
         ))}
       </div>
