@@ -1,52 +1,85 @@
-.about-section {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 100vh;
+.accessories-section {
+  padding: 60px 20px;
+  background-color: #d7eaf8;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.section-title {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 40px;
+}
+
+.section-title h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.highlight-line {
+  width: 80px;
+  height: 6px;
+  background-color: #fcd34d;
+  border-radius: 3px;
+  margin: 8px auto 0;
+}
+
+.accessories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.accessory-box {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
-.about-overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+.accessory-box:hover {
+  transform: translateY(-5px);
+}
+
+.accessory-box img {
   width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 15px;
 }
 
-.about-wrapper {
-  max-width: 1000px;
-  width: 90%;
-  background: rgba(255, 255, 255, 0.75); /* semi-transparent white */
-  padding: 40px;
-  border-radius: 12px;
-  text-align: left;
-  color: #333;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  overflow-y: auto;
-  max-height: 90vh;
-}
-
-.about-wrapper h2 {
-  font-size: 2.2rem;
-  color: #0f3c78;
-  margin-bottom: 20px;
+.accessory-box h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 10px 0 5px;
+  color: #000;
   text-align: center;
 }
 
-.about-wrapper h3 {
-  font-size: 1.4rem;
-  margin-top: 30px;
+.accessory-box p {
+  font-size: 0.95rem;
+  color: #000;
   margin-bottom: 10px;
-  color: #0f3c78;
 }
 
-.about-wrapper p {
-  font-size: 1.05rem;
-  line-height: 1.6;
-  margin-bottom: 15px;
+.add-to-cart-btn {
+  background-color: #083f7c;
+  color: white;
+  font-size: 14px;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #092957;
 }
