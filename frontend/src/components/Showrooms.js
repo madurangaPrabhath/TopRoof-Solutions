@@ -57,7 +57,12 @@ const Showrooms = () => {
               <i className="fas fa-envelope"></i>{' '}
               <a href={`mailto:${room.email}`}>{room.email}</a>
             </p>
-            <button className="contact-button">Contact</button>
+            <a
+              className="contact-button"
+              href={`mailto:${room.email}`}
+            >
+              Contact
+            </a>
           </div>
         ))}
       </div>
