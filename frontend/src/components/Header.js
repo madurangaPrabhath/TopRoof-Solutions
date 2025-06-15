@@ -1,5 +1,7 @@
 import React from 'react';
 import '../assets/styles/Header.css';
+import { Link } from 'react-router-dom';
+import { FaShoppingCart } from 'react-icons/fa';
 import Logo from '../assets/images/logo.png';
 
 const Header = () => {
