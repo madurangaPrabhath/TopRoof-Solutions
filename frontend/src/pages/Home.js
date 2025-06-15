@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from '../components/Header';
 import HeroSection from '../components/HeroSection';
 import RoofingProducts from '../components/RoofingProducts';
 import TopSellingProducts from '../components/TopSellingProducts';
@@ -13,6 +14,7 @@ import Footer from '../components/Footer';
 const Home = () => {
   return (
     <div>
+      <Header />
       <HeroSection />
       <RoofingProducts />
       <TopSellingProducts />

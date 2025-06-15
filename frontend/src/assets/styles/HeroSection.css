@@ -54,15 +54,17 @@
 }
 
 .hero-image {
-  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width: 100%;
 }
 
 .hero-image img {
-  width: 500px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  object-fit: contain;
   border-radius: 10px;
 }
 
@@ -84,5 +86,11 @@
   .hero-text p {
     text-align: center;
     font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-image img {
+    max-width: 90%;
   }
 }
