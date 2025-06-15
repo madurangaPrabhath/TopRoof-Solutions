@@ -22,9 +22,9 @@ const AccessoriesProducts = () => {
 
   return (
     <section className="accessories-section">
-      <div className="section-title">
+      <div className="section-heading">
         <h2>Accessories Products</h2>
-        <div className="highlight-line"></div>
+        <div className="underline"></div>
       </div>
       <div className="accessories-grid">
         {accessories.map((item, index) => (
@@ -32,9 +32,7 @@ const AccessoriesProducts = () => {
             <img src={item.image} alt={item.name} />
             <h3>{item.name}</h3>
             <p>{item.price}</p>
-            <button className="add-to-cart-btn" onClick={handleAddToCart}>
-              Add to Cart
-            </button>
+            <button onClick={handleAddToCart}>Add to Cart</button>
           </div>
         ))}
       </div>
