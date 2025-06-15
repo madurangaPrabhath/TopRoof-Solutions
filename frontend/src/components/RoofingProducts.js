@@ -1,5 +1,6 @@
 import React from 'react';
 import '../assets/styles/RoofingProducts.css';
+import { useNavigate } from 'react-router-dom';
 
 import CaulfieldGreen from '../assets/images/caulfield-green.jpg';
 import Bronze from '../assets/images/bronze.jpg';
@@ -14,6 +15,12 @@ const products = [
 ];
 
 const RoofingProducts = () => {
+  const navigate = useNavigate();
+
+  const handleAddToCart = () => {
+    navigate('/cart');
+  };
+
   return (
     <section className="roofing-products">
       <div className="section-heading">
@@ -26,7 +33,7 @@ const RoofingProducts = () => {
             <img src={product.image} alt={product.name} />
             <h3>{product.name}</h3>
             <p>{product.price}</p>
-            <button>Add to Cart</button>
+            <button onClick={handleAddToCart}>Add to Cart</button>
           </div>
         ))}
       </div>

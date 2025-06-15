@@ -1,5 +1,6 @@
 import React from 'react';
 import '../assets/styles/TopSellingProducts.css';
+import { useNavigate } from 'react-router-dom';
 
 import CementRoofingSheet from '../assets/images/cement-roofing-sheet.jpg';
 import SquareGutter from '../assets/images/easy-sheet.jpg';
@@ -14,6 +15,12 @@ const topSelling = [
 ];
 
 const TopSellingProducts = () => {
+  const navigate = useNavigate();
+
+  const handleAddToCart = () => {
+    navigate('/cart');
+  };
+
   return (
     <section className="top-selling-section">
       <div className="section-heading">
@@ -26,7 +33,7 @@ const TopSellingProducts = () => {
             <img src={item.image} alt={item.name} />
             <h3>{item.name}</h3>
             <p>{item.price}</p>
-            <button>Add to Cart</button>
+            <button onClick={handleAddToCart}>Add to Cart</button>
           </div>
         ))}
       </div>
