@@ -42,7 +42,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div className="footer-col">
+        <div className="footer-col" id="contact">
           <h4>Need help</h4>
           <p>+94 77 255 0770</p>
           <p>Monday – Friday: 9:00AM – 5:00PM</p>

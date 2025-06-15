@@ -18,13 +18,17 @@ const Home = () => {
       <HeroSection />
       <RoofingProducts />
       <TopSellingProducts />
-      <AboutUs />
+      <section id="about">
+        <AboutUs />
+      </section>
       <AccessoriesProducts />
       <Showrooms />
       <Testimonials />
       <Supporters />
       <NewsletterSection />
-      <Footer />
+      <section id="contact">
+        <Footer />
+      </section>
     </div>
   );
 };
