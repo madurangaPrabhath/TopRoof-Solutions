@@ -18,7 +18,7 @@
 .section-heading .underline {
   width: 90px;
   height: 5px;
-  background-color: #f7c948; /* Yellow bar */
+  background-color: #f7c948;
   margin: 0 auto;
   border-radius: 5px;
 }

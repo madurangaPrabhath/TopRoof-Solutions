@@ -17,7 +17,7 @@ const RoofingProducts = () => {
   return (
     <section className="roofing-products">
       <div className="section-heading">
-        <h2>Top Selling Products</h2>
+        <h2>Roofing Products</h2>
         <div className="underline"></div>
       </div>
       <div className="roofing-grid">
