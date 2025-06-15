@@ -1,6 +1,6 @@
 .supporters-section {
   background-color: #ffffff;
-  padding: 60px 20px;
+  padding: 145px 20px;
   text-align: center;
 }
 
@@ -25,12 +25,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 60px;
+  gap: 110px;
   flex-wrap: wrap;
 }
 
 .supporters-logos img {
-  max-height: 160px;
+  max-height: 200px;
   object-fit: contain;
   transition: transform 0.3s ease;
 }
