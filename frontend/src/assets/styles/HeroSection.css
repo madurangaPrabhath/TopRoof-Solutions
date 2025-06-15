@@ -5,6 +5,7 @@
   background-color: #002e6e;
   color: white;
   padding: 60px 40px;
+  min-height: calc(85vh - 100px);
   flex-wrap: wrap;
   background-image: url('../images/wave-bg.jpg');
   background-repeat: no-repeat;
@@ -54,10 +55,13 @@
 }
 
 .hero-image {
+  flex: 1;
+  min-width: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 100%;
+  position: relative;
+  perspective: 1000px;
 }
 
 .hero-image img {
@@ -65,7 +69,43 @@
   max-width: 500px;
   height: auto;
   object-fit: contain;
-  border-radius: 10px;
+  border-radius: 12px;
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(59, 130, 246, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transform: rotateY(-5deg) rotateX(2deg);
+  transition: all 0.5s ease;
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+  animation: float 3s ease-in-out infinite;
+}
+
+.hero-image img:hover {
+  transform: rotateY(0) rotateX(0) scale(1.02);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(59, 130, 246, 0.3);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: rotateY(-5deg) rotateX(2deg) translateY(0);
+  }
+  50% {
+    transform: rotateY(-5deg) rotateX(2deg) translateY(-15px);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-image img {
+    max-width: 90%;
+    transform: none;
+    animation: none;
+  }
+  
+  .hero-image img:hover {
+    transform: none;
+  }
 }
 
 @media (max-width: 768px) {
