@@ -7,7 +7,7 @@ const NewsletterSection = () => {
     <section className="newsletter-section">
       <div className="newsletter-container">
         <h2 className="newsletter-heading">
-          Join our newsletter and get a discount for your first order
+          Join us and get a discount for your first order
         </h2>
         <a href="/products" className="try-button">
           TRY NOW <FaArrowRight />
