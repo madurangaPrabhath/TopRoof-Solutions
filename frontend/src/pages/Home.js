@@ -28,7 +28,6 @@ const Home = () => {
       <section id="accessories-products">
         <AccessoriesProducts />
       </section>
-      <AccessoriesProducts />
       <section id="showrooms">
         <Showrooms />
       </section>
