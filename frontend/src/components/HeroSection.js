@@ -1,5 +1,6 @@
 import React from 'react';
 import '../assets/styles/HeroSection.css';
+import Hero from "../assets/images/hero.jpg";
 
 function HeroSection() {
   return (
@@ -12,14 +13,14 @@ function HeroSection() {
         <p>
           Your one-stop online shop for premium gutters, roofing sheets, and construction
           accessories in Sri Lanka. Explore a wide range of high-quality roofing products, all at
-          your fingertips. Easy shopping, secure payment, and fast delivery — making your roofing
+          your fingertips. Easy shopping, secure payment, and fast delivery making your roofing
           projects simpler and more efficient.
           <br />Start shopping now!
         </p>
         <a href="/products" className="cta-button">Start shopping now!</a>
       </div>
       <div className="hero-image">
-        <img src="/assets/hero-image.png" alt="Roof Design" />
+        <img src={Hero} alt="Roof Design" />
       </div>
     </section>
   );

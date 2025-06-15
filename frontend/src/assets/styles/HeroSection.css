@@ -1,34 +1,40 @@
 .hero-section {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  background-color: #063469;
+  align-items: center;
+  background-color: #002e6e;
+  color: white;
   padding: 60px 40px;
   flex-wrap: wrap;
-  color: white;
+  background-image: url('../images/wave-bg.jpg');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: cover;
 }
 
 .hero-text {
   flex: 1;
-  min-width: 320px;
-  max-width: 600px;
+  min-width: 300px;
+  padding-right: 30px;
 }
 
 .hero-text h1 {
-  font-size: 2.8rem;
+  font-size: 3.5rem;
   font-weight: 800;
-  line-height: 1.2;
   margin-bottom: 20px;
-}
+  line-height: 1.2;
+  color: white;
+  text-align: left;
 
-.hero-text h1 span {
-  color: #f0f2f5;
+  text-shadow: 
+    2px 2px 6px rgba(0, 0, 0, 0.4),
+    0 0 10px rgba(255, 255, 255, 0.1);
 }
 
 .hero-text p {
   font-size: 1rem;
+  margin-bottom: 20px;
   line-height: 1.6;
-  margin-bottom: 30px;
 }
 
 .cta-button {
@@ -49,12 +55,34 @@
 
 .hero-image {
   flex: 1;
-  text-align: center;
-  min-width: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .hero-image img {
-  width: 100%;
-  max-width: 400px;
-  border-radius: 8px;
+  width: 500px;
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column-reverse;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .hero-text {
+    text-align: center;
+  }
+
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-text p {
+    text-align: center;
+    font-size: 0.95rem;
+  }
 }
