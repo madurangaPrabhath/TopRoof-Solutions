@@ -16,7 +16,10 @@ const products = [
 const RoofingProducts = () => {
   return (
     <section className="roofing-products">
-      <h2>Roofing Products</h2>
+      <div className="section-heading">
+        <h2>Top Selling Products</h2>
+        <div className="underline"></div>
+      </div>
       <div className="roofing-grid">
         {products.map((product, index) => (
           <div className="roofing-card" key={index}>
