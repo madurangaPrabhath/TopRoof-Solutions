@@ -4,10 +4,23 @@
   text-align: center;
 }
 
-.top-selling-section h2 {
-  font-size: 2rem;
-  color: #0f3c78;
+.section-heading {
   margin-bottom: 30px;
+}
+
+.section-heading h2 {
+  font-size: 2rem;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.section-heading .underline {
+  width: 90px;
+  height: 5px;
+  background-color: #f7c948; /* Yellow bar */
+  margin: 0 auto;
+  border-radius: 5px;
 }
 
 .top-selling-grid {

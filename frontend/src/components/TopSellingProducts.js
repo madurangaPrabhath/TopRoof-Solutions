@@ -16,7 +16,10 @@ const topSelling = [
 const TopSellingProducts = () => {
   return (
     <section className="top-selling-section">
-      <h2>Top Selling Products</h2>
+      <div className="section-heading">
+        <h2>Top Selling Products</h2>
+        <div className="underline"></div>
+      </div>
       <div className="top-selling-grid">
         {topSelling.map((item, index) => (
           <div className="top-product-box" key={index}>
