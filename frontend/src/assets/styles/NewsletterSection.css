@@ -15,19 +15,33 @@
 }
 
 .try-button {
-  background-color: #5895f3;
-  border: none;
-  padding: 15px 35px;
-  font-size: 1rem;
-  color: #fff;
-  border-radius: 10px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  padding: 20px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #007bff, #00b4d8);
+  border: none;
+  border-radius: 40px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(0, 123, 255, 0.4);
+  text-decoration: none;
 }
 
 .try-button:hover {
-  background-color: #417fe0;
+  background: linear-gradient(135deg, #0056b3, #0096c7);
+  box-shadow: 0 6px 18px rgba(0, 123, 255, 0.6);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.try-button svg {
+  transition: transform 0.3s ease;
+}
+
+.try-button:hover svg {
+  transform: translateX(5px);
 }
