@@ -1,37 +1,56 @@
 import React from 'react';
-import '../assets/styles/AccessoriesProducts.css';
+import '../assets/styles/AboutUs.css';
+import BackgroundImage from '../assets/images/about.jpg';
 
-import Accessory1 from '../assets/images/armour-terminal-ridge.jpg';
-import Accessory2 from '../assets/images/el-toro-frame.jpg';
-import Accessory3 from '../assets/images/gutter.jpg';
-import Accessory4 from '../assets/images/snow-white(ridge).jpg';
-
-const accessories = [
-  { name: 'Armour Terminal Ridge', price: 'Rs.990/=', image: Accessory1 },
-  { name: 'El-Toro Frame', price: 'Rs.1,500/=', image: Accessory2 },
-  { name: 'Gutter', price: 'Rs.1,100/=', image: Accessory3 },
-  { name: 'Snow White (Ridges)', price: 'Rs.870/=', image: Accessory4 },
-];
-
-const AccessoriesProducts = () => {
+const AboutUs = () => {
   return (
-    <section className="accessories-section">
-      <div className="section-title">
-        <h2>Accessories Products</h2>
-        <div className="highlight-line"></div>
-      </div>
-      <div className="accessories-grid">
-        {accessories.map((item, index) => (
-          <div className="accessory-box" key={index}>
-            <img src={item.image} alt={item.name} />
-            <h3>{item.name}</h3>
-            <p>{item.price}</p>
-            <button className="add-to-cart-btn">Add to Cart</button>
-          </div>
-        ))}
+    <section
+      className="about-us"
+      style={{ backgroundImage: `url(${BackgroundImage})` }}
+    >
+      <div className="overlay">
+        <div className="about-content">
+          <h1>About Us</h1>
+          <p>
+            At TopRoof Solutions, we are dedicated to transforming the way roofing materials are
+            distributed and accessed across Sri Lanka. As the country’s trusted online platform
+            for gutters, roofing sheets, downspouts, and related construction accessories,
+            our mission is simple: make high-quality roofing products available to everyone, everywhere.
+          </p>
+
+          <h2>Who We Are</h2>
+          <p>
+            TopRoof Solutions was founded with a vision to modernize the roofing industry in Sri Lanka.
+            We recognized a common challenge faced by contractors, homeowners, and builders: limited
+            access to a wide variety of roofing products in one place. That’s why we created this platform
+            to bring convenience, variety, and reliability to your roofing supply needs.
+          </p>
+
+          <h2>What We Offer</h2>
+          <p>
+            At TopRoof Solutions, we provide a convenient online platform for purchasing high-quality
+            gutters, roofing sheets, and accessories across Sri Lanka. With a wide product range,
+            secure payments, reliable delivery, and expert support, we make it easy for homeowners and
+            contractors to find everything they need in one place. Our mission is to simplify roofing
+            material distribution through technology, quality, and exceptional service.
+          </p>
+
+          <h2>Our Vision</h2>
+          <p>
+            To be Sri Lanka’s leading online destination for roofing and gutter products,
+            empowering construction professionals and homeowners through accessibility,
+            technology, and service excellence.
+          </p>
+
+          <p className="bottom-note">
+            Join the TopRoof community today and experience a smarter way to shop for roofing materials.
+            Whether you’re building your dream home or managing a construction project, we’re here to support
+            you every step of the way.
+          </p>
+        </div>
       </div>
     </section>
   );
 };
 
-export default AccessoriesProducts;
+export default AboutUs;

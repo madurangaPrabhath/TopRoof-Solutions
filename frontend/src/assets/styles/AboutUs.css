@@ -1,85 +1,61 @@
-.accessories-section {
-  padding: 60px 20px;
-  background-color: #d7eaf8;
-  text-align: center;
-  min-height: 100vh;
-}
-
-.section-title {
+.about-us {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   position: relative;
-  display: inline-block;
-  margin-bottom: 40px;
-}
-
-.section-title h2 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #222;
-}
-
-.highlight-line {
-  width: 80px;
-  height: 6px;
-  background-color: #fcd34d;
-  border-radius: 3px;
-  margin: 8px auto 0;
-}
-
-.accessories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 30px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.accessory-box {
-  background: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  min-height: 100vh;
+  padding: 60px 15px;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
-.accessory-box:hover {
-  transform: translateY(-5px);
-}
-
-.accessory-box img {
+.overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 40px 20px;
+  border-radius: 8px;
   width: 100%;
-  height: 150px;
-  object-fit: contain;
-  margin-bottom: 15px;
+  max-width: 1000px;
 }
 
-.accessory-box h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 10px 0 5px;
-  color: #000;
+.about-content {
   text-align: center;
+  color: #f2f2f2;
 }
 
-.accessory-box p {
-  font-size: 0.95rem;
-  color: #000;
-  margin-bottom: 10px;
+.about-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 25px;
 }
 
-.add-to-cart-btn {
-  background-color: #083f7c;
-  color: white;
-  font-size: 14px;
-  padding: 6px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.about-content h2 {
+  font-size: 1.6rem;
+  margin-top: 30px;
+  color: #ffffff;
 }
 
-.add-to-cart-btn:hover {
-  background-color: #092957;
+.about-content p {
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-top: 12px;
+  color: #e0e0e0;
+}
+
+.about-content .bottom-note {
+  margin-top: 30px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .about-content h1 {
+    font-size: 2rem;
+  }
+
+  .about-content h2 {
+    font-size: 1.3rem;
+  }
+
+  .about-content p {
+    font-size: 0.95rem;
+  }
 }
