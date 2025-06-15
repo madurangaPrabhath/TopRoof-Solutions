@@ -29,11 +29,13 @@ const TopSellingProducts = () => {
       </div>
       <div className="top-selling-grid">
         {topSelling.map((item, index) => (
-          <div className="top-product-box" key={index}>
-            <img src={item.image} alt={item.name} />
-            <h3>{item.name}</h3>
-            <p>{item.price}</p>
-            <button onClick={handleAddToCart}>Add to Cart</button>
+          <div className="top-product-card" key={index}>
+            <img src={item.image} alt={item.name} className="product-image" />
+            <h3 className="product-name">{item.name}</h3>
+            <p className="product-price">{item.price}</p>
+            <button className="add-to-cart-btn" onClick={handleAddToCart}>
+              Add to Cart
+            </button>
           </div>
         ))}
       </div>
