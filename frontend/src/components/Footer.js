@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import '../assets/styles/Footer.css';
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from 'react-icons/fa';
 import { IoGlobeOutline } from 'react-icons/io5';
@@ -26,19 +26,19 @@ const Footer = () => {
         <div className="footer-col">
           <h4>Product</h4>
           <ul>
-            <li><Link to="/roofing-products">Roofing Products</Link></li>
-            <li><Link to="/top-selling-products">Top Selling Products</Link></li>
-            <li><Link to="/accessories-products">Accessories Products</Link></li>
+            <li><HashLink smooth to="/#roofing-products">Roofing Products</HashLink></li>
+            <li><HashLink smooth to="/#top-selling-products">Top Selling Products</HashLink></li>
+            <li><HashLink smooth to="/#accessories-products">Accessories Products</HashLink></li>
           </ul>
         </div>
 
         <div className="footer-col">
           <h4>Company</h4>
           <ul>
-            <li><a href="#">About us</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">Help Center</a></li>
-            <li><a href="#">Showrooms</a></li>
+            <li><HashLink smooth to="/#about">About us</HashLink></li>
+            <li><HashLink smooth to="/#about">Careers</HashLink></li>
+            <li><HashLink smooth to="/#showrooms">Help Center</HashLink></li>
+            <li><HashLink smooth to="/#showrooms">Showrooms</HashLink></li>
           </ul>
         </div>
 
@@ -58,9 +58,15 @@ const Footer = () => {
         </div>
         <div className="footer-copy">©2025 TopRoof Solutions</div>
         <div className="footer-socials">
-          <FaFacebookF />
-          <FaTwitter />
-          <FaLinkedinIn />
+          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+            <FaFacebookF />
+          </a>
+          <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
+            <FaTwitter />
+          </a>
+          <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+            <FaLinkedinIn />
+          </a>
         </div>
       </div>
     </footer>

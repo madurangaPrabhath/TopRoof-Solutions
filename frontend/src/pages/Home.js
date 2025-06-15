@@ -16,13 +16,22 @@ const Home = () => {
     <div>
       <Header />
       <HeroSection />
-      <RoofingProducts />
-      <TopSellingProducts />
+      <section id="roofing-products">
+        <RoofingProducts />
+      </section>
+      <section id="top-selling-products">
+        <TopSellingProducts />
+      </section>
       <section id="about">
         <AboutUs />
       </section>
+      <section id="accessories-products">
+        <AccessoriesProducts />
+      </section>
       <AccessoriesProducts />
-      <Showrooms />
+      <section id="showrooms">
+        <Showrooms />
+      </section>
       <Testimonials />
       <Supporters />
       <NewsletterSection />
