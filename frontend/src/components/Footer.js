@@ -56,7 +56,7 @@ const Footer = () => {
           <IoGlobeOutline />
           <span>English</span>
         </div>
-        <div className="footer-copy">©2025 TopRoof Solutions</div>
+        <div className="footer-copy">Copyright © 2025 TopRoof Solutions</div>
         <div className="footer-socials">
           <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
             <FaFacebookF />
