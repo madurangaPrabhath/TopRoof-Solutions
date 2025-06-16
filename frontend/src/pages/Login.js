@@ -3,7 +3,7 @@ import '../assets/styles/Login.css';
 import Header from '../components/Header';
 import NewsletterSection from '../components/NewsletterSection';
 import Footer from '../components/Footer';
-
+import { Link } from 'react-router-dom';
 const Login = () => {
   return (
     <div>
@@ -15,7 +15,11 @@ const Login = () => {
           <input type="password" placeholder="Password" required />
           <button type="submit">Login</button>
         </form>
+        <p className="register-link">
+          Not registered? <Link to="/register">Register here</Link>
+        </p>
       </div>
+
       <NewsletterSection />
       <section id="contact">
         <Footer />
