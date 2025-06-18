@@ -9,6 +9,7 @@ import Cart from './pages/Cart';
 import RoofingProducts from './components/RoofingProducts';
 import TopSellingProducts from './components/TopSellingProducts';
 import AccessoriesProducts from './components/AccessoriesProducts';
+import AdminPanel from './pages/AdminPanel';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/roofing-products" element={<RoofingProducts />} />
         <Route path="/top-selling-products" element={<TopSellingProducts />} />
         <Route path="/accessories-products" element={<AccessoriesProducts />} />
+        <Route path="/admin" element={<AdminPanel />} />
       </Routes>
     </Router>
   );
