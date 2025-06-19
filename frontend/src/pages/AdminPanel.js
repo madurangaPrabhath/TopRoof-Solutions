@@ -10,34 +10,45 @@ const AdminPanel = () => {
   const [formData, setFormData] = useState({
     name: '', price: '', imageUrl: '', category: ''
   });
+  const [editingId, setEditingId] = useState(null);
 
   const PRODUCT_API = 'http://localhost:8080/api/products';
   const USER_API = 'http://localhost:8080/api/users';
 
   useEffect(() => {
-    fetch(PRODUCT_API)
-      .then(res => res.json())
-      .then(setProducts);
-
-    fetch(USER_API)
-      .then(res => res.json())
-      .then(setUsers);
+    fetch(PRODUCT_API).then(res => res.json()).then(setProducts);
+    fetch(USER_API).then(res => res.json()).then(setUsers);
   }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleAddProduct = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(PRODUCT_API, {
-      method: 'POST',
+    const method = editingId ? 'PUT' : 'POST';
+    const url = editingId ? `${PRODUCT_API}/${editingId}` : PRODUCT_API;
+
+    const res = await fetch(url, {
+      method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
     });
-    const newProduct = await res.json();
-    setProducts([...products, newProduct]);
+    const result = await res.json();
+
+    if (editingId) {
+      setProducts(products.map(p => (p.id === editingId ? result : p)));
+    } else {
+      setProducts([...products, result]);
+    }
+
     setFormData({ name: '', price: '', imageUrl: '', category: '' });
+    setEditingId(null);
+  };
+
+  const handleEditProduct = (product) => {
+    setFormData(product);
+    setEditingId(product.id);
   };
 
   const handleDeleteProduct = async (id) => {
@@ -56,12 +67,12 @@ const AdminPanel = () => {
       <div className="admin-container">
         <h2>Admin Panel - Manage Products & Users</h2>
 
-        <form onSubmit={handleAddProduct} className="product-form">
+        <form onSubmit={handleSubmit} className="product-form">
           <input name="name" value={formData.name} onChange={handleChange} placeholder="Product Name" required />
           <input name="price" value={formData.price} onChange={handleChange} placeholder="Price" required />
           <input name="imageUrl" value={formData.imageUrl} onChange={handleChange} placeholder="Image URL" required />
           <input name="category" value={formData.category} onChange={handleChange} placeholder="Category" required />
-          <button type="submit">Add Product</button>
+          <button type="submit">{editingId ? 'Update' : 'Add'} Product</button>
         </form>
 
         <h3>Product List</h3>
@@ -79,6 +90,7 @@ const AdminPanel = () => {
                 <td><img src={p.imageUrl} alt={p.name} className="admin-img" /></td>
                 <td>{p.category}</td>
                 <td>
+                  <button className="edit-btn" onClick={() => handleEditProduct(p)}>Edit</button>{' '}
                   <button className="delete-btn" onClick={() => handleDeleteProduct(p.id)}>Delete</button>
                 </td>
               </tr>
@@ -89,9 +101,7 @@ const AdminPanel = () => {
         <h3>User List</h3>
         <table className="admin-table">
           <thead>
-            <tr>
-              <th>Email</th><th>Role</th><th>Actions</th>
-            </tr>
+            <tr><th>Email</th><th>Role</th><th>Actions</th></tr>
           </thead>
           <tbody>
             {users.map(user => (
