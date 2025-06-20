@@ -27,16 +27,6 @@ public class AdminController {
         return ResponseEntity.ok(userRepository.findAll());
     }
 
-    @DeleteMapping("/users/{email}")
-    public ResponseEntity<?> deleteUser(@PathVariable String email) {
-        return userRepository.findByEmail(email)
-                .map(user -> {
-                    userRepository.delete(user);
-                    return ResponseEntity.ok().build();
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getAllProducts() {
         return ResponseEntity.ok(productRepository.findAll());
