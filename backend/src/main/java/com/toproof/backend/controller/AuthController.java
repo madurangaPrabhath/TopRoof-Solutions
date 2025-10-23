@@ -1,33 +1,51 @@
 package com.toproof.backend.controller;
 
 import com.toproof.backend.models.User;
-import com.toproof.backend.repo.UserRepository;
+import com.toproof.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
     @Autowired
-    private UserRepository userRepo;
+    private UserService userService;
 
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
-        if (userRepo.existsById(user.getEmail())) {
-            return "Email already registered!";
+    public ResponseEntity<?> register(@RequestBody User user) {
+        try {
+            User registeredUser = userService.registerUser(user);
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Registration successful!");
+            response.put("user", registeredUser);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
-        userRepo.save(user);
-        return "Registration successful!";
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
-        User found = userRepo.findByEmail(user.getEmail());
-        if (found != null && found.getPassword().equals(user.getPassword())) {
-            return "Login successful!";
+    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
+        String email = credentials.get("email");
+        String password = credentials.get("password");
+
+        if (userService.authenticateUser(email, password)) {
+            User user = userService.getUserByEmail(email).orElseThrow();
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Login successful!");
+            response.put("user", user);
+            return ResponseEntity.ok(response);
+        } else {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", "Invalid credentials!");
+            return ResponseEntity.status(401).body(error);
         }
-        return "Invalid credentials!";
     }
 }
