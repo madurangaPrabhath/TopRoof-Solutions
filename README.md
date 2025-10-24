@@ -27,25 +27,50 @@ TopRoof Solutions addresses these issues by offering:
 
 ## 🚀 Features
 
-- 🧑‍💼 **Multi-role Access**: Admin and Customer dashboards for role-specific functionality.
-- 🏗️ **Product Catalog**: Categories for gutters, roofing sheets, downspouts, and more.
-- 💳 **Secure Checkout**: Integrated with trusted gateways (Stripe or PayPal).
-- 🛒 **Shopping Cart**: Add, update, and remove items before purchase.
-- 📦 **Order Tracking**: Real-time status updates for ongoing orders.
-- 🔍 **Search and Filter**: Easy navigation to find specific products.
-- 🖥️ **Mobile-Responsive Design**: Seamless experience across devices.
-- 🔐 **Authentication**: Secure login and registration (JWT/OAuth2).
-- ⚙️ **Admin Panel**: For product, order, and user management.
+### **User Features**
+
+- � **Secure Authentication**: User registration and login with BCrypt password encryption
+- 🛍️ **Product Browsing**: View products by categories (Roofing, Accessories)
+- 🛒 **Shopping Cart**: Add, update quantity, remove items, and checkout
+- � **Order Management**: View order history with status tracking
+- 👤 **User Dashboard**: Personal profile, order tracking, and quick actions
+- 🔄 **Persistent Sessions**: Auto-login with localStorage (stay logged in)
+- � **User Profile Dropdown**: Quick access to dashboard, cart, and logout
+
+### **Admin Features**
+
+- 👨‍💼 **Admin Dashboard**: Full-featured admin panel with tabbed navigation
+- � **Statistics Overview**: Real-time stats for orders, revenue, and users
+- 🏷️ **Product Management**: Create, read, update, and delete products
+  - Product details: name, price, category, brand, stock, description
+  - Image management with Unsplash URLs
+  - Featured and bestseller flags
+- � **User Management**: Create, update, and delete users and admins
+  - Role assignment (USER/ADMIN)
+  - Full CRUD operations on user accounts
+- 📋 **Order Overview**: View all orders with status and details
+- 🎨 **Responsive Layout**: Full-width dashboard optimized for all screen sizes
+
+### **Technical Features**
+
+- 🖥️ **Mobile-Responsive Design**: Breakpoints at 768px, 1024px, and 1920px
+- ⚡ **RESTful API**: 29+ endpoints for complete backend operations
+- 🔒 **Password Security**: BCrypt hashing for all user passwords
+- 🌐 **Session Persistence**: localStorage integration for seamless experience
+- 📐 **Overflow-Free UI**: No horizontal scrolling on any dashboard
+- 🎨 **Modern UI/UX**: Gradient designs, hover effects, and smooth transitions
 
 ---
 
 ## 🧱 Tech Stack
 
-- **Frontend**: React.js / React Native  
-- **Backend**: Spring Boot (Java)  
-- **Database**: MySQL / SQL  
-- **Authentication**: JWT / OAuth2 (optional)  
-- **Payments**: Stripe / PayPal Integration
+- **Frontend**: React.js 18 with React Router
+- **Backend**: Spring Boot 3.5.7 (Java 20)
+- **Database**: MySQL 9.5
+- **Authentication**: BCrypt password hashing with localStorage session management
+- **Styling**: Custom CSS with Grid and Flexbox layouts
+- **Icons**: React Icons (FontAwesome)
+- **Images**: Unsplash integration for product images
 
 ---
 
@@ -70,51 +95,289 @@ TopRoof Solutions addresses these issues by offering:
 ## 🔗 Related Projects
 
 - **Global Models**: Amazon, eBay – user experience, payment flow, order handling.
-- **Local References**:  
-  - [Daraz.lk](https://www.daraz.lk)  
-  - [LankaRoof.lk](https://www.lankaroof.lk)  
-  - [Roofing.lk](https://www.roofing.lk)  
+- **Local References**:
+  - [Daraz.lk](https://www.daraz.lk)
+  - [LankaRoof.lk](https://www.lankaroof.lk)
+  - [Roofing.lk](https://www.roofing.lk)
   - [BuildingMaterial.lk](https://www.buildingmaterial.lk)
 
 ---
 
 ## 📦 Installation & Setup
 
+### Prerequisites
+
+- **Java 20.0.1** or higher
+- **Node.js** and **npm**
+- **MySQL 9.5** or higher
+- **Maven** (included via Maven Wrapper)
+
 ### Clone the Repository:
 
 ```bash
-git clone https://github.com/your-username/toproof-solutions.git
-cd toproof-solutions
+git clone https://github.com/madurangaPrabhath/TopRoof-Solutions.git
+cd TopRoof-Solutions
+```
+
+---
+
+### Database Setup:
+
+1. Create a MySQL database:
+
+```sql
+CREATE DATABASE toproofdb;
+```
+
+2. Update database credentials in `backend/src/main/resources/application.properties`:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/toproofdb
+spring.datasource.username=root
+spring.datasource.password=1234
 ```
 
 ---
 
 ### Backend (Spring Boot):
 
-1. Configure `application.properties` with your MySQL DB credentials.
-2. Run using your IDE or command line:
+1. Navigate to the backend directory:
+
 ```bash
-mvn spring-boot:run
+cd backend
 ```
+
+2. Build the project:
+
+```bash
+./mvnw.cmd clean package -DskipTests  # Windows
+# OR
+./mvnw clean package -DskipTests      # Linux/Mac
+```
+
+3. Run the application:
+
+```bash
+./mvnw.cmd spring-boot:run            # Windows
+# OR
+./mvnw spring-boot:run                # Linux/Mac
+```
+
+The backend will start on **http://localhost:8080**
+
+**Note:** The DataInitializer will automatically populate the database with:
+
+- 14 sample products (roofing and accessories)
+- 2 sample users:
+  - Admin: `admin@toproof.com` / `admin123`
+  - User: `user@toproof.com` / `user123`
 
 ---
 
 ### Frontend (React):
 
+1. Navigate to the frontend directory:
+
 ```bash
 cd frontend
+```
+
+2. Install dependencies:
+
+```bash
 npm install
+```
+
+3. Start the development server:
+
+```bash
 npm start
 ```
 
+The frontend will open automatically at **http://localhost:3000**
+
+---
+
+## 🔑 Default Login Credentials
+
+### Admin Account:
+
+- **Email:** admin@toproof.com
+- **Password:** admin123
+
+### User Account:
+
+- **Email:** user@toproof.com
+- **Password:** user123
+
+---
+
+## 🌐 API Endpoints
+
+### Authentication (`/api/auth`)
+
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - User login
+
+### Products (`/api/products`)
+
+- `GET /api/products` - Get all products
+- `GET /api/products/{id}` - Get product by ID
+- `GET /api/products/category/{category}` - Get products by category
+- `GET /api/products/featured` - Get featured products
+- `GET /api/products/bestsellers` - Get bestseller products
+
+### Cart (`/api/cart`)
+
+- `POST /api/cart/add` - Add item to cart
+- `GET /api/cart/user/{userId}` - Get user's cart
+- `PUT /api/cart/{id}` - Update cart item
+- `DELETE /api/cart/{id}` - Remove cart item
+
+### Orders (`/api/orders`)
+
+- `POST /api/orders` - Create new order
+- `GET /api/orders/user/{userId}` - Get user's orders
+- `GET /api/orders` - Get all orders (Admin)
+
+### Admin (`/api/admin`)
+
+- `GET /api/admin/products` - Get all products
+- `POST /api/admin/products` - Create product
+- `PUT /api/admin/products/{id}` - Update product
+- `DELETE /api/admin/products/{id}` - Delete product
+- `GET /api/admin/users` - Get all users
+- `PUT /api/admin/users/{id}` - Update user
+- `DELETE /api/admin/users/{email}` - Delete user
+
+---
+
+## 📁 Project Structure
+
+```
+TopRoof-Solutions/
+├── backend/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/toproof/backend/
+│   │   │   │   ├── BackendApplication.java
+│   │   │   │   ├── config/
+│   │   │   │   │   ├── CorsConfig.java
+│   │   │   │   │   ├── DataInitializer.java
+│   │   │   │   │   └── SecurityConfig.java
+│   │   │   │   ├── controller/
+│   │   │   │   │   ├── AdminController.java
+│   │   │   │   │   ├── AuthController.java
+│   │   │   │   │   ├── CartController.java
+│   │   │   │   │   ├── OrderController.java
+│   │   │   │   │   └── ProductController.java
+│   │   │   │   ├── models/
+│   │   │   │   │   ├── Cart.java
+│   │   │   │   │   ├── Order.java
+│   │   │   │   │   ├── OrderItem.java
+│   │   │   │   │   ├── Product.java
+│   │   │   │   │   └── User.java
+│   │   │   │   ├── repo/
+│   │   │   │   │   ├── CartRepository.java
+│   │   │   │   │   ├── OrderRepository.java
+│   │   │   │   │   ├── ProductRepository.java
+│   │   │   │   │   └── UserRepository.java
+│   │   │   │   └── service/
+│   │   │   │       ├── CartService.java
+│   │   │   │       ├── OrderService.java
+│   │   │   │       ├── ProductService.java
+│   │   │   │       └── UserService.java
+│   │   │   └── resources/
+│   │   │       └── application.properties
+│   │   └── test/
+│   ├── pom.xml
+│   └── mvnw.cmd
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/
+│   │   │   ├── images/
+│   │   │   └── styles/
+│   │   │       ├── Dashboard.css
+│   │   │       ├── Header.css
+│   │   │       ├── Footer.css
+│   │   │       └── [other CSS files]
+│   │   ├── components/
+│   │   │   ├── Header.js
+│   │   │   ├── Footer.js
+│   │   │   ├── HeroSection.js
+│   │   │   ├── TopSellingProducts.js
+│   │   │   └── [other components]
+│   │   ├── pages/
+│   │   │   ├── Home.js
+│   │   │   ├── Login.js
+│   │   │   ├── Register.js
+│   │   │   ├── Products.js
+│   │   │   ├── Cart.js
+│   │   │   ├── UserDashboard.js
+│   │   │   └── AdminDashboard.js
+│   │   ├── App.js
+│   │   └── index.js
+│   └── package.json
+└── README.md
+```
+
+---
+
+## 🎨 UI Highlights
+
+- **Gradient Backgrounds**: Modern purple-blue gradient themes
+- **Responsive Tables**: Fixed layout with percentage-based columns
+- **Tab Navigation**: Clean admin dashboard with three main sections
+- **User Dropdown**: Profile menu with user info, role badge, and quick actions
+- **Card Layouts**: Grid-based product and action cards with hover effects
+- **No Overflow**: Optimized CSS prevents horizontal scrolling on all pages
+
+---
+
+## 🔧 Technologies Used
+
+### Backend
+
+- Spring Boot 3.5.7
+- Spring Data JPA
+- Spring Security
+- BCrypt Password Encoder
+- MySQL Connector
+- Maven
+
+### Frontend
+
+- React 18
+- React Router DOM
+- React Icons
+- Fetch API for HTTP requests
+- CSS Grid & Flexbox
+- LocalStorage API
+
+---
+
+## 🚀 Future Enhancements
+
+- 💳 Payment gateway integration (Stripe/PayPal)
+- 📧 Email notifications for orders
+- 🔍 Advanced search and filtering
+- ⭐ Product reviews and ratings
+- 📊 Advanced analytics dashboard
+- 📱 Mobile app (React Native)
+- 🌍 Multi-language support
+- 🚚 Real-time delivery tracking
+
+---
+
 Access the platform:
 
-- Frontend: [http://localhost:3000](http://localhost:3000)  
+- Frontend: [http://localhost:3000](http://localhost:3000)
 - Backend API: [http://localhost:8080](http://localhost:8080)
+- API Docs: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) (if Swagger is configured)
 
 ---
 
 ## 📄 License
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). Feel free to use and adapt it as needed.
-
