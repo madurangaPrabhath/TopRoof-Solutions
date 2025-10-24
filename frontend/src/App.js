@@ -9,7 +9,6 @@ import Cart from './pages/Cart';
 import RoofingProducts from './components/RoofingProducts';
 import TopSellingProducts from './components/TopSellingProducts';
 import AccessoriesProducts from './components/AccessoriesProducts';
-import AdminPanel from './pages/AdminPanel';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 
@@ -25,7 +24,6 @@ function App() {
         <Route path="/roofing-products" element={<RoofingProducts />} />
         <Route path="/top-selling-products" element={<TopSellingProducts />} />
         <Route path="/accessories-products" element={<AccessoriesProducts />} />
-        <Route path="/admin" element={<AdminPanel />} />
         <Route path="/dashboard" element={<UserDashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
       </Routes>
