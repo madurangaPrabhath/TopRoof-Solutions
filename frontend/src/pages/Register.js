@@ -1,14 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../assets/styles/Register.css';
 import Header from '../components/Header';
 import NewsletterSection from '../components/NewsletterSection';
 import Footer from '../components/Footer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        // Redirect to appropriate dashboard
+        if (user.role === 'ADMIN') {
+          navigate('/admin-dashboard');
+        } else {
+          navigate('/dashboard');
+        }
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        localStorage.removeItem('user');
+      }
+    }
+  }, [navigate]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
