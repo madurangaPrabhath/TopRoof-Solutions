@@ -11,6 +11,9 @@ const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Add body class for overflow control
+    document.body.classList.add('user-dashboard-page');
+    
     // Check if user is logged in
     const userData = localStorage.getItem('user');
     if (!userData) {
@@ -23,6 +26,11 @@ const UserDashboard = () => {
 
     // Fetch user orders
     fetchOrders(parsedUser.id);
+    
+    // Cleanup body class on unmount
+    return () => {
+      document.body.classList.remove('user-dashboard-page');
+    };
   }, [navigate]);
 
   const fetchOrders = async (userId) => {
@@ -50,7 +58,7 @@ const UserDashboard = () => {
   }
 
   return (
-    <div>
+    <div className="user-dashboard">
       <Header />
       <div className="dashboard-container">
         <div className="dashboard-header">
@@ -58,7 +66,7 @@ const UserDashboard = () => {
           <button onClick={handleLogout} className="logout-btn">Logout</button>
         </div>
 
-        <div className="dashboard-content">
+        <div className="dashboard-content user-dashboard-content">
           <div className="dashboard-sidebar">
             <div className="user-info-card">
               <h3>Profile Information</h3>
