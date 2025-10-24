@@ -39,7 +39,7 @@ const Products = () => {
     const user = JSON.parse(userData);
     
     try {
-      const response = await fetch('http://localhost:8080/api/cart', {
+      const response = await fetch('http://localhost:8080/api/cart/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -52,11 +52,13 @@ const Products = () => {
       if (response.ok) {
         alert(`${product.name} added to cart!`);
       } else {
-        alert('Failed to add to cart');
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        alert('Failed to add to cart: ' + errorText);
       }
     } catch (error) {
       console.error('Error adding to cart:', error);
-      alert('Failed to add to cart');
+      alert('Failed to add to cart: ' + error.message);
     }
   };
 
