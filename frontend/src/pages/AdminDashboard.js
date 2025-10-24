@@ -6,7 +6,6 @@ import '../assets/styles/Dashboard.css';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalProducts: 0,
@@ -31,7 +30,6 @@ const AdminDashboard = () => {
       return;
     }
 
-    setUser(parsedUser);
     fetchDashboardData();
   }, [navigate]);
 

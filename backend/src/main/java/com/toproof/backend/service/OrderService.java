@@ -20,9 +20,6 @@ public class OrderService {
   @Autowired
   private CartItemRepository cartItemRepository;
 
-  @Autowired
-  private ProductRepository productRepository;
-
   public List<Order> getAllOrders() {
     return orderRepository.findAll();
   }

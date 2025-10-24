@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../assets/styles/AdminPanel.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -12,23 +13,29 @@ const AdminPanel = () => {
   });
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
   const PRODUCT_API = 'http://localhost:8080/api/admin/products';
   const USER_API = 'http://localhost:8080/api/admin/users';
 
   useEffect(() => {
-    if (!token) {
+    // Check if user is logged in and is admin
+    const userData = localStorage.getItem('user');
+    if (!userData) {
       setError("Unauthorized: Please log in.");
+      navigate('/login');
       return;
     }
 
-    fetch(PRODUCT_API, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    })
+    const user = JSON.parse(userData);
+    if (user.role !== 'ADMIN') {
+      setError("Access denied: Admin only.");
+      navigate('/dashboard');
+      return;
+    }
+
+    // Fetch products
+    fetch(PRODUCT_API)
       .then(res => {
         if (!res.ok) throw new Error("Failed to fetch products.");
         return res.json();
@@ -36,19 +43,15 @@ const AdminPanel = () => {
       .then(setProducts)
       .catch(err => setError(err.message));
 
-    fetch(USER_API, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    })
+    // Fetch users
+    fetch(USER_API)
       .then(res => {
         if (!res.ok) throw new Error("Failed to fetch users.");
         return res.json();
       })
       .then(setUsers)
       .catch(err => setError(err.message));
-  }, []);
+  }, [navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -59,30 +62,37 @@ const AdminPanel = () => {
     const method = editingId ? 'PUT' : 'POST';
     const url = editingId ? `${PRODUCT_API}/${editingId}` : PRODUCT_API;
 
-    const res = await fetch(url, {
-      method,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    });
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
 
-    if (!res.ok) {
-      alert("Failed to save product.");
-      return;
+      if (!res.ok) {
+        const errorText = await res.text();
+        alert("Failed to save product: " + errorText);
+        return;
+      }
+
+      const result = await res.json();
+
+      if (editingId) {
+        setProducts(products.map(p => (p.id === editingId ? result : p)));
+        alert('Product updated successfully!');
+      } else {
+        setProducts([...products, result]);
+        alert('Product added successfully!');
+      }
+
+      setFormData({ name: '', price: '', imageUrl: '', category: '' });
+      setEditingId(null);
+    } catch (error) {
+      console.error('Error saving product:', error);
+      alert('Failed to save product. Please try again.');
     }
-
-    const result = await res.json();
-
-    if (editingId) {
-      setProducts(products.map(p => (p.id === editingId ? result : p)));
-    } else {
-      setProducts([...products, result]);
-    }
-
-    setFormData({ name: '', price: '', imageUrl: '', category: '' });
-    setEditingId(null);
   };
 
   const handleEditProduct = (product) => {
@@ -91,28 +101,46 @@ const AdminPanel = () => {
   };
 
   const handleDeleteProduct = async (id) => {
-    const res = await fetch(`${PRODUCT_API}/${id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    if (!window.confirm('Are you sure you want to delete this product?')) {
+      return;
+    }
 
-    if (res.ok) {
-      setProducts(products.filter(p => p.id !== id));
-    } else {
-      alert("Failed to delete product.");
+    try {
+      const res = await fetch(`${PRODUCT_API}/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (res.ok) {
+        setProducts(products.filter(p => p.id !== id));
+        alert('Product deleted successfully!');
+      } else {
+        alert("Failed to delete product.");
+      }
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      alert('Failed to delete product. Please try again.');
     }
   };
 
   const handleDeleteUser = async (email) => {
-    const res = await fetch(`${USER_API}/${email}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    if (!window.confirm('Are you sure you want to delete this user?')) {
+      return;
+    }
 
-    if (res.ok) {
-      setUsers(users.filter(u => u.email !== email));
-    } else {
-      alert("Failed to delete user.");
+    try {
+      const res = await fetch(`${USER_API}/${email}`, {
+        method: 'DELETE'
+      });
+
+      if (res.ok) {
+        setUsers(users.filter(u => u.email !== email));
+        alert('User deleted successfully!');
+      } else {
+        alert("Failed to delete user.");
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      alert('Failed to delete user. Please try again.');
     }
   };
 
