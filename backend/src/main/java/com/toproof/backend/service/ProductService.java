@@ -4,8 +4,10 @@ import com.toproof.backend.models.Product;
 import com.toproof.backend.repo.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -35,6 +37,53 @@ public class ProductService {
 
     public List<Product> searchProducts(String keyword) {
         return productRepository.findByNameContainingIgnoreCase(keyword);
+    }
+    
+    public List<String> getAllBrands() {
+        return productRepository.findAllDistinctBrands();
+    }
+    
+    public List<String> getAllCategories() {
+        return productRepository.findAllDistinctCategories();
+    }
+    
+    public List<Product> filterProducts(String searchTerm, String category, String brand, 
+                                        Double minPrice, Double maxPrice, String sortBy) {
+        List<Product> products = productRepository.findByFilters(
+            searchTerm != null && !searchTerm.isEmpty() ? searchTerm : null,
+            category != null && !category.isEmpty() ? category : null,
+            brand != null && !brand.isEmpty() ? brand : null,
+            minPrice,
+            maxPrice
+        );
+        
+        // Apply sorting
+        if (sortBy != null && !sortBy.isEmpty()) {
+            switch (sortBy.toLowerCase()) {
+                case "price_asc":
+                    products = products.stream()
+                        .sorted(Comparator.comparing(Product::getPrice))
+                        .collect(Collectors.toList());
+                    break;
+                case "price_desc":
+                    products = products.stream()
+                        .sorted(Comparator.comparing(Product::getPrice).reversed())
+                        .collect(Collectors.toList());
+                    break;
+                case "name_asc":
+                    products = products.stream()
+                        .sorted(Comparator.comparing(Product::getName))
+                        .collect(Collectors.toList());
+                    break;
+                case "name_desc":
+                    products = products.stream()
+                        .sorted(Comparator.comparing(Product::getName).reversed())
+                        .collect(Collectors.toList());
+                    break;
+            }
+        }
+        
+        return products;
     }
 
     public Product addProduct(Product product) {

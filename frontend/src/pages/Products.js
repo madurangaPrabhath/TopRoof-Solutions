@@ -1,80 +1,144 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
-import NewsletterSection from '../components/NewsletterSection';
-import Footer from '../components/Footer';
-import '../assets/styles/Products.css';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import NewsletterSection from "../components/NewsletterSection";
+import Footer from "../components/Footer";
+import "../assets/styles/Products.css";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  // Filter states
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch products from backend
-    fetch('http://localhost:8080/api/products')
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to fetch products.");
-        return res.json();
-      })
-      .then(data => {
-        setProducts(data);
+    // Fetch products, brands, and categories
+    Promise.all([
+      fetch("http://localhost:8080/api/products").then((res) => res.json()),
+      fetch("http://localhost:8080/api/products/brands").then((res) =>
+        res.json()
+      ),
+      fetch("http://localhost:8080/api/products/categories").then((res) =>
+        res.json()
+      ),
+    ])
+      .then(([productsData, brandsData, categoriesData]) => {
+        setProducts(productsData);
+        setFilteredProducts(productsData);
+        setBrands(brandsData);
+        setCategories(categoriesData);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         setError(err.message);
         setLoading(false);
       });
   }, []);
 
+  useEffect(() => {
+    applyFilters();
+  }, [
+    searchTerm,
+    selectedCategory,
+    selectedBrand,
+    minPrice,
+    maxPrice,
+    sortBy,
+    products,
+  ]);
+
+  const applyFilters = () => {
+    const params = new URLSearchParams();
+
+    if (searchTerm) params.append("search", searchTerm);
+    if (selectedCategory) params.append("category", selectedCategory);
+    if (selectedBrand) params.append("brand", selectedBrand);
+    if (minPrice) params.append("minPrice", minPrice);
+    if (maxPrice) params.append("maxPrice", maxPrice);
+    if (sortBy) params.append("sortBy", sortBy);
+
+    const queryString = params.toString();
+    const url = queryString
+      ? `http://localhost:8080/api/products/filter?${queryString}`
+      : "http://localhost:8080/api/products";
+
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => setFilteredProducts(data))
+      .catch((err) => console.error("Error filtering products:", err));
+  };
+
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory("");
+    setSelectedBrand("");
+    setMinPrice("");
+    setMaxPrice("");
+    setSortBy("");
+  };
+
   const handleAddToCart = async (product) => {
-    const userData = localStorage.getItem('user');
+    const userData = localStorage.getItem("user");
     if (!userData) {
-      alert('Please login to add items to cart');
-      navigate('/login');
+      alert("Please login to add items to cart");
+      navigate("/login");
       return;
     }
 
     const user = JSON.parse(userData);
-    
+
     try {
-      const response = await fetch('http://localhost:8080/api/cart/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:8080/api/cart/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId: user.id,
           productId: product.id,
-          quantity: 1
-        })
+          quantity: 1,
+        }),
       });
 
       if (response.ok) {
         alert(`${product.name} added to cart!`);
       } else {
         const errorText = await response.text();
-        console.error('Error response:', errorText);
-        alert('Failed to add to cart: ' + errorText);
+        console.error("Error response:", errorText);
+        alert("Failed to add to cart: " + errorText);
       }
     } catch (error) {
-      console.error('Error adding to cart:', error);
-      alert('Failed to add to cart: ' + error.message);
+      console.error("Error adding to cart:", error);
+      alert("Failed to add to cart: " + error.message);
     }
   };
 
   const getProductsByCategory = (category) => {
-    return products.filter(p => p.category?.toLowerCase() === category.toLowerCase());
+    return products.filter(
+      (p) => p.category?.toLowerCase() === category.toLowerCase()
+    );
   };
 
-  const roofingProducts = getProductsByCategory('roofing');
-  const accessoriesProducts = getProductsByCategory('accessories');
-  const featuredProducts = products.filter(p => p.featured || p.bestSeller);
+  const roofingProducts = getProductsByCategory("roofing");
+  const accessoriesProducts = getProductsByCategory("accessories");
+  const featuredProducts = products.filter((p) => p.featured || p.bestSeller);
 
   if (loading) {
     return (
       <div>
         <Header />
-        <div style={{ textAlign: 'center', padding: '100px 20px' }}>
+        <div style={{ textAlign: "center", padding: "100px 20px" }}>
           <h2>Loading products...</h2>
         </div>
         <Footer />
@@ -86,7 +150,9 @@ const Products = () => {
     return (
       <div>
         <Header />
-        <div style={{ textAlign: 'center', padding: '100px 20px', color: 'red' }}>
+        <div
+          style={{ textAlign: "center", padding: "100px 20px", color: "red" }}
+        >
           <h2>Error: {error}</h2>
         </div>
         <Footer />
@@ -100,12 +166,156 @@ const Products = () => {
       <section className="products-hero">
         <div className="hero-content">
           <h1>Explore Our Roofing & Gutter Products</h1>
-          <p>High-quality roofing sheets, gutters, ridges and accessories crafted for durability and performance in Sri Lankan conditions.</p>
+          <p>
+            High-quality roofing sheets, gutters, ridges and accessories crafted
+            for durability and performance in Sri Lankan conditions.
+          </p>
         </div>
       </section>
 
+      {/* Filter Section */}
+      <section className="filter-section">
+        <div className="filter-container">
+          <div className="filter-header">
+            <h3>
+              <span>🔍</span> Search & Filter Products
+            </h3>
+            <button className="toggle-filters-btn" onClick={() => setShowFilters(!showFilters)}>
+              {showFilters ? '▲ Hide Filters' : '▼ Show Filters'}
+            </button>
+          </div>
+          
+          {showFilters && (
+            <div className="filter-controls">
+              {/* Search Bar */}
+              <div className="filter-group search-group">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="search-input"
+                />
+              </div>
+
+              {/* Filters Grid */}
+              <div className="filters-grid">
+                {/* Category Filter */}
+                <div className="filter-group">
+                  <label>Category</label>
+                  <select 
+                    value={selectedCategory} 
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="filter-select"
+                  >
+                    <option value="">All Categories</option>
+                    {categories.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Brand Filter */}
+                <div className="filter-group">
+                  <label>Brand</label>
+                  <select 
+                    value={selectedBrand} 
+                    onChange={(e) => setSelectedBrand(e.target.value)}
+                    className="filter-select"
+                  >
+                    <option value="">All Brands</option>
+                    {brands.map(brand => (
+                      <option key={brand} value={brand}>{brand}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Price Range */}
+                <div className="filter-group">
+                  <label>Min Price (Rs.)</label>
+                  <input
+                    type="number"
+                    placeholder="0"
+                    value={minPrice}
+                    onChange={(e) => setMinPrice(e.target.value)}
+                    className="price-input"
+                  />
+                </div>
+
+                <div className="filter-group">
+                  <label>Max Price (Rs.)</label>
+                  <input
+                    type="number"
+                    placeholder="10000"
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(e.target.value)}
+                    className="price-input"
+                  />
+                </div>
+
+                {/* Sort By */}
+                <div className="filter-group">
+                  <label>Sort By</label>
+                  <select 
+                    value={sortBy} 
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="filter-select"
+                  >
+                    <option value="">Default</option>
+                    <option value="price_asc">Price: Low to High</option>
+                    <option value="price_desc">Price: High to Low</option>
+                    <option value="name_asc">Name: A to Z</option>
+                    <option value="name_desc">Name: Z to A</option>
+                  </select>
+                </div>
+
+                {/* Clear Filters Button */}
+                <div className="filter-group">
+                  <label>&nbsp;</label>
+                  <button onClick={clearFilters} className="clear-filters-btn">
+                    Clear Filters
+                  </button>
+                </div>
+              </div>
+              
+              {/* Results Count */}
+              <div className="results-count">
+                Showing <strong>{filteredProducts.length}</strong> of <strong>{products.length}</strong> products
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* All Products Grid */}
+      <section className="all-products-section">
+        {filteredProducts.length === 0 ? (
+          <div className="no-products">
+            <h3>No products found</h3>
+            <p>Try adjusting your filters or search term</p>
+          </div>
+        ) : (
+          <div className="products-grid">
+            {filteredProducts.map((product) => (
+              <div className="product-card" key={product.id}>
+                {product.bestSeller && <span className="badge">Best Seller</span>}
+                {product.featured && <span className="badge featured-badge">Featured</span>}
+                <img src={product.imageUrl} alt={product.name} />
+                <h3>{product.name}</h3>
+                <p className="brand">{product.brand}</p>
+                <p className="category-tag">{product.category}</p>
+                <p className="price">Rs. {product.price.toFixed(2)}</p>
+                <p className="description">{product.description}</p>
+                <button onClick={() => handleAddToCart(product)}>Add to Cart</button>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Old sections removed - now showing all filtered products above */}
       {/* Roofing Products Section */}
-      {roofingProducts.length > 0 && (
+      {roofingProducts.length > 0 && !searchTerm && !selectedCategory && !selectedBrand && !minPrice && !maxPrice && (
         <section id="roofing-products" className="product-section">
           <div className="section-heading">
             <h2>Roofing Products</h2>
@@ -118,7 +328,9 @@ const Products = () => {
                 <h3>{product.name}</h3>
                 <p className="price">Rs. {product.price.toFixed(2)}</p>
                 <p className="description">{product.description}</p>
-                <button onClick={() => handleAddToCart(product)}>Add to Cart</button>
+                <button onClick={() => handleAddToCart(product)}>
+                  Add to Cart
+                </button>
               </div>
             ))}
           </div>
@@ -126,7 +338,7 @@ const Products = () => {
       )}
 
       {/* Featured/Best Seller Products */}
-      {featuredProducts.length > 0 && (
+      {featuredProducts.length > 0 && !searchTerm && !selectedCategory && !selectedBrand && !minPrice && !maxPrice && (
         <section id="top-selling-products" className="product-section">
           <div className="section-heading">
             <h2>Top Selling Products</h2>
@@ -135,13 +347,19 @@ const Products = () => {
           <div className="products-grid">
             {featuredProducts.map((product) => (
               <div className="product-card featured" key={product.id}>
-                {product.bestSeller && <span className="badge">Best Seller</span>}
-                {product.featured && <span className="badge featured-badge">Featured</span>}
+                {product.bestSeller && (
+                  <span className="badge">Best Seller</span>
+                )}
+                {product.featured && (
+                  <span className="badge featured-badge">Featured</span>
+                )}
                 <img src={product.imageUrl} alt={product.name} />
                 <h3>{product.name}</h3>
                 <p className="price">Rs. {product.price.toFixed(2)}</p>
                 <p className="description">{product.description}</p>
-                <button onClick={() => handleAddToCart(product)}>Add to Cart</button>
+                <button onClick={() => handleAddToCart(product)}>
+                  Add to Cart
+                </button>
               </div>
             ))}
           </div>
@@ -149,7 +367,7 @@ const Products = () => {
       )}
 
       {/* Accessories Products Section */}
-      {accessoriesProducts.length > 0 && (
+      {accessoriesProducts.length > 0 && !searchTerm && !selectedCategory && !selectedBrand && !minPrice && !maxPrice && (
         <section id="accessories-products" className="product-section">
           <div className="section-heading">
             <h2>Accessories Products</h2>
@@ -162,7 +380,9 @@ const Products = () => {
                 <h3>{product.name}</h3>
                 <p className="price">Rs. {product.price.toFixed(2)}</p>
                 <p className="description">{product.description}</p>
-                <button onClick={() => handleAddToCart(product)}>Add to Cart</button>
+                <button onClick={() => handleAddToCart(product)}>
+                  Add to Cart
+                </button>
               </div>
             ))}
           </div>

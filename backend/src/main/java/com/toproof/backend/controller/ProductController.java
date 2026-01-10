@@ -46,6 +46,27 @@ public class ProductController {
     public ResponseEntity<List<Product>> searchProducts(@RequestParam String keyword) {
         return ResponseEntity.ok(productService.searchProducts(keyword));
     }
+    
+    @GetMapping("/filter")
+    public ResponseEntity<List<Product>> filterProducts(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) String sortBy) {
+        return ResponseEntity.ok(productService.filterProducts(search, category, brand, minPrice, maxPrice, sortBy));
+    }
+    
+    @GetMapping("/brands")
+    public ResponseEntity<List<String>> getAllBrands() {
+        return ResponseEntity.ok(productService.getAllBrands());
+    }
+    
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> getAllCategories() {
+        return ResponseEntity.ok(productService.getAllCategories());
+    }
 
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody Product product) {
