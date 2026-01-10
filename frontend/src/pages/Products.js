@@ -180,11 +180,14 @@ const Products = () => {
             <h3>
               <span>🔍</span> Search & Filter Products
             </h3>
-            <button className="toggle-filters-btn" onClick={() => setShowFilters(!showFilters)}>
-              {showFilters ? '▲ Hide Filters' : '▼ Show Filters'}
+            <button
+              className="toggle-filters-btn"
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              {showFilters ? "▲ Hide Filters" : "▼ Show Filters"}
             </button>
           </div>
-          
+
           {showFilters && (
             <div className="filter-controls">
               {/* Search Bar */}
@@ -203,14 +206,16 @@ const Products = () => {
                 {/* Category Filter */}
                 <div className="filter-group">
                   <label>Category</label>
-                  <select 
-                    value={selectedCategory} 
+                  <select
+                    value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
                     className="filter-select"
                   >
                     <option value="">All Categories</option>
-                    {categories.map(cat => (
-                      <option key={cat} value={cat}>{cat}</option>
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -218,14 +223,16 @@ const Products = () => {
                 {/* Brand Filter */}
                 <div className="filter-group">
                   <label>Brand</label>
-                  <select 
-                    value={selectedBrand} 
+                  <select
+                    value={selectedBrand}
                     onChange={(e) => setSelectedBrand(e.target.value)}
                     className="filter-select"
                   >
                     <option value="">All Brands</option>
-                    {brands.map(brand => (
-                      <option key={brand} value={brand}>{brand}</option>
+                    {brands.map((brand) => (
+                      <option key={brand} value={brand}>
+                        {brand}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -256,8 +263,8 @@ const Products = () => {
                 {/* Sort By */}
                 <div className="filter-group">
                   <label>Sort By</label>
-                  <select 
-                    value={sortBy} 
+                  <select
+                    value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
                     className="filter-select"
                   >
@@ -277,10 +284,11 @@ const Products = () => {
                   </button>
                 </div>
               </div>
-              
+
               {/* Results Count */}
               <div className="results-count">
-                Showing <strong>{filteredProducts.length}</strong> of <strong>{products.length}</strong> products
+                Showing <strong>{filteredProducts.length}</strong> of{" "}
+                <strong>{products.length}</strong> products
               </div>
             </div>
           )}
@@ -298,55 +306,6 @@ const Products = () => {
           <div className="products-grid">
             {filteredProducts.map((product) => (
               <div className="product-card" key={product.id}>
-                {product.bestSeller && <span className="badge">Best Seller</span>}
-                {product.featured && <span className="badge featured-badge">Featured</span>}
-                <img src={product.imageUrl} alt={product.name} />
-                <h3>{product.name}</h3>
-                <p className="brand">{product.brand}</p>
-                <p className="category-tag">{product.category}</p>
-                <p className="price">Rs. {product.price.toFixed(2)}</p>
-                <p className="description">{product.description}</p>
-                <button onClick={() => handleAddToCart(product)}>Add to Cart</button>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
-
-      {/* Old sections removed - now showing all filtered products above */}
-      {/* Roofing Products Section */}
-      {roofingProducts.length > 0 && !searchTerm && !selectedCategory && !selectedBrand && !minPrice && !maxPrice && (
-        <section id="roofing-products" className="product-section">
-          <div className="section-heading">
-            <h2>Roofing Products</h2>
-            <div className="underline"></div>
-          </div>
-          <div className="products-grid">
-            {roofingProducts.map((product) => (
-              <div className="product-card" key={product.id}>
-                <img src={product.imageUrl} alt={product.name} />
-                <h3>{product.name}</h3>
-                <p className="price">Rs. {product.price.toFixed(2)}</p>
-                <p className="description">{product.description}</p>
-                <button onClick={() => handleAddToCart(product)}>
-                  Add to Cart
-                </button>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Featured/Best Seller Products */}
-      {featuredProducts.length > 0 && !searchTerm && !selectedCategory && !selectedBrand && !minPrice && !maxPrice && (
-        <section id="top-selling-products" className="product-section">
-          <div className="section-heading">
-            <h2>Top Selling Products</h2>
-            <div className="underline"></div>
-          </div>
-          <div className="products-grid">
-            {featuredProducts.map((product) => (
-              <div className="product-card featured" key={product.id}>
                 {product.bestSeller && (
                   <span className="badge">Best Seller</span>
                 )}
@@ -355,6 +314,8 @@ const Products = () => {
                 )}
                 <img src={product.imageUrl} alt={product.name} />
                 <h3>{product.name}</h3>
+                <p className="brand">{product.brand}</p>
+                <p className="category-tag">{product.category}</p>
                 <p className="price">Rs. {product.price.toFixed(2)}</p>
                 <p className="description">{product.description}</p>
                 <button onClick={() => handleAddToCart(product)}>
@@ -363,31 +324,99 @@ const Products = () => {
               </div>
             ))}
           </div>
-        </section>
-      )}
+        )}
+      </section>
+
+      {/* Old sections removed - now showing all filtered products above */}
+      {/* Roofing Products Section */}
+      {roofingProducts.length > 0 &&
+        !searchTerm &&
+        !selectedCategory &&
+        !selectedBrand &&
+        !minPrice &&
+        !maxPrice && (
+          <section id="roofing-products" className="product-section">
+            <div className="section-heading">
+              <h2>Roofing Products</h2>
+              <div className="underline"></div>
+            </div>
+            <div className="products-grid">
+              {roofingProducts.map((product) => (
+                <div className="product-card" key={product.id}>
+                  <img src={product.imageUrl} alt={product.name} />
+                  <h3>{product.name}</h3>
+                  <p className="price">Rs. {product.price.toFixed(2)}</p>
+                  <p className="description">{product.description}</p>
+                  <button onClick={() => handleAddToCart(product)}>
+                    Add to Cart
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+      {/* Featured/Best Seller Products */}
+      {featuredProducts.length > 0 &&
+        !searchTerm &&
+        !selectedCategory &&
+        !selectedBrand &&
+        !minPrice &&
+        !maxPrice && (
+          <section id="top-selling-products" className="product-section">
+            <div className="section-heading">
+              <h2>Top Selling Products</h2>
+              <div className="underline"></div>
+            </div>
+            <div className="products-grid">
+              {featuredProducts.map((product) => (
+                <div className="product-card featured" key={product.id}>
+                  {product.bestSeller && (
+                    <span className="badge">Best Seller</span>
+                  )}
+                  {product.featured && (
+                    <span className="badge featured-badge">Featured</span>
+                  )}
+                  <img src={product.imageUrl} alt={product.name} />
+                  <h3>{product.name}</h3>
+                  <p className="price">Rs. {product.price.toFixed(2)}</p>
+                  <p className="description">{product.description}</p>
+                  <button onClick={() => handleAddToCart(product)}>
+                    Add to Cart
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
       {/* Accessories Products Section */}
-      {accessoriesProducts.length > 0 && !searchTerm && !selectedCategory && !selectedBrand && !minPrice && !maxPrice && (
-        <section id="accessories-products" className="product-section">
-          <div className="section-heading">
-            <h2>Accessories Products</h2>
-            <div className="underline"></div>
-          </div>
-          <div className="products-grid">
-            {accessoriesProducts.map((product) => (
-              <div className="product-card" key={product.id}>
-                <img src={product.imageUrl} alt={product.name} />
-                <h3>{product.name}</h3>
-                <p className="price">Rs. {product.price.toFixed(2)}</p>
-                <p className="description">{product.description}</p>
-                <button onClick={() => handleAddToCart(product)}>
-                  Add to Cart
-                </button>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {accessoriesProducts.length > 0 &&
+        !searchTerm &&
+        !selectedCategory &&
+        !selectedBrand &&
+        !minPrice &&
+        !maxPrice && (
+          <section id="accessories-products" className="product-section">
+            <div className="section-heading">
+              <h2>Accessories Products</h2>
+              <div className="underline"></div>
+            </div>
+            <div className="products-grid">
+              {accessoriesProducts.map((product) => (
+                <div className="product-card" key={product.id}>
+                  <img src={product.imageUrl} alt={product.name} />
+                  <h3>{product.name}</h3>
+                  <p className="price">Rs. {product.price.toFixed(2)}</p>
+                  <p className="description">{product.description}</p>
+                  <button onClick={() => handleAddToCart(product)}>
+                    Add to Cart
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
       <NewsletterSection />
       <section id="contact">

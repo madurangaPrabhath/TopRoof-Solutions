@@ -29,13 +29,19 @@ TopRoof Solutions addresses these issues by offering:
 
 ### **User Features**
 
-- � **Secure Authentication**: User registration and login with BCrypt password encryption
+- 🔐 **Secure Authentication**: User registration and login with BCrypt password encryption
 - 🛍️ **Product Browsing**: View products by categories (Roofing, Accessories)
+- 🔍 **Advanced Search & Filtering**:
+  - Real-time product search by name and description
+  - Filter by category, brand, and price range
+  - Sort products by price (low to high, high to low) or name (A-Z, Z-A)
+  - Combined multi-filter support with instant results
+  - Collapsible filter panel for better UX
 - 🛒 **Shopping Cart**: Add, update quantity, remove items, and checkout
-- � **Order Management**: View order history with status tracking
+- 📦 **Order Management**: View order history with status tracking
 - 👤 **User Dashboard**: Personal profile, order tracking, and quick actions
 - 🔄 **Persistent Sessions**: Auto-login with localStorage (stay logged in)
-- � **User Profile Dropdown**: Quick access to dashboard, cart, and logout
+- 👨‍💼 **User Profile Dropdown**: Quick access to dashboard, cart, and logout
 
 ### **Admin Features**
 
@@ -54,11 +60,13 @@ TopRoof Solutions addresses these issues by offering:
 ### **Technical Features**
 
 - 🖥️ **Mobile-Responsive Design**: Breakpoints at 768px, 1024px, and 1920px
-- ⚡ **RESTful API**: 29+ endpoints for complete backend operations
+- ⚡ **RESTful API**: 33+ endpoints for complete backend operations
 - 🔒 **Password Security**: BCrypt hashing for all user passwords
 - 🌐 **Session Persistence**: localStorage integration for seamless experience
 - 📐 **Overflow-Free UI**: No horizontal scrolling on any dashboard
 - 🎨 **Modern UI/UX**: Gradient designs, hover effects, and smooth transitions
+- 🔍 **Advanced Filtering**: Multi-parameter product filtering with real-time updates
+- 🗂️ **Dynamic Sorting**: Multiple sorting options for better product discovery
 
 ---
 
@@ -223,7 +231,11 @@ The frontend will open automatically at **http://localhost:3000**
 
 - `GET /api/products` - Get all products
 - `GET /api/products/{id}` - Get product by ID
-- `GET /api/products/category/{category}` - Get products by category
+- `GET /api/products/category/{category}` - Get products by
+- `GET /api/products/search?keyword={keyword}` - Search products by keyword
+- `GET /api/products/filter?search={term}&category={cat}&brand={brand}&minPrice={min}&maxPrice={max}&sortBy={sort}` - Advanced filtering
+- `GET /api/products/brands` - Get all unique brands
+- `GET /api/products/categories` - Get all unique categories category
 - `GET /api/products/featured` - Get featured products
 - `GET /api/products/bestsellers` - Get bestseller products
 
@@ -357,12 +369,15 @@ TopRoof-Solutions/
 
 ---
 
-## 🚀 Future Enhancements
+##⭐ Product reviews and ratings
 
-- 💳 Payment gateway integration (Stripe/PayPal)
-- 📧 Email notifications for orders
-- 🔍 Advanced search and filtering
-- ⭐ Product reviews and ratings
+- 📊 Advanced analytics dashboard
+- 📱 Mobile app (React Native)
+- 🌍 Multi-language support
+- 🚚 Real-time delivery tracking
+- 📸 Product image upload functionality
+- 🔔 Stock alert notifications
+- 📈 Sales reports and insights
 - 📊 Advanced analytics dashboard
 - 📱 Mobile app (React Native)
 - 🌍 Multi-language support
