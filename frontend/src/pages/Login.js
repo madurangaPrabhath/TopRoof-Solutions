@@ -1,31 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import '../assets/styles/Login.css';
-import Header from '../components/Header';
-import NewsletterSection from '../components/NewsletterSection';
-import Footer from '../components/Footer';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import "../assets/styles/Login.css";
+import Header from "../components/Header";
+import NewsletterSection from "../components/NewsletterSection";
+import Footer from "../components/Footer";
+import { Link, useNavigate } from "react-router-dom";
+import { API_ENDPOINTS } from "../config/api";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     // Check if user is already logged in
-    const userData = localStorage.getItem('user');
+    const userData = localStorage.getItem("user");
     if (userData) {
       try {
         const user = JSON.parse(userData);
         // Redirect to appropriate dashboard
-        if (user.role === 'ADMIN') {
-          navigate('/admin-dashboard');
+        if (user.role === "ADMIN") {
+          navigate("/admin-dashboard");
         } else {
-          navigate('/dashboard');
+          navigate("/dashboard");
         }
       } catch (error) {
-        console.error('Error parsing user data:', error);
-        localStorage.removeItem('user');
+        console.error("Error parsing user data:", error);
+        localStorage.removeItem("user");
       }
     }
   }, [navigate]);
@@ -35,32 +36,32 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8080/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+      const response = await fetch(API_ENDPOINTS.LOGIN, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
 
       if (response.ok) {
         const result = await response.json();
-        
+
         // Store user data in localStorage
-        localStorage.setItem('user', JSON.stringify(result.user));
-        localStorage.setItem('userEmail', email);
-        
+        localStorage.setItem("user", JSON.stringify(result.user));
+        localStorage.setItem("userEmail", email);
+
         // Redirect based on user role
-        if (result.user.role === 'ADMIN') {
-          navigate('/admin-dashboard');
+        if (result.user.role === "ADMIN") {
+          navigate("/admin-dashboard");
         } else {
-          navigate('/dashboard');
+          navigate("/dashboard");
         }
       } else {
         const errorText = await response.text();
-        alert(errorText || 'Invalid email or password');
+        alert(errorText || "Invalid email or password");
       }
     } catch (error) {
-      console.error('Login error:', error);
-      alert('Login failed! Please check your connection.');
+      console.error("Login error:", error);
+      alert("Login failed! Please check your connection.");
     } finally {
       setLoading(false);
     }
@@ -87,7 +88,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button type="submit" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
         <p className="register-link">

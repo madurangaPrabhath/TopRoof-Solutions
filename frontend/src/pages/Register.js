@@ -1,31 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import '../assets/styles/Register.css';
-import Header from '../components/Header';
-import NewsletterSection from '../components/NewsletterSection';
-import Footer from '../components/Footer';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import "../assets/styles/Register.css";
+import Header from "../components/Header";
+import NewsletterSection from "../components/NewsletterSection";
+import Footer from "../components/Footer";
+import { Link, useNavigate } from "react-router-dom";
+import { API_ENDPOINTS } from "../config/api";
 
 const Register = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     // Check if user is already logged in
-    const userData = localStorage.getItem('user');
+    const userData = localStorage.getItem("user");
     if (userData) {
       try {
         const user = JSON.parse(userData);
         // Redirect to appropriate dashboard
-        if (user.role === 'ADMIN') {
-          navigate('/admin-dashboard');
+        if (user.role === "ADMIN") {
+          navigate("/admin-dashboard");
         } else {
-          navigate('/dashboard');
+          navigate("/dashboard");
         }
       } catch (error) {
-        console.error('Error parsing user data:', error);
-        localStorage.removeItem('user');
+        console.error("Error parsing user data:", error);
+        localStorage.removeItem("user");
       }
     }
   }, [navigate]);
@@ -38,10 +39,10 @@ const Register = () => {
       return;
     }
 
-    const response = await fetch('http://localhost:8080/api/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+    const response = await fetch(API_ENDPOINTS.REGISTER, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
     });
 
     const result = await response.text();

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import '../assets/styles/Dashboard.css';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import "../assets/styles/Dashboard.css";
+import { API_ENDPOINTS } from "../config/api";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -10,42 +11,55 @@ const AdminDashboard = () => {
     totalUsers: 0,
     totalProducts: 0,
     totalOrders: 0,
-    pendingOrders: 0
+    pendingOrders: 0,
   });
   const [recentOrders, setRecentOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'products', 'users'
-  
+  const [activeTab, setActiveTab] = useState("dashboard"); // 'dashboard', 'products', 'users'
+
   // Product management state
   const [products, setProducts] = useState([]);
   const [productFormData, setProductFormData] = useState({
-    name: '', price: '', imageUrl: '', category: '', description: '', brand: '', stockQuantity: 0, featured: false, bestSeller: false
+    name: "",
+    price: "",
+    imageUrl: "",
+    category: "",
+    description: "",
+    brand: "",
+    stockQuantity: 0,
+    featured: false,
+    bestSeller: false,
   });
   const [editingProductId, setEditingProductId] = useState(null);
-  
+
   // User management state
   const [users, setUsers] = useState([]);
   const [userFormData, setUserFormData] = useState({
-    email: '', password: '', fullName: '', phone: '', address: '', role: 'USER'
+    email: "",
+    password: "",
+    fullName: "",
+    phone: "",
+    address: "",
+    role: "USER",
   });
   const [editingUserId, setEditingUserId] = useState(null);
 
-  const PRODUCT_API = 'http://localhost:8080/api/admin/products';
-  const USER_API = 'http://localhost:8080/api/admin/users';
-  const AUTH_API = 'http://localhost:8080/api/auth';
+  const PRODUCT_API = API_ENDPOINTS.ADMIN_PRODUCTS;
+  const USER_API = API_ENDPOINTS.ADMIN_USERS;
+  const AUTH_API = API_ENDPOINTS.REGISTER.replace("/register", "");
 
   useEffect(() => {
     // Check if user is logged in and is admin
-    const userData = localStorage.getItem('user');
+    const userData = localStorage.getItem("user");
     if (!userData) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
 
     const parsedUser = JSON.parse(userData);
-    if (parsedUser.role !== 'ADMIN') {
-      alert('Access denied! Admin only.');
-      navigate('/dashboard');
+    if (parsedUser.role !== "ADMIN") {
+      alert("Access denied! Admin only.");
+      navigate("/dashboard");
       return;
     }
 
@@ -56,25 +70,27 @@ const AdminDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const usersResponse = await fetch('http://localhost:8080/api/users');
+      const usersResponse = await fetch("http://localhost:8080/api/users");
       const users = usersResponse.ok ? await usersResponse.json() : [];
 
-      const productsResponse = await fetch('http://localhost:8080/api/products');
+      const productsResponse = await fetch(
+        "http://localhost:8080/api/products"
+      );
       const products = productsResponse.ok ? await productsResponse.json() : [];
 
-      const ordersResponse = await fetch('http://localhost:8080/api/orders');
+      const ordersResponse = await fetch("http://localhost:8080/api/orders");
       const orders = ordersResponse.ok ? await ordersResponse.json() : [];
 
       setStats({
         totalUsers: users.length,
         totalProducts: products.length,
         totalOrders: orders.length,
-        pendingOrders: orders.filter(o => o.status === 'PENDING').length
+        pendingOrders: orders.filter((o) => o.status === "PENDING").length,
       });
 
       setRecentOrders(orders.slice(0, 5));
     } catch (error) {
-      console.error('Error fetching dashboard data:', error);
+      console.error("Error fetching dashboard data:", error);
     } finally {
       setLoading(false);
     }
@@ -88,7 +104,7 @@ const AdminDashboard = () => {
         setProducts(data);
       }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error("Error fetching products:", error);
     }
   };
 
@@ -100,53 +116,58 @@ const AdminDashboard = () => {
         setUsers(data);
       }
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error("Error fetching users:", error);
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('userEmail');
-    navigate('/login');
+    localStorage.removeItem("user");
+    localStorage.removeItem("userEmail");
+    navigate("/login");
   };
 
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/orders/${orderId}/status`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus })
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/orders/${orderId}/status`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
 
       if (response.ok) {
-        alert('Order status updated!');
+        alert("Order status updated!");
         fetchDashboardData();
       }
     } catch (error) {
-      console.error('Error updating order:', error);
-      alert('Failed to update order status');
+      console.error("Error updating order:", error);
+      alert("Failed to update order status");
     }
   };
 
   // Product Management Functions
   const handleProductChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setProductFormData({ 
-      ...productFormData, 
-      [name]: type === 'checkbox' ? checked : value 
+    setProductFormData({
+      ...productFormData,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
   const handleProductSubmit = async (e) => {
     e.preventDefault();
-    const method = editingProductId ? 'PUT' : 'POST';
-    const url = editingProductId ? `${PRODUCT_API}/${editingProductId}` : PRODUCT_API;
+    const method = editingProductId ? "PUT" : "POST";
+    const url = editingProductId
+      ? `${PRODUCT_API}/${editingProductId}`
+      : PRODUCT_API;
 
     try {
       const res = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(productFormData)
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(productFormData),
       });
 
       if (!res.ok) {
@@ -156,79 +177,91 @@ const AdminDashboard = () => {
       }
 
       const result = await res.json();
-      alert(editingProductId ? 'Product updated successfully!' : 'Product added successfully!');
-      
+      alert(
+        editingProductId
+          ? "Product updated successfully!"
+          : "Product added successfully!"
+      );
+
       setProductFormData({
-        name: '', price: '', imageUrl: '', category: '', description: '', brand: '', stockQuantity: 0, featured: false, bestSeller: false
+        name: "",
+        price: "",
+        imageUrl: "",
+        category: "",
+        description: "",
+        brand: "",
+        stockQuantity: 0,
+        featured: false,
+        bestSeller: false,
       });
       setEditingProductId(null);
       fetchProducts();
       fetchDashboardData();
     } catch (error) {
-      console.error('Error saving product:', error);
-      alert('Failed to save product. Please try again.');
+      console.error("Error saving product:", error);
+      alert("Failed to save product. Please try again.");
     }
   };
 
   const handleEditProduct = (product) => {
     setProductFormData(product);
     setEditingProductId(product.id);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDeleteProduct = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this product?')) {
+    if (!window.confirm("Are you sure you want to delete this product?")) {
       return;
     }
 
     try {
       const res = await fetch(`${PRODUCT_API}/${id}`, {
-        method: 'DELETE'
+        method: "DELETE",
       });
 
       if (res.ok) {
-        alert('Product deleted successfully!');
+        alert("Product deleted successfully!");
         fetchProducts();
         fetchDashboardData();
       } else {
         alert("Failed to delete product.");
       }
     } catch (error) {
-      console.error('Error deleting product:', error);
-      alert('Failed to delete product. Please try again.');
+      console.error("Error deleting product:", error);
+      alert("Failed to delete product. Please try again.");
     }
   };
 
   // User Management Functions
   const handleUserChange = (e) => {
     const { name, value } = e.target;
-    setUserFormData({ 
-      ...userFormData, 
-      [name]: value 
+    setUserFormData({
+      ...userFormData,
+      [name]: value,
     });
   };
 
   const handleUserSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validate password length
     if (!editingUserId && userFormData.password.length < 6) {
-      alert('Password must be at least 6 characters long');
+      alert("Password must be at least 6 characters long");
       return;
     }
 
     try {
       // Use register endpoint for creating new users
-      const url = editingUserId 
-        ? `${USER_API}/${editingUserId}` 
+      const url = editingUserId
+        ? `${USER_API}/${editingUserId}`
         : `${AUTH_API}/register`;
-      
-      const method = editingUserId ? 'PUT' : 'POST';
+
+      const method = editingUserId ? "PUT" : "POST";
 
       const res = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userFormData)
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userFormData),
       });
 
       if (!res.ok) {
@@ -237,53 +270,62 @@ const AdminDashboard = () => {
         return;
       }
 
-      alert(editingUserId ? 'User updated successfully!' : 'User created successfully!');
-      
+      alert(
+        editingUserId
+          ? "User updated successfully!"
+          : "User created successfully!"
+      );
+
       setUserFormData({
-        email: '', password: '', fullName: '', phone: '', address: '', role: 'USER'
+        email: "",
+        password: "",
+        fullName: "",
+        phone: "",
+        address: "",
+        role: "USER",
       });
       setEditingUserId(null);
       fetchUsers();
       fetchDashboardData();
     } catch (error) {
-      console.error('Error saving user:', error);
-      alert('Failed to save user. Please try again.');
+      console.error("Error saving user:", error);
+      alert("Failed to save user. Please try again.");
     }
   };
 
   const handleEditUser = (user) => {
     setUserFormData({
       email: user.email,
-      password: '', // Don't populate password for security
-      fullName: user.fullName || '',
-      phone: user.phone || '',
-      address: user.address || '',
-      role: user.role
+      password: "", // Don't populate password for security
+      fullName: user.fullName || "",
+      phone: user.phone || "",
+      address: user.address || "",
+      role: user.role,
     });
     setEditingUserId(user.id);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDeleteUser = async (email) => {
-    if (!window.confirm('Are you sure you want to delete this user?')) {
+    if (!window.confirm("Are you sure you want to delete this user?")) {
       return;
     }
 
     try {
       const res = await fetch(`${USER_API}/${email}`, {
-        method: 'DELETE'
+        method: "DELETE",
       });
 
       if (res.ok) {
-        alert('User deleted successfully!');
+        alert("User deleted successfully!");
         fetchUsers();
         fetchDashboardData();
       } else {
         alert("Failed to delete user.");
       }
     } catch (error) {
-      console.error('Error deleting user:', error);
-      alert('Failed to delete user. Please try again.');
+      console.error("Error deleting user:", error);
+      alert("Failed to delete user. Please try again.");
     }
   };
 
@@ -299,27 +341,29 @@ const AdminDashboard = () => {
           <h1>Admin Dashboard</h1>
           <div className="header-actions">
             <span className="admin-badge">Administrator</span>
-            <button onClick={handleLogout} className="logout-btn">Logout</button>
+            <button onClick={handleLogout} className="logout-btn">
+              Logout
+            </button>
           </div>
         </div>
 
         {/* Tab Navigation */}
         <div className="tab-navigation">
-          <button 
-            className={activeTab === 'dashboard' ? 'tab-btn active' : 'tab-btn'}
-            onClick={() => setActiveTab('dashboard')}
+          <button
+            className={activeTab === "dashboard" ? "tab-btn active" : "tab-btn"}
+            onClick={() => setActiveTab("dashboard")}
           >
             📊 Dashboard
           </button>
-          <button 
-            className={activeTab === 'products' ? 'tab-btn active' : 'tab-btn'}
-            onClick={() => setActiveTab('products')}
+          <button
+            className={activeTab === "products" ? "tab-btn active" : "tab-btn"}
+            onClick={() => setActiveTab("products")}
           >
             📦 Manage Products
           </button>
-          <button 
-            className={activeTab === 'users' ? 'tab-btn active' : 'tab-btn'}
-            onClick={() => setActiveTab('users')}
+          <button
+            className={activeTab === "users" ? "tab-btn active" : "tab-btn"}
+            onClick={() => setActiveTab("users")}
           >
             👥 Manage Users
           </button>
@@ -327,7 +371,7 @@ const AdminDashboard = () => {
 
         <div className="dashboard-content">
           {/* Dashboard View */}
-          {activeTab === 'dashboard' && (
+          {activeTab === "dashboard" && (
             <>
               {/* Statistics Cards */}
               <div className="stats-grid">
@@ -365,12 +409,18 @@ const AdminDashboard = () => {
               <div className="admin-actions">
                 <h2>Quick Actions</h2>
                 <div className="actions-grid">
-                  <div className="action-card" onClick={() => setActiveTab('products')}>
+                  <div
+                    className="action-card"
+                    onClick={() => setActiveTab("products")}
+                  >
                     <i className="icon">📦</i>
                     <h4>Manage Products</h4>
                     <p>Add, edit, delete products</p>
                   </div>
-                  <div className="action-card" onClick={() => setActiveTab('users')}>
+                  <div
+                    className="action-card"
+                    onClick={() => setActiveTab("users")}
+                  >
                     <i className="icon">👥</i>
                     <h4>Manage Users</h4>
                     <p>View all users</p>
@@ -407,21 +457,27 @@ const AdminDashboard = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {recentOrders.map(order => (
+                        {recentOrders.map((order) => (
                           <tr key={order.id}>
                             <td>#{order.id}</td>
-                            <td>{order.user?.email || 'N/A'}</td>
-                            <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                            <td>{order.user?.email || "N/A"}</td>
+                            <td>
+                              {new Date(order.createdAt).toLocaleDateString()}
+                            </td>
                             <td>Rs. {order.totalAmount.toFixed(2)}</td>
                             <td>
-                              <span className={`status-badge status-${order.status.toLowerCase()}`}>
+                              <span
+                                className={`status-badge status-${order.status.toLowerCase()}`}
+                              >
                                 {order.status}
                               </span>
                             </td>
                             <td>
-                              <select 
-                                value={order.status} 
-                                onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                              <select
+                                value={order.status}
+                                onChange={(e) =>
+                                  updateOrderStatus(order.id, e.target.value)
+                                }
                                 className="status-select"
                               >
                                 <option value="PENDING">Pending</option>
@@ -442,9 +498,9 @@ const AdminDashboard = () => {
           )}
 
           {/* Manage Products View */}
-          {activeTab === 'products' && (
+          {activeTab === "products" && (
             <div className="manage-section">
-              <h2>{editingProductId ? 'Edit Product' : 'Add New Product'}</h2>
+              <h2>{editingProductId ? "Edit Product" : "Add New Product"}</h2>
               <form onSubmit={handleProductSubmit} className="product-form">
                 <div className="form-row">
                   <div className="form-group">
@@ -550,15 +606,23 @@ const AdminDashboard = () => {
                 </div>
                 <div className="form-actions">
                   <button type="submit" className="submit-btn">
-                    {editingProductId ? '✓ Update Product' : '+ Add Product'}
+                    {editingProductId ? "✓ Update Product" : "+ Add Product"}
                   </button>
                   {editingProductId && (
-                    <button 
-                      type="button" 
+                    <button
+                      type="button"
                       onClick={() => {
                         setEditingProductId(null);
                         setProductFormData({
-                          name: '', price: '', imageUrl: '', category: '', description: '', brand: '', stockQuantity: 0, featured: false, bestSeller: false
+                          name: "",
+                          price: "",
+                          imageUrl: "",
+                          category: "",
+                          description: "",
+                          brand: "",
+                          stockQuantity: 0,
+                          featured: false,
+                          bestSeller: false,
                         });
                       }}
                       className="cancel-btn"
@@ -569,7 +633,9 @@ const AdminDashboard = () => {
                 </div>
               </form>
 
-              <h2 style={{marginTop: '40px'}}>All Products ({products.length})</h2>
+              <h2 style={{ marginTop: "40px" }}>
+                All Products ({products.length})
+              </h2>
               <div className="table-container">
                 <table className="data-table">
                   <thead>
@@ -586,19 +652,33 @@ const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {products.map(product => (
+                    {products.map((product) => (
                       <tr key={product.id}>
                         <td>{product.id}</td>
                         <td>{product.name}</td>
                         <td>Rs. {product.price}</td>
-                        <td><span className="category-badge">{product.category}</span></td>
-                        <td>{product.brand || 'N/A'}</td>
-                        <td>{product.stockQuantity}</td>
-                        <td>{product.featured ? '✓' : '✗'}</td>
-                        <td>{product.bestSeller ? '✓' : '✗'}</td>
                         <td>
-                          <button onClick={() => handleEditProduct(product)} className="edit-btn">✎ Edit</button>
-                          <button onClick={() => handleDeleteProduct(product.id)} className="delete-btn">🗑 Delete</button>
+                          <span className="category-badge">
+                            {product.category}
+                          </span>
+                        </td>
+                        <td>{product.brand || "N/A"}</td>
+                        <td>{product.stockQuantity}</td>
+                        <td>{product.featured ? "✓" : "✗"}</td>
+                        <td>{product.bestSeller ? "✓" : "✗"}</td>
+                        <td>
+                          <button
+                            onClick={() => handleEditProduct(product)}
+                            className="edit-btn"
+                          >
+                            ✎ Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteProduct(product.id)}
+                            className="delete-btn"
+                          >
+                            🗑 Delete
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -609,9 +689,9 @@ const AdminDashboard = () => {
           )}
 
           {/* Manage Users View */}
-          {activeTab === 'users' && (
+          {activeTab === "users" && (
             <div className="manage-section">
-              <h2>{editingUserId ? 'Edit User' : 'Add New User'}</h2>
+              <h2>{editingUserId ? "Edit User" : "Add New User"}</h2>
               <form onSubmit={handleUserSubmit} className="product-form">
                 <div className="form-row">
                   <div className="form-group">
@@ -633,7 +713,11 @@ const AdminDashboard = () => {
                       value={userFormData.password}
                       onChange={handleUserChange}
                       required={!editingUserId}
-                      placeholder={editingUserId ? "Leave blank to keep current" : "Minimum 6 characters"}
+                      placeholder={
+                        editingUserId
+                          ? "Leave blank to keep current"
+                          : "Minimum 6 characters"
+                      }
                       minLength="6"
                     />
                   </div>
@@ -683,15 +767,20 @@ const AdminDashboard = () => {
                 </div>
                 <div className="form-actions">
                   <button type="submit" className="submit-btn">
-                    {editingUserId ? '✓ Update User' : '+ Add User'}
+                    {editingUserId ? "✓ Update User" : "+ Add User"}
                   </button>
                   {editingUserId && (
-                    <button 
-                      type="button" 
+                    <button
+                      type="button"
                       onClick={() => {
                         setEditingUserId(null);
                         setUserFormData({
-                          email: '', password: '', fullName: '', phone: '', address: '', role: 'USER'
+                          email: "",
+                          password: "",
+                          fullName: "",
+                          phone: "",
+                          address: "",
+                          role: "USER",
                         });
                       }}
                       className="cancel-btn"
@@ -702,7 +791,7 @@ const AdminDashboard = () => {
                 </div>
               </form>
 
-              <h2 style={{marginTop: '40px'}}>All Users ({users.length})</h2>
+              <h2 style={{ marginTop: "40px" }}>All Users ({users.length})</h2>
               <div className="table-container">
                 <table className="data-table">
                   <thead>
@@ -717,26 +806,35 @@ const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {users.map(user => (
+                    {users.map((user) => (
                       <tr key={user.id}>
                         <td>{user.id}</td>
                         <td>{user.email}</td>
-                        <td>{user.fullName || 'N/A'}</td>
-                        <td>{user.phone || 'N/A'}</td>
-                        <td>{user.address || 'N/A'}</td>
+                        <td>{user.fullName || "N/A"}</td>
+                        <td>{user.phone || "N/A"}</td>
+                        <td>{user.address || "N/A"}</td>
                         <td>
-                          <span className={`role-badge role-${user.role?.toLowerCase()}`}>
+                          <span
+                            className={`role-badge role-${user.role?.toLowerCase()}`}
+                          >
                             {user.role}
                           </span>
                         </td>
                         <td>
-                          <button onClick={() => handleEditUser(user)} className="edit-btn">✎ Edit</button>
-                          <button 
-                            onClick={() => handleDeleteUser(user.email)} 
-                            className="delete-btn"
-                            disabled={user.role === 'ADMIN'}
+                          <button
+                            onClick={() => handleEditUser(user)}
+                            className="edit-btn"
                           >
-                            {user.role === 'ADMIN' ? '🔒 Protected' : '🗑 Delete'}
+                            ✎ Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteUser(user.email)}
+                            className="delete-btn"
+                            disabled={user.role === "ADMIN"}
+                          >
+                            {user.role === "ADMIN"
+                              ? "🔒 Protected"
+                              : "🗑 Delete"}
                           </button>
                         </td>
                       </tr>
