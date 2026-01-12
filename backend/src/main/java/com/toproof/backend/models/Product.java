@@ -26,6 +26,8 @@ public class Product {
 
     private String brand;
     private Integer stockQuantity = 0;
+    private Double averageRating = 0.0;
+    private Long reviewCount = 0L;
     private boolean featured = false;
     private boolean bestSeller = false;
 
@@ -114,6 +116,22 @@ public class Product {
 
     public void setStockQuantity(Integer stockQuantity) {
         this.stockQuantity = stockQuantity;
+    }
+
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public Long getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(Long reviewCount) {
+        this.reviewCount = reviewCount;
     }
 
     public boolean isFeatured() {
