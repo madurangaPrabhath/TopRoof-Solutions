@@ -1,16 +1,17 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Home from './pages/Home';
-import Products from './pages/Products';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Cart from './pages/Cart';
-import RoofingProducts from './components/RoofingProducts';
-import TopSellingProducts from './components/TopSellingProducts';
-import AccessoriesProducts from './components/AccessoriesProducts';
-import UserDashboard from './pages/UserDashboard';
-import AdminDashboard from './pages/AdminDashboard';
+import Home from "./pages/Home";
+import Products from "./pages/Products";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Cart from "./pages/Cart";
+import Wishlist from "./pages/Wishlist";
+import RoofingProducts from "./components/RoofingProducts";
+import TopSellingProducts from "./components/TopSellingProducts";
+import AccessoriesProducts from "./components/AccessoriesProducts";
+import UserDashboard from "./pages/UserDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/products" element={<Products />} />
         <Route path="/roofing-products" element={<RoofingProducts />} />
         <Route path="/top-selling-products" element={<TopSellingProducts />} />
