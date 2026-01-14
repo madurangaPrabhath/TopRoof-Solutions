@@ -32,7 +32,6 @@ public class WishlistItem {
         this.addedAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
