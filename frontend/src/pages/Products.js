@@ -371,7 +371,10 @@ const Products = () => {
                   className={`wishlist-btn ${
                     wishlistItems.has(product.id) ? "in-wishlist" : ""
                   }`}
-                  onClick={() => toggleWishlist(product.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleWishlist(product.id);
+                  }}
                   title={
                     wishlistItems.has(product.id)
                       ? "Remove from wishlist"
@@ -380,13 +383,23 @@ const Products = () => {
                 >
                   {wishlistItems.has(product.id) ? "❤️" : "🤍"}
                 </button>
-                <img src={product.imageUrl} alt={product.name} />
-                <h3>{product.name}</h3>
-                <p className="brand">{product.brand}</p>
-                <p className="category-tag">{product.category}</p>
-                <p className="price">Rs. {product.price.toFixed(2)}</p>
-                <p className="description">{product.description}</p>
-                <button onClick={() => handleAddToCart(product)}>
+                <div
+                  onClick={() => navigate(`/products/${product.id}`)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <img src={product.imageUrl} alt={product.name} />
+                  <h3>{product.name}</h3>
+                  <p className="brand">{product.brand}</p>
+                  <p className="category-tag">{product.category}</p>
+                  <p className="price">Rs. {product.price.toFixed(2)}</p>
+                  <p className="description">{product.description}</p>
+                </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart(product);
+                  }}
+                >
                   Add to Cart
                 </button>
               </div>
@@ -415,7 +428,10 @@ const Products = () => {
                     className={`wishlist-btn ${
                       wishlistItems.has(product.id) ? "in-wishlist" : ""
                     }`}
-                    onClick={() => toggleWishlist(product.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleWishlist(product.id);
+                    }}
                     title={
                       wishlistItems.has(product.id)
                         ? "Remove from wishlist"
@@ -424,11 +440,21 @@ const Products = () => {
                   >
                     {wishlistItems.has(product.id) ? "❤️" : "🤍"}
                   </button>
-                  <img src={product.imageUrl} alt={product.name} />
-                  <h3>{product.name}</h3>
-                  <p className="price">Rs. {product.price.toFixed(2)}</p>
-                  <p className="description">{product.description}</p>
-                  <button onClick={() => handleAddToCart(product)}>
+                  <div
+                    onClick={() => navigate(`/products/${product.id}`)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <img src={product.imageUrl} alt={product.name} />
+                    <h3>{product.name}</h3>
+                    <p className="price">Rs. {product.price.toFixed(2)}</p>
+                    <p className="description">{product.description}</p>
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(product);
+                    }}
+                  >
                     Add to Cart
                   </button>
                 </div>
@@ -462,7 +488,10 @@ const Products = () => {
                     className={`wishlist-btn ${
                       wishlistItems.has(product.id) ? "in-wishlist" : ""
                     }`}
-                    onClick={() => toggleWishlist(product.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleWishlist(product.id);
+                    }}
                     title={
                       wishlistItems.has(product.id)
                         ? "Remove from wishlist"
@@ -471,11 +500,21 @@ const Products = () => {
                   >
                     {wishlistItems.has(product.id) ? "❤️" : "🤍"}
                   </button>
-                  <img src={product.imageUrl} alt={product.name} />
-                  <h3>{product.name}</h3>
-                  <p className="price">Rs. {product.price.toFixed(2)}</p>
-                  <p className="description">{product.description}</p>
-                  <button onClick={() => handleAddToCart(product)}>
+                  <div
+                    onClick={() => navigate(`/products/${product.id}`)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <img src={product.imageUrl} alt={product.name} />
+                    <h3>{product.name}</h3>
+                    <p className="price">Rs. {product.price.toFixed(2)}</p>
+                    <p className="description">{product.description}</p>
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(product);
+                    }}
+                  >
                     Add to Cart
                   </button>
                 </div>
@@ -503,7 +542,10 @@ const Products = () => {
                     className={`wishlist-btn ${
                       wishlistItems.has(product.id) ? "in-wishlist" : ""
                     }`}
-                    onClick={() => toggleWishlist(product.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleWishlist(product.id);
+                    }}
                     title={
                       wishlistItems.has(product.id)
                         ? "Remove from wishlist"
@@ -512,11 +554,21 @@ const Products = () => {
                   >
                     {wishlistItems.has(product.id) ? "❤️" : "🤍"}
                   </button>
-                  <img src={product.imageUrl} alt={product.name} />
-                  <h3>{product.name}</h3>
-                  <p className="price">Rs. {product.price.toFixed(2)}</p>
-                  <p className="description">{product.description}</p>
-                  <button onClick={() => handleAddToCart(product)}>
+                  <div
+                    onClick={() => navigate(`/products/${product.id}`)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <img src={product.imageUrl} alt={product.name} />
+                    <h3>{product.name}</h3>
+                    <p className="price">Rs. {product.price.toFixed(2)}</p>
+                    <p className="description">{product.description}</p>
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(product);
+                    }}
+                  >
                     Add to Cart
                   </button>
                 </div>
