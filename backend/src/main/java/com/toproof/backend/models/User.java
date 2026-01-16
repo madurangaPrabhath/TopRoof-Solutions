@@ -1,6 +1,7 @@
 package com.toproof.backend.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,16 +11,29 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NotBlank(message = "Email is required")
+  @Email(message = "Email should be valid")
   @Column(unique = true, nullable = false)
   private String email;
 
+  @NotBlank(message = "Password is required")
+  @Size(min = 6, message = "Password must be at least 6 characters long")
   @Column(nullable = false)
   private String password;
 
+  @Size(max = 50, message = "First name cannot exceed 50 characters")
   private String firstName;
+  
+  @Size(max = 50, message = "Last name cannot exceed 50 characters")
   private String lastName;
+  
+  @Size(max = 100, message = "Full name cannot exceed 100 characters")
   private String fullName;
+  
+  @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Phone number should be valid")
   private String phone;
+  
+  @Size(max = 255, message = "Address cannot exceed 255 characters")
   private String address;
 
   @Column(nullable = false)

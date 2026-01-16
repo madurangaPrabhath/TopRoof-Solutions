@@ -1,6 +1,7 @@
 package com.toproof.backend.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,24 +11,39 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Product name is required")
+    @Size(min = 2, max = 100, message = "Product name must be between 2 and 100 characters")
     @Column(nullable = false)
     private String name;
 
+    @Size(max = 1000, message = "Description cannot exceed 1000 characters")
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @NotNull(message = "Price is required")
+    @Positive(message = "Price must be greater than 0")
     @Column(nullable = false)
     private double price;
 
     private String imageUrl;
 
+    @NotBlank(message = "Category is required")
     @Column(nullable = false)
     private String category; // ROOFING, ACCESSORIES
 
+    @Size(max = 50, message = "Brand name cannot exceed 50 characters")
     private String brand;
+    
+    @Min(value = 0, message = "Stock quantity cannot be negative")
     private Integer stockQuantity = 0;
+    
+    @Min(value = 0, message = "Average rating cannot be negative")
+    @Max(value = 5, message = "Average rating cannot exceed 5")
     private Double averageRating = 0.0;
+    
+    @Min(value = 0, message = "Review count cannot be negative")
     private Long reviewCount = 0L;
+    
     private boolean featured = false;
     private boolean bestSeller = false;
 
