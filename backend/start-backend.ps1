@@ -1,24 +1,24 @@
 # TopRoof Solutions Backend - Quick Start Script
 # Run this script to start the backend server
 
-Write-Host "🚀 Starting TopRoof Solutions Backend..." -ForegroundColor Cyan
+Write-Host "Starting TopRoof Solutions Backend..." -ForegroundColor Cyan
 Write-Host ""
 
 # Check if Java is installed
 Write-Host "Checking Java installation..." -ForegroundColor Yellow
 $javaVersion = java -version 2>&1 | Select-String "version"
 if ($javaVersion) {
-    Write-Host "✅ Java found: $javaVersion" -ForegroundColor Green
+    Write-Host "Java found: $javaVersion" -ForegroundColor Green
 } else {
-    Write-Host "❌ Java not found! Please install JDK 21" -ForegroundColor Red
-    Write-Host "Download from: https://learn.microsoft.com/en-us/java/openjdk/download#openjdk-21" -ForegroundColor Yellow
+    Write-Host "Java not found! Please install JDK 21" -ForegroundColor Red
+    Write-Host "Download from: https://learn.microsoft.com/en-us/java/openjdk/download" -ForegroundColor Yellow
     exit 1
 }
 
 Write-Host ""
 
 # Check if MySQL is running (optional check)
-Write-Host "📦 Make sure MySQL is running on localhost:3306" -ForegroundColor Yellow
+Write-Host "Make sure MySQL is running on localhost:3306" -ForegroundColor Yellow
 Write-Host ""
 
 # Start the application
