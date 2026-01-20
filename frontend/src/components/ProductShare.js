@@ -4,13 +4,11 @@ import "../assets/styles/ProductShare.css";
 const ProductShare = ({ product }) => {
   const [showShareMenu, setShowShareMenu] = useState(false);
 
-  // Build shareable URL (use current URL + product ID or customize as needed)
   const productUrl = `${window.location.origin}/products?id=${product.id}`;
   const productTitle = product.name;
   const productDescription =
     product.description || `Check out ${product.name} at TopRoof Solutions`;
 
-  // Share URLs for different platforms
   const shareUrls = {
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`,
     twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(productUrl)}&text=${encodeURIComponent(productTitle)}`,
@@ -21,7 +19,6 @@ const ProductShare = ({ product }) => {
 
   const handleShare = (platform) => {
     if (platform === "native" && navigator.share) {
-      // Use native Web Share API (mobile devices)
       navigator
         .share({
           title: productTitle,
@@ -30,7 +27,6 @@ const ProductShare = ({ product }) => {
         })
         .catch((err) => console.log("Error sharing:", err));
     } else if (platform === "copy") {
-      // Copy link to clipboard
       navigator.clipboard
         .writeText(productUrl)
         .then(() => {
@@ -39,7 +35,6 @@ const ProductShare = ({ product }) => {
         })
         .catch((err) => console.error("Failed to copy:", err));
     } else {
-      // Open social media share window
       window.open(shareUrls[platform], "_blank", "width=600,height=400");
       setShowShareMenu(false);
     }
@@ -68,7 +63,6 @@ const ProductShare = ({ product }) => {
           </div>
 
           <div className="share-buttons">
-            {/* Native Share (for mobile) */}
             {navigator.share && (
               <button
                 className="share-btn native-share"
@@ -80,7 +74,6 @@ const ProductShare = ({ product }) => {
               </button>
             )}
 
-            {/* Facebook */}
             <button
               className="share-btn facebook-share"
               onClick={() => handleShare("facebook")}
@@ -90,7 +83,6 @@ const ProductShare = ({ product }) => {
               <span className="share-label">Facebook</span>
             </button>
 
-            {/* Twitter */}
             <button
               className="share-btn twitter-share"
               onClick={() => handleShare("twitter")}
@@ -100,7 +92,6 @@ const ProductShare = ({ product }) => {
               <span className="share-label">Twitter</span>
             </button>
 
-            {/* WhatsApp */}
             <button
               className="share-btn whatsapp-share"
               onClick={() => handleShare("whatsapp")}
@@ -110,7 +101,6 @@ const ProductShare = ({ product }) => {
               <span className="share-label">WhatsApp</span>
             </button>
 
-            {/* LinkedIn */}
             <button
               className="share-btn linkedin-share"
               onClick={() => handleShare("linkedin")}
@@ -120,7 +110,6 @@ const ProductShare = ({ product }) => {
               <span className="share-label">LinkedIn</span>
             </button>
 
-            {/* Email */}
             <button
               className="share-btn email-share"
               onClick={() => handleShare("email")}
@@ -130,7 +119,6 @@ const ProductShare = ({ product }) => {
               <span className="share-label">Email</span>
             </button>
 
-            {/* Copy Link */}
             <button
               className="share-btn copy-link"
               onClick={() => handleShare("copy")}
@@ -143,7 +131,6 @@ const ProductShare = ({ product }) => {
         </div>
       )}
 
-      {/* Backdrop to close menu when clicking outside */}
       {showShareMenu && (
         <div
           className="share-menu-backdrop"
