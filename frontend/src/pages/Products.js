@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import NewsletterSection from "../components/NewsletterSection";
 import Footer from "../components/Footer";
+import ProductShare from "../components/ProductShare";
 import { API_ENDPOINTS } from "../config/api";
 import axios from "axios";
 import "../assets/styles/Products.css";
@@ -16,7 +17,6 @@ const Products = () => {
   const [categories, setCategories] = useState([]);
   const [wishlistItems, setWishlistItems] = useState(new Set());
 
-  // Filter states
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
@@ -28,14 +28,13 @@ const Products = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch products, brands, and categories
     Promise.all([
       fetch("http://localhost:8080/api/products").then((res) => res.json()),
       fetch("http://localhost:8080/api/products/brands").then((res) =>
-        res.json()
+        res.json(),
       ),
       fetch("http://localhost:8080/api/products/categories").then((res) =>
-        res.json()
+        res.json(),
       ),
     ])
       .then(([productsData, brandsData, categoriesData]) => {
@@ -92,10 +91,10 @@ const Products = () => {
     const user = JSON.parse(userData);
     try {
       const response = await axios.get(
-        `${API_ENDPOINTS.WISHLIST_GET}/${user.id}`
+        `${API_ENDPOINTS.WISHLIST_GET}/${user.id}`,
       );
       const wishlistProductIds = new Set(
-        response.data.map((item) => item.product.id)
+        response.data.map((item) => item.product.id),
       );
       setWishlistItems(wishlistProductIds);
     } catch (err) {
@@ -181,7 +180,7 @@ const Products = () => {
 
   const getProductsByCategory = (category) => {
     return products.filter(
-      (p) => p.category?.toLowerCase() === category.toLowerCase()
+      (p) => p.category?.toLowerCase() === category.toLowerCase(),
     );
   };
 
@@ -383,6 +382,7 @@ const Products = () => {
                 >
                   {wishlistItems.has(product.id) ? "❤️" : "🤍"}
                 </button>
+                <ProductShare product={product} />
                 <div
                   onClick={() => navigate(`/products/${product.id}`)}
                   style={{ cursor: "pointer" }}
@@ -408,8 +408,6 @@ const Products = () => {
         )}
       </section>
 
-      {/* Old sections removed - now showing all filtered products above */}
-      {/* Roofing Products Section */}
       {roofingProducts.length > 0 &&
         !searchTerm &&
         !selectedCategory &&
@@ -440,6 +438,7 @@ const Products = () => {
                   >
                     {wishlistItems.has(product.id) ? "❤️" : "🤍"}
                   </button>
+                  <ProductShare product={product} />
                   <div
                     onClick={() => navigate(`/products/${product.id}`)}
                     style={{ cursor: "pointer" }}
@@ -463,7 +462,6 @@ const Products = () => {
           </section>
         )}
 
-      {/* Featured/Best Seller Products */}
       {featuredProducts.length > 0 &&
         !searchTerm &&
         !selectedCategory &&
@@ -500,6 +498,7 @@ const Products = () => {
                   >
                     {wishlistItems.has(product.id) ? "❤️" : "🤍"}
                   </button>
+                  <ProductShare product={product} />
                   <div
                     onClick={() => navigate(`/products/${product.id}`)}
                     style={{ cursor: "pointer" }}
@@ -523,7 +522,6 @@ const Products = () => {
           </section>
         )}
 
-      {/* Accessories Products Section */}
       {accessoriesProducts.length > 0 &&
         !searchTerm &&
         !selectedCategory &&
@@ -554,6 +552,7 @@ const Products = () => {
                   >
                     {wishlistItems.has(product.id) ? "❤️" : "🤍"}
                   </button>
+                  <ProductShare product={product} />
                   <div
                     onClick={() => navigate(`/products/${product.id}`)}
                     style={{ cursor: "pointer" }}
