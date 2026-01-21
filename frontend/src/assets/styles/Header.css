@@ -40,42 +40,58 @@
   padding: 8px 14px;
   color: white;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 8px;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
 
+.header-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: #ffc107;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
 .header-nav a:hover {
-  background-color: #0051a2;
+  background-color: rgba(255, 193, 7, 0.15);
   color: #ffc107;
   transform: translateY(-2px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.header-nav a:hover::after {
+  width: 80%;
 }
 
 .nav-btn,
 .cart-btn {
-  background-color: #ffc107;
+  background: linear-gradient(135deg, #ffc107 0%, #ffb400 100%);
   color: #03316c;
   font-weight: 600;
   text-decoration: none;
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px;
+  padding: 10px 18px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 15px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+  cursor: pointer;
 }
 
 .nav-btn:hover,
 .cart-btn:hover {
-  background-color: #ffb400;
+  background: linear-gradient(135deg, #ffb400 0%, #ffa000 100%);
   color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4);
 }
 
 /* User Profile Menu */
