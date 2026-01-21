@@ -1,7 +1,17 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .product-detail-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
+  animation: fadeIn 0.5s ease-in;
 }
 
 .breadcrumb {
@@ -36,9 +46,15 @@
   width: 100%;
   max-width: 500px;
   height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   object-fit: cover;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-detail-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
 }
 
 .product-info-section {
@@ -62,20 +78,32 @@
 
 .brand-badge,
 .category-badge {
-  padding: 6px 12px;
-  border-radius: 20px;
+  padding: 8px 16px;
+  border-radius: 25px;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .brand-badge {
-  background-color: #c8102e;
+  background: linear-gradient(135deg, #c8102e 0%, #a00d24 100%);
   color: white;
 }
 
+.brand-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(200, 16, 46, 0.3);
+}
+
 .category-badge {
-  background-color: #f0f0f0;
+  background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
   color: #333;
+}
+
+.category-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .product-price {
@@ -138,24 +166,28 @@
 .quantity-selector button {
   width: 40px;
   height: 40px;
-  border: 1px solid #ddd;
-  background-color: white;
+  border: 2px solid #e0e0e0;
+  background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
   cursor: pointer;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
-  border-radius: 5px;
-  transition: all 0.3s;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .quantity-selector button:hover:not(:disabled) {
-  background-color: #c8102e;
+  background: linear-gradient(135deg, #c8102e 0%, #a00d24 100%);
   color: white;
   border-color: #c8102e;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(200, 16, 46, 0.3);
 }
 
 .quantity-selector button:disabled {
-  opacity: 0.5;
+  opacity: 0.3;
   cursor: not-allowed;
+  background: #f0f0f0;
 }
 
 .quantity-selector input {
@@ -174,45 +206,66 @@
 
 .add-to-cart-btn {
   flex: 1;
-  padding: 15px 30px;
+  padding: 16px 32px;
   font-size: 16px;
-  font-weight: 600;
-  background-color: #c8102e;
+  font-weight: 700;
+  background: linear-gradient(135deg, #c8102e 0%, #a00d24 100%);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(200, 16, 46, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .add-to-cart-btn:hover:not(:disabled) {
-  background-color: #a00d24;
+  background: linear-gradient(135deg, #a00d24 0%, #7a0a1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(200, 16, 46, 0.4);
+}
+
+.add-to-cart-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(200, 16, 46, 0.3);
 }
 
 .add-to-cart-btn:disabled {
-  background-color: #ccc;
+  background: linear-gradient(135deg, #ccc 0%, #999 100%);
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .wishlist-btn {
   width: 60px;
   height: 50px;
-  font-size: 24px;
+  font-size: 26px;
   background-color: white;
-  border: 2px solid #ddd;
-  border-radius: 5px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .wishlist-btn:hover {
   border-color: #c8102e;
-  transform: scale(1.1);
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 4px 16px rgba(200, 16, 46, 0.2);
 }
 
 .wishlist-btn.active {
   border-color: #c8102e;
-  background-color: #fff5f5;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%);
+  animation: heartbeat 0.6s ease-in-out;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1.1); }
+  75% { transform: scale(1.15); }
 }
 
 .reviews-section {
