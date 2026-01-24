@@ -129,24 +129,6 @@ cd TopRoof-Solutions
 
 ---
 
-### Database Setup:
-
-1. Create a MySQL database:
-
-```sql
-CREATE DATABASE toproofdb;
-```
-
-2. Update database credentials in `backend/src/main/resources/application.properties`:
-
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/toproofdb
-spring.datasource.username=root
-spring.datasource.password=1234
-```
-
----
-
 ### Backend (Spring Boot):
 
 1. Navigate to the backend directory:
