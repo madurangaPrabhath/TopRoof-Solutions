@@ -202,50 +202,6 @@ The frontend will open automatically at **http://localhost:3000**
 
 ---
 
-## 🌐 API Endpoints
-
-### Authentication (`/api/auth`)
-
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - User login
-
-### Products (`/api/products`)
-
-- `GET /api/products` - Get all products
-- `GET /api/products/{id}` - Get product by ID
-- `GET /api/products/category/{category}` - Get products by
-- `GET /api/products/search?keyword={keyword}` - Search products by keyword
-- `GET /api/products/filter?search={term}&category={cat}&brand={brand}&minPrice={min}&maxPrice={max}&sortBy={sort}` - Advanced filtering
-- `GET /api/products/brands` - Get all unique brands
-- `GET /api/products/categories` - Get all unique categories category
-- `GET /api/products/featured` - Get featured products
-- `GET /api/products/bestsellers` - Get bestseller products
-
-### Cart (`/api/cart`)
-
-- `POST /api/cart/add` - Add item to cart
-- `GET /api/cart/user/{userId}` - Get user's cart
-- `PUT /api/cart/{id}` - Update cart item
-- `DELETE /api/cart/{id}` - Remove cart item
-
-### Orders (`/api/orders`)
-
-- `POST /api/orders` - Create new order
-- `GET /api/orders/user/{userId}` - Get user's orders
-- `GET /api/orders` - Get all orders (Admin)
-
-### Admin (`/api/admin`)
-
-- `GET /api/admin/products` - Get all products
-- `POST /api/admin/products` - Create product
-- `PUT /api/admin/products/{id}` - Update product
-- `DELETE /api/admin/products/{id}` - Delete product
-- `GET /api/admin/users` - Get all users
-- `PUT /api/admin/users/{id}` - Update user
-- `DELETE /api/admin/users/{email}` - Delete user
-
----
-
 ## 📁 Project Structure
 
 ```
