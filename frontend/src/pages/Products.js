@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import NewsletterSection from "../components/NewsletterSection";
@@ -51,19 +51,7 @@ const Products = () => {
       });
   }, []);
 
-  useEffect(() => {
-    applyFilters();
-  }, [
-    searchTerm,
-    selectedCategory,
-    selectedBrand,
-    minPrice,
-    maxPrice,
-    sortBy,
-    products,
-  ]);
-
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     const params = new URLSearchParams();
 
     if (searchTerm) params.append("search", searchTerm);
@@ -82,7 +70,11 @@ const Products = () => {
       .then((res) => res.json())
       .then((data) => setFilteredProducts(data))
       .catch((err) => console.error("Error filtering products:", err));
-  };
+  }, [searchTerm, selectedCategory, selectedBrand, minPrice, maxPrice, sortBy]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
 
   const fetchWishlist = async () => {
     const userData = localStorage.getItem("user");
