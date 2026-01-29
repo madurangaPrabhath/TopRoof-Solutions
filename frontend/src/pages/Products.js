@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import NewsletterSection from "../components/NewsletterSection";
 import Footer from "../components/Footer";
-import ProductShare from "../components/ProductShare";
 import { API_ENDPOINTS } from "../config/api";
 import axios from "axios";
 import "../assets/styles/Products.css";
@@ -374,7 +373,6 @@ const Products = () => {
                 >
                   {wishlistItems.has(product.id) ? "❤️" : "🤍"}
                 </button>
-                <ProductShare product={product} />
                 <div
                   onClick={() => navigate(`/products/${product.id}`)}
                   style={{ cursor: "pointer" }}
@@ -430,7 +428,6 @@ const Products = () => {
                   >
                     {wishlistItems.has(product.id) ? "❤️" : "🤍"}
                   </button>
-                  <ProductShare product={product} />
                   <div
                     onClick={() => navigate(`/products/${product.id}`)}
                     style={{ cursor: "pointer" }}
@@ -490,7 +487,6 @@ const Products = () => {
                   >
                     {wishlistItems.has(product.id) ? "❤️" : "🤍"}
                   </button>
-                  <ProductShare product={product} />
                   <div
                     onClick={() => navigate(`/products/${product.id}`)}
                     style={{ cursor: "pointer" }}
@@ -544,7 +540,6 @@ const Products = () => {
                   >
                     {wishlistItems.has(product.id) ? "❤️" : "🤍"}
                   </button>
-                  <ProductShare product={product} />
                   <div
                     onClick={() => navigate(`/products/${product.id}`)}
                     style={{ cursor: "pointer" }}
