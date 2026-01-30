@@ -1,5 +1,7 @@
 package com.toproof.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,9 +16,11 @@ public class Order {
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
+  @JsonIgnoreProperties({"password", "orders", "cartItems", "wishlistItems"})
   private User user;
 
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<OrderItem> orderItems = new ArrayList<>();
 
   @Column(nullable = false)

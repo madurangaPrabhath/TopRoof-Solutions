@@ -124,15 +124,35 @@
 }
 
 @media (max-width: 576px) {
+  .accessories-section {
+    padding: 40px 15px;
+  }
+
+  .section-heading h2 {
+    font-size: 1.5rem;
+  }
+
   .accessories-grid {
     grid-template-columns: 1fr;
-    max-width: 400px;
+    max-width: 100%;
+    gap: 15px;
   }
+
   .accessory-card {
     min-height: auto;
     max-height: none;
+    padding: 15px;
   }
-  .accessories-section {
-    padding: 40px 20px;
+
+  .product-image {
+    height: 160px;
+  }
+
+  .product-name {
+    font-size: 1rem;
+  }
+
+  .add-to-cart-btn {
+    padding: 12px 14px;
   }
 }

@@ -15,7 +15,6 @@ function HeroSection() {
           accessories in Sri Lanka. Explore a wide range of high-quality roofing products, all at
           your fingertips. Easy shopping, secure payment, and fast delivery making your roofing
           projects simpler and more efficient.
-          <br />Start shopping now!
         </p>
         <a href="/products" className="cta-button">Start shopping now!</a>
       </div>

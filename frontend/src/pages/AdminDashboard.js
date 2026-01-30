@@ -14,10 +14,11 @@ const AdminDashboard = () => {
     pendingOrders: 0,
   });
   const [recentOrders, setRecentOrders] = useState([]);
+  const [allOrders, setAllOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("dashboard"); // 'dashboard', 'products', 'users'
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [orderFilter, setOrderFilter] = useState("ALL");
 
-  // Product management state
   const [products, setProducts] = useState([]);
   const [productFormData, setProductFormData] = useState({
     name: "",
@@ -32,7 +33,6 @@ const AdminDashboard = () => {
   });
   const [editingProductId, setEditingProductId] = useState(null);
 
-  // User management state
   const [users, setUsers] = useState([]);
   const [userFormData, setUserFormData] = useState({
     email: "",
@@ -49,7 +49,6 @@ const AdminDashboard = () => {
   const AUTH_API = API_ENDPOINTS.REGISTER.replace("/register", "");
 
   useEffect(() => {
-    // Check if user is logged in and is admin
     const userData = localStorage.getItem("user");
     if (!userData) {
       navigate("/login");
@@ -66,6 +65,7 @@ const AdminDashboard = () => {
     fetchDashboardData();
     fetchProducts();
     fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   const fetchDashboardData = async () => {
@@ -74,7 +74,7 @@ const AdminDashboard = () => {
       const users = usersResponse.ok ? await usersResponse.json() : [];
 
       const productsResponse = await fetch(
-        "http://localhost:8080/api/products"
+        "http://localhost:8080/api/products",
       );
       const products = productsResponse.ok ? await productsResponse.json() : [];
 
@@ -88,6 +88,7 @@ const AdminDashboard = () => {
         pendingOrders: orders.filter((o) => o.status === "PENDING").length,
       });
 
+      setAllOrders(orders);
       setRecentOrders(orders.slice(0, 5));
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
@@ -134,20 +135,88 @@ const AdminDashboard = () => {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ status: newStatus }),
-        }
+        },
       );
 
       if (response.ok) {
-        alert("Order status updated!");
-        fetchDashboardData();
+        const updatedOrder = await response.json();
+        console.log("Order status updated:", updatedOrder);
+
+        // Update both allOrders and recentOrders
+        setAllOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order.id === orderId ? { ...order, status: newStatus } : order,
+          ),
+        );
+        setRecentOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order.id === orderId ? { ...order, status: newStatus } : order,
+          ),
+        );
+
+        // Refresh stats
+        await fetchDashboardData();
+        alert("Order status updated successfully!");
+      } else {
+        const errorData = await response.text();
+        console.error("Failed to update order status:", errorData);
+        alert("Failed to update order status: " + errorData);
       }
     } catch (error) {
       console.error("Error updating order:", error);
-      alert("Failed to update order status");
+      alert("Failed to update order status: " + error.message);
     }
   };
 
-  // Product Management Functions
+  const updatePaymentStatus = async (orderId, newPaymentStatus) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/orders/${orderId}/payment-status`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ paymentStatus: newPaymentStatus }),
+        },
+      );
+
+      if (response.ok) {
+        const updatedOrder = await response.json();
+        console.log("Payment status updated:", updatedOrder);
+
+        // Update both allOrders and recentOrders
+        setAllOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order.id === orderId
+              ? { ...order, paymentStatus: newPaymentStatus }
+              : order,
+          ),
+        );
+        setRecentOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order.id === orderId
+              ? { ...order, paymentStatus: newPaymentStatus }
+              : order,
+          ),
+        );
+
+        await fetchDashboardData();
+        alert("Payment status updated successfully!");
+      } else {
+        const errorData = await response.text();
+        console.error("Failed to update payment status:", errorData);
+        alert("Failed to update payment status: " + errorData);
+      }
+    } catch (error) {
+      console.error("Error updating payment status:", error);
+      alert("Failed to update payment status: " + error.message);
+    }
+  };
+
+  const getFilteredOrders = () => {
+    if (orderFilter === "ALL") return allOrders;
+    return allOrders.filter((order) => order.status === orderFilter);
+  };
+
   const handleProductChange = (e) => {
     const { name, value, type, checked } = e.target;
     setProductFormData({
@@ -176,11 +245,11 @@ const AdminDashboard = () => {
         return;
       }
 
-      const result = await res.json();
+      await res.json();
       alert(
         editingProductId
           ? "Product updated successfully!"
-          : "Product added successfully!"
+          : "Product added successfully!",
       );
 
       setProductFormData({
@@ -232,7 +301,6 @@ const AdminDashboard = () => {
     }
   };
 
-  // User Management Functions
   const handleUserChange = (e) => {
     const { name, value } = e.target;
     setUserFormData({
@@ -244,14 +312,12 @@ const AdminDashboard = () => {
   const handleUserSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate password length
     if (!editingUserId && userFormData.password.length < 6) {
       alert("Password must be at least 6 characters long");
       return;
     }
 
     try {
-      // Use register endpoint for creating new users
       const url = editingUserId
         ? `${USER_API}/${editingUserId}`
         : `${AUTH_API}/register`;
@@ -273,7 +339,7 @@ const AdminDashboard = () => {
       alert(
         editingUserId
           ? "User updated successfully!"
-          : "User created successfully!"
+          : "User created successfully!",
       );
 
       setUserFormData({
@@ -296,7 +362,7 @@ const AdminDashboard = () => {
   const handleEditUser = (user) => {
     setUserFormData({
       email: user.email,
-      password: "", // Don't populate password for security
+      password: "",
       fullName: user.fullName || "",
       phone: user.phone || "",
       address: user.address || "",
@@ -347,7 +413,6 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Tab Navigation */}
         <div className="tab-navigation">
           <button
             className={activeTab === "dashboard" ? "tab-btn active" : "tab-btn"}
@@ -362,6 +427,12 @@ const AdminDashboard = () => {
             📦 Manage Products
           </button>
           <button
+            className={activeTab === "orders" ? "tab-btn active" : "tab-btn"}
+            onClick={() => setActiveTab("orders")}
+          >
+            🛒 Manage Orders
+          </button>
+          <button
             className={activeTab === "users" ? "tab-btn active" : "tab-btn"}
             onClick={() => setActiveTab("users")}
           >
@@ -370,10 +441,8 @@ const AdminDashboard = () => {
         </div>
 
         <div className="dashboard-content">
-          {/* Dashboard View */}
           {activeTab === "dashboard" && (
             <>
-              {/* Statistics Cards */}
               <div className="stats-grid">
                 <div className="stat-card">
                   <div className="stat-icon">👥</div>
@@ -405,7 +474,6 @@ const AdminDashboard = () => {
                 </div>
               </div>
 
-              {/* Quick Actions */}
               <div className="admin-actions">
                 <h2>Quick Actions</h2>
                 <div className="actions-grid">
@@ -416,6 +484,14 @@ const AdminDashboard = () => {
                     <i className="icon">📦</i>
                     <h4>Manage Products</h4>
                     <p>Add, edit, delete products</p>
+                  </div>
+                  <div
+                    className="action-card"
+                    onClick={() => setActiveTab("orders")}
+                  >
+                    <i className="icon">🛒</i>
+                    <h4>Manage Orders</h4>
+                    <p>View and update orders</p>
                   </div>
                   <div
                     className="action-card"
@@ -430,15 +506,9 @@ const AdminDashboard = () => {
                     <h4>View Reports</h4>
                     <p>Sales and analytics</p>
                   </div>
-                  <div className="action-card">
-                    <i className="icon">⚙️</i>
-                    <h4>Settings</h4>
-                    <p>System configuration</p>
-                  </div>
                 </div>
               </div>
 
-              {/* Recent Orders */}
               <div className="recent-orders">
                 <h2>Recent Orders</h2>
                 {recentOrders.length === 0 ? (
@@ -497,7 +567,166 @@ const AdminDashboard = () => {
             </>
           )}
 
-          {/* Manage Products View */}
+          {activeTab === "orders" && (
+            <div className="manage-section orders-management">
+              <h2>📋 All Orders</h2>
+
+              <div className="orders-filter">
+                <label>Filter by Status: </label>
+                <select
+                  value={orderFilter}
+                  onChange={(e) => setOrderFilter(e.target.value)}
+                  className="filter-select"
+                >
+                  <option value="ALL">All Orders</option>
+                  <option value="PENDING">Pending</option>
+                  <option value="CONFIRMED">Confirmed</option>
+                  <option value="SHIPPED">Shipped</option>
+                  <option value="DELIVERED">Delivered</option>
+                  <option value="CANCELLED">Cancelled</option>
+                </select>
+                <span className="orders-count">
+                  Showing {getFilteredOrders().length} order(s)
+                </span>
+              </div>
+
+              {getFilteredOrders().length === 0 ? (
+                <div className="empty-orders">
+                  <p>No orders found</p>
+                </div>
+              ) : (
+                <div className="orders-table full-orders">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Payment Method</th>
+                        <th>Payment Status</th>
+                        <th>Order Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {getFilteredOrders().map((order) => (
+                        <tr
+                          key={order.id}
+                          className={`order-row status-${order.status?.toLowerCase()}`}
+                        >
+                          <td>
+                            <strong>#{order.id}</strong>
+                          </td>
+                          <td>
+                            <div className="customer-info">
+                              <span>{order.user?.fullName || "N/A"}</span>
+                              <small>{order.user?.email || "N/A"}</small>
+                            </div>
+                          </td>
+                          <td>
+                            {new Date(order.createdAt).toLocaleDateString()}
+                            <br />
+                            <small>
+                              {new Date(order.createdAt).toLocaleTimeString()}
+                            </small>
+                          </td>
+                          <td>
+                            <span className="items-count">
+                              {order.orderItems?.length || 0} item(s)
+                            </span>
+                            <div className="items-preview">
+                              {order.orderItems
+                                ?.slice(0, 2)
+                                .map((item, idx) => (
+                                  <small key={idx}>
+                                    {item.product?.name || "Product"} x
+                                    {item.quantity}
+                                  </small>
+                                ))}
+                              {order.orderItems?.length > 2 && (
+                                <small>
+                                  +{order.orderItems.length - 2} more
+                                </small>
+                              )}
+                            </div>
+                          </td>
+                          <td>
+                            <strong>
+                              Rs. {order.totalAmount?.toFixed(2) || "0.00"}
+                            </strong>
+                          </td>
+                          <td>
+                            <span
+                              className={`payment-method ${order.paymentMethod?.toLowerCase().replace(/\s+/g, "-")}`}
+                            >
+                              {order.paymentMethod || "N/A"}
+                            </span>
+                          </td>
+                          <td>
+                            <select
+                              value={order.paymentStatus || "PENDING"}
+                              onChange={(e) =>
+                                updatePaymentStatus(order.id, e.target.value)
+                              }
+                              className={`payment-status-select status-${order.paymentStatus?.toLowerCase()}`}
+                            >
+                              <option value="PENDING">Pending</option>
+                              <option value="PAID">Paid</option>
+                              <option value="FAILED">Failed</option>
+                            </select>
+                          </td>
+                          <td>
+                            <select
+                              value={order.status}
+                              onChange={(e) =>
+                                updateOrderStatus(order.id, e.target.value)
+                              }
+                              className={`status-select status-${order.status?.toLowerCase()}`}
+                            >
+                              <option value="PENDING">Pending</option>
+                              <option value="CONFIRMED">Confirmed</option>
+                              <option value="SHIPPED">Shipped</option>
+                              <option value="DELIVERED">Delivered</option>
+                              <option value="CANCELLED">Cancelled</option>
+                            </select>
+                          </td>
+                          <td>
+                            <div className="action-buttons">
+                              <button
+                                className="btn-view"
+                                onClick={() => {
+                                  const details = `
+Order #${order.id}
+Customer: ${order.user?.fullName || "N/A"} (${order.user?.email || "N/A"})
+Phone: ${order.user?.phone || "N/A"}
+Address: ${order.shippingAddress || order.user?.address || "N/A"}
+Date: ${new Date(order.createdAt).toLocaleString()}
+Payment: ${order.paymentMethod || "N/A"} - ${order.paymentStatus || "N/A"}
+Status: ${order.status}
+Total: Rs. ${order.totalAmount?.toFixed(2) || "0.00"}
+
+Items:
+${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.quantity} @ Rs. ${item.price?.toFixed(2)}`).join("\n") || "No items"}
+                                  `;
+                                  alert(details);
+                                }}
+                                title="View Details"
+                              >
+                                👁️
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+
           {activeTab === "products" && (
             <div className="manage-section">
               <h2>{editingProductId ? "Edit Product" : "Add New Product"}</h2>
@@ -688,7 +917,6 @@ const AdminDashboard = () => {
             </div>
           )}
 
-          {/* Manage Users View */}
           {activeTab === "users" && (
             <div className="manage-section">
               <h2>{editingUserId ? "Edit User" : "Add New User"}</h2>
@@ -702,7 +930,7 @@ const AdminDashboard = () => {
                       value={userFormData.email}
                       onChange={handleUserChange}
                       required
-                      disabled={editingUserId} // Email cannot be changed when editing
+                      disabled={editingUserId}
                     />
                   </div>
                   <div className="form-group">

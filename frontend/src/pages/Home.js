@@ -18,7 +18,6 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch products from backend
     fetch("http://localhost:8080/api/products")
       .then((res) => res.json())
       .then((data) => {
@@ -78,7 +77,6 @@ const Home = () => {
       <Header />
       <HeroSection />
 
-      {/* Roofing Products Section */}
       <section id="roofing-products" className="roofing-products">
         <div className="section-heading">
           <h2>Roofing Products</h2>
@@ -133,7 +131,6 @@ const Home = () => {
         )}
       </section>
 
-      {/* Top Selling Products Section */}
       <section id="top-selling-products" className="roofing-products">
         <div className="section-heading">
           <h2>Top Selling Products</h2>
@@ -195,7 +192,6 @@ const Home = () => {
         <AboutUs />
       </section>
 
-      {/* Accessories Products Section */}
       <section id="accessories-products" className="roofing-products">
         <div className="section-heading">
           <h2>Accessories Products</h2>

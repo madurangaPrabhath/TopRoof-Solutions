@@ -15,12 +15,10 @@ const Register = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if user is already logged in
     const userData = localStorage.getItem("user");
     if (userData) {
       try {
         const user = JSON.parse(userData);
-        // Redirect to appropriate dashboard
         if (user.role === "ADMIN") {
           navigate("/admin-dashboard");
         } else {
@@ -90,7 +88,6 @@ const Register = () => {
         alert(result.message || "Registration successful!");
         navigate("/login");
       } else {
-        // Handle validation errors from backend
         if (result.errors) {
           setErrors(result.errors);
         } else {

@@ -225,7 +225,6 @@ const Products = () => {
         </div>
       </section>
 
-      {/* Filter Section */}
       <section className="filter-section">
         <div className="filter-container">
           <div className="filter-header">
@@ -242,7 +241,6 @@ const Products = () => {
 
           {showFilters && (
             <div className="filter-controls">
-              {/* Search Bar */}
               <div className="filter-group search-group">
                 <input
                   type="text"
@@ -253,9 +251,7 @@ const Products = () => {
                 />
               </div>
 
-              {/* Filters Grid */}
               <div className="filters-grid">
-                {/* Category Filter */}
                 <div className="filter-group">
                   <label>Category</label>
                   <select
@@ -272,7 +268,6 @@ const Products = () => {
                   </select>
                 </div>
 
-                {/* Brand Filter */}
                 <div className="filter-group">
                   <label>Brand</label>
                   <select
@@ -289,7 +284,6 @@ const Products = () => {
                   </select>
                 </div>
 
-                {/* Price Range */}
                 <div className="filter-group">
                   <label>Min Price (Rs.)</label>
                   <input
@@ -312,7 +306,6 @@ const Products = () => {
                   />
                 </div>
 
-                {/* Sort By */}
                 <div className="filter-group">
                   <label>Sort By</label>
                   <select
@@ -328,7 +321,6 @@ const Products = () => {
                   </select>
                 </div>
 
-                {/* Clear Filters Button */}
                 <div className="filter-group">
                   <label>&nbsp;</label>
                   <button onClick={clearFilters} className="clear-filters-btn">
@@ -337,7 +329,6 @@ const Products = () => {
                 </div>
               </div>
 
-              {/* Results Count */}
               <div className="results-count">
                 Showing <strong>{filteredProducts.length}</strong> of{" "}
                 <strong>{products.length}</strong> products
@@ -347,7 +338,6 @@ const Products = () => {
         </div>
       </section>
 
-      {/* All Products Grid */}
       <section className="all-products-section">
         {filteredProducts.length === 0 ? (
           <div className="no-products">

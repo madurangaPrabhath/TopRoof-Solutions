@@ -14,12 +14,10 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if user is already logged in
     const userData = localStorage.getItem("user");
     if (userData) {
       try {
         const user = JSON.parse(userData);
-        // Redirect to appropriate dashboard
         if (user.role === "ADMIN") {
           navigate("/admin-dashboard");
         } else {
@@ -74,11 +72,9 @@ const Login = () => {
       if (response.ok) {
         const result = await response.json();
 
-        // Store user data in localStorage
         localStorage.setItem("user", JSON.stringify(result.user));
         localStorage.setItem("userEmail", email);
 
-        // Redirect based on user role
         if (result.user.role === "ADMIN") {
           navigate("/admin-dashboard");
         } else {
@@ -87,7 +83,6 @@ const Login = () => {
       } else {
         const result = await response.json();
 
-        // Handle validation errors from backend
         if (result.errors) {
           setErrors(result.errors);
         } else {

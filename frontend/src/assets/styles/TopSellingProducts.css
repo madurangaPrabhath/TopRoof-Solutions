@@ -122,11 +122,35 @@
 }
 
 @media (max-width: 576px) {
+  .top-selling-section {
+    padding: 40px 15px;
+  }
+
+  .section-heading h2 {
+    font-size: 1.5rem;
+  }
+
   .top-selling-grid {
     grid-template-columns: 1fr;
-    max-width: 400px;
+    max-width: 100%;
+    gap: 15px;
   }
+
   .top-product-card {
     min-height: auto;
+    max-height: none;
+    padding: 15px;
+  }
+
+  .top-product-card img {
+    height: 160px;
+  }
+
+  .top-product-card h3 {
+    font-size: 1rem;
+  }
+
+  .top-product-card button {
+    padding: 12px 14px;
   }
 }

@@ -87,12 +87,68 @@
 }
 
 @media (max-width: 768px) {
+  .roofing-products {
+    padding: 40px 20px;
+  }
+
+  .section-heading h2 {
+    font-size: 1.6rem;
+  }
+
   .roofing-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
   }
   
+  .roofing-card {
+    padding: 20px;
+    max-height: none;
+  }
+  
   .roofing-card img {
     height: 150px;
+  }
+
+  .roofing-card h3 {
+    font-size: 1rem;
+  }
+
+  .roofing-card button {
+    padding: 12px 14px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .roofing-products {
+    padding: 30px 15px;
+  }
+
+  .section-heading h2 {
+    font-size: 1.4rem;
+  }
+
+  .roofing-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .roofing-card {
+    padding: 15px;
+  }
+
+  .roofing-card img {
+    height: 180px;
+    object-fit: cover;
+  }
+
+  .roofing-card h3 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+
+  .roofing-card p {
+    font-size: 0.95rem;
+    margin-bottom: 10px;
   }
 }

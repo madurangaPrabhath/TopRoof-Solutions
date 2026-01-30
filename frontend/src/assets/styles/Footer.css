@@ -131,3 +131,69 @@
 .footer-socials svg:hover {
   color: #ffc107;
 }
+
+@media (max-width: 968px) {
+  .footer {
+    padding: 40px 30px 20px;
+  }
+
+  .footer-main {
+    gap: 30px;
+  }
+
+  .footer-col {
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 30px 20px 20px;
+  }
+
+  .footer-main {
+    flex-direction: column;
+    text-align: center;
+    gap: 25px;
+  }
+
+  .footer-col {
+    width: 100%;
+  }
+
+  .footer-branding {
+    justify-content: center;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .footer-socials {
+    justify-content: center;
+  }
+
+  .footer-lang {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 25px 15px 15px;
+  }
+
+  .footer-col p {
+    font-size: 14px;
+  }
+
+  .footer-title {
+    font-size: 16px;
+  }
+
+  .footer-bottom {
+    font-size: 12px;
+  }
+}

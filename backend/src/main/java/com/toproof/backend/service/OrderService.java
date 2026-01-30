@@ -20,18 +20,46 @@ public class OrderService {
   @Autowired
   private CartItemRepository cartItemRepository;
 
+  @Transactional(readOnly = true)
   public List<Order> getAllOrders() {
-    return orderRepository.findAll();
+    List<Order> orders = orderRepository.findAllWithItemsAndUser();
+    // Force initialization
+    for (Order order : orders) {
+      if (order.getOrderItems() != null) {
+        order.getOrderItems().size();
+        for (OrderItem item : order.getOrderItems()) {
+          if (item.getProduct() != null) {
+            item.getProduct().getName();
+          }
+        }
+      }
+      if (order.getUser() != null) {
+        order.getUser().getEmail();
+      }
+    }
+    return orders;
   }
 
+  @Transactional(readOnly = true)
   public Optional<Order> getOrderById(Long id) {
-    return orderRepository.findById(id);
+    return orderRepository.findByIdWithItems(id);
   }
 
+  @Transactional(readOnly = true)
   public List<Order> getOrdersByUser(Long userId) {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new RuntimeException("User not found"));
-    return orderRepository.findByUserOrderByCreatedAtDesc(user);
+    List<Order> orders = orderRepository.findByUserWithItemsOrderByCreatedAtDesc(user);
+    // Force initialization of orderItems and products
+    for (Order order : orders) {
+      order.getOrderItems().size();
+      for (OrderItem item : order.getOrderItems()) {
+        if (item.getProduct() != null) {
+          item.getProduct().getName();
+        }
+      }
+    }
+    return orders;
   }
 
   public List<Order> getOrdersByStatus(String status) {
@@ -82,20 +110,50 @@ public class OrderService {
 
   @Transactional
   public Order updateOrderStatus(Long orderId, String status) {
-    Order order = orderRepository.findById(orderId)
+    Order order = orderRepository.findByIdWithItems(orderId)
         .orElseThrow(() -> new RuntimeException("Order not found"));
 
     order.setStatus(status);
-    return orderRepository.save(order);
+    Order savedOrder = orderRepository.save(order);
+    
+    // Force initialization
+    if (savedOrder.getOrderItems() != null) {
+      savedOrder.getOrderItems().size();
+      for (OrderItem item : savedOrder.getOrderItems()) {
+        if (item.getProduct() != null) {
+          item.getProduct().getName();
+        }
+      }
+    }
+    if (savedOrder.getUser() != null) {
+      savedOrder.getUser().getEmail();
+    }
+    
+    return savedOrder;
   }
 
   @Transactional
   public Order updatePaymentStatus(Long orderId, String paymentStatus) {
-    Order order = orderRepository.findById(orderId)
+    Order order = orderRepository.findByIdWithItems(orderId)
         .orElseThrow(() -> new RuntimeException("Order not found"));
 
     order.setPaymentStatus(paymentStatus);
-    return orderRepository.save(order);
+    Order savedOrder = orderRepository.save(order);
+    
+    // Force initialization
+    if (savedOrder.getOrderItems() != null) {
+      savedOrder.getOrderItems().size();
+      for (OrderItem item : savedOrder.getOrderItems()) {
+        if (item.getProduct() != null) {
+          item.getProduct().getName();
+        }
+      }
+    }
+    if (savedOrder.getUser() != null) {
+      savedOrder.getUser().getEmail();
+    }
+    
+    return savedOrder;
   }
 
   @Transactional

@@ -1,5 +1,7 @@
 package com.toproof.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,10 +13,12 @@ public class OrderItem {
 
   @ManyToOne
   @JoinColumn(name = "order_id", nullable = false)
+  @JsonBackReference
   private Order order;
 
   @ManyToOne
   @JoinColumn(name = "product_id", nullable = false)
+  @JsonIgnoreProperties({"category", "description", "stockQuantity", "createdAt", "updatedAt"})
   private Product product;
 
   @Column(nullable = false)

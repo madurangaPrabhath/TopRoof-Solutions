@@ -10,7 +10,7 @@ const UserDashboard = () => {
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("orders"); // 'orders' or 'profile'
+  const [activeTab, setActiveTab] = useState("orders");
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -26,10 +26,8 @@ const UserDashboard = () => {
   const [message, setMessage] = useState({ type: "", text: "" });
 
   useEffect(() => {
-    // Add body class for overflow control
     document.body.classList.add("user-dashboard-page");
 
-    // Check if user is logged in
     const userData = localStorage.getItem("user");
     if (!userData) {
       navigate("/login");
@@ -39,7 +37,6 @@ const UserDashboard = () => {
     const parsedUser = JSON.parse(userData);
     setUser(parsedUser);
 
-    // Initialize form data
     setFormData({
       firstName: parsedUser.firstName || "",
       lastName: parsedUser.lastName || "",
@@ -50,10 +47,8 @@ const UserDashboard = () => {
       currentPassword: "",
     });
 
-    // Fetch user orders
     fetchOrders(parsedUser.id);
 
-    // Cleanup body class on unmount
     return () => {
       document.body.classList.remove("user-dashboard-page");
     };
@@ -98,7 +93,6 @@ const UserDashboard = () => {
         address: formData.address,
       };
 
-      // Only include password fields if user is changing password
       if (formData.password) {
         if (!formData.currentPassword) {
           setMessage({
@@ -123,12 +117,10 @@ const UserDashboard = () => {
       if (response.ok) {
         const updatedUser = await response.json();
 
-        // Update user in localStorage
         const storedUser = { ...user, ...updatedUser };
         localStorage.setItem("user", JSON.stringify(storedUser));
         setUser(storedUser);
 
-        // Reset password fields
         setFormData((prev) => ({ ...prev, password: "", currentPassword: "" }));
         setEditMode(false);
         setMessage({ type: "success", text: "Profile updated successfully!" });
@@ -201,7 +193,6 @@ const UserDashboard = () => {
           </button>
         </div>
 
-        {/* Tab Navigation */}
         <div className="dashboard-tabs">
           <button
             className={activeTab === "orders" ? "tab-btn active" : "tab-btn"}
@@ -274,30 +265,41 @@ const UserDashboard = () => {
                           <div className="order-header">
                             <h3>Order #{order.id}</h3>
                             <span
-                              className={`status-badge status-${order.status.toLowerCase()}`}
+                              className={`status-badge status-${(order.status || "pending").toLowerCase()}`}
                             >
-                              {order.status}
+                              {order.status || "PENDING"}
                             </span>
                           </div>
                           <div className="order-details">
                             <p>
                               <strong>Date:</strong>{" "}
-                              {new Date(order.createdAt).toLocaleDateString()}
+                              {order.createdAt
+                                ? new Date(order.createdAt).toLocaleDateString()
+                                : "N/A"}
                             </p>
                             <p>
                               <strong>Total:</strong> Rs.{" "}
-                              {order.totalAmount.toFixed(2)}
+                              {order.totalAmount?.toFixed(2) || "0.00"}
                             </p>
                             <p>
                               <strong>Items:</strong>{" "}
                               {order.orderItems?.length || 0}
                             </p>
                             <p>
-                              <strong>Payment:</strong> {order.paymentStatus}
+                              <strong>Payment Method:</strong>{" "}
+                              {order.paymentMethod || "Not specified"}
+                            </p>
+                            <p>
+                              <strong>Payment Status:</strong>{" "}
+                              <span
+                                className={`payment-status-badge payment-${(order.paymentStatus || "pending").toLowerCase()}`}
+                              >
+                                {order.paymentStatus || "PENDING"}
+                              </span>
                             </p>
                             <p>
                               <strong>Shipping Address:</strong>{" "}
-                              {order.shippingAddress}
+                              {order.shippingAddress || "Not specified"}
                             </p>
                           </div>
                           <div className="order-items">
@@ -306,7 +308,9 @@ const UserDashboard = () => {
                               <div key={item.id} className="order-item">
                                 <span>{item.product?.name || "Product"}</span>
                                 <span>x{item.quantity}</span>
-                                <span>Rs. {item.price.toFixed(2)}</span>
+                                <span>
+                                  Rs. {item.price?.toFixed(2) || "0.00"}
+                                </span>
                               </div>
                             ))}
                           </div>
