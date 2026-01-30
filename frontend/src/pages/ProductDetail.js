@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ProductReviews from "../components/ProductReviews";
-import axios from "axios";
-import { API_ENDPOINTS } from "../config/api";
 import "../assets/styles/ProductDetail.css";
 
 const ProductDetail = () => {
@@ -14,11 +12,9 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [isInWishlist, setIsInWishlist] = useState(false);
 
   useEffect(() => {
     fetchProduct();
-    checkWishlist();
   }, [id]);
 
   const fetchProduct = async () => {
@@ -31,24 +27,6 @@ const ProductDetail = () => {
     } catch (err) {
       setError(err.message);
       setLoading(false);
-    }
-  };
-
-  const checkWishlist = async () => {
-    const userData = localStorage.getItem("user");
-    if (!userData) return;
-
-    const user = JSON.parse(userData);
-    try {
-      const response = await axios.get(
-        `${API_ENDPOINTS.WISHLIST_GET}/${user.id}`
-      );
-      const isInList = response.data.some(
-        (item) => item.product.id === parseInt(id)
-      );
-      setIsInWishlist(isInList);
-    } catch (err) {
-      console.error("Error checking wishlist:", err);
     }
   };
 
@@ -82,34 +60,6 @@ const ProductDetail = () => {
     } catch (error) {
       console.error("Error adding to cart:", error);
       alert("Failed to add to cart: " + error.message);
-    }
-  };
-
-  const toggleWishlist = async () => {
-    const userData = localStorage.getItem("user");
-    if (!userData) {
-      alert("Please login to add items to wishlist");
-      navigate("/login");
-      return;
-    }
-
-    const user = JSON.parse(userData);
-
-    try {
-      if (isInWishlist) {
-        await axios.delete(API_ENDPOINTS.WISHLIST_REMOVE, {
-          params: { userId: user.id, productId: product.id },
-        });
-        setIsInWishlist(false);
-      } else {
-        await axios.post(API_ENDPOINTS.WISHLIST_ADD, null, {
-          params: { userId: user.id, productId: product.id },
-        });
-        setIsInWishlist(true);
-      }
-    } catch (err) {
-      console.error("Error toggling wishlist:", err);
-      alert(err.response?.data?.error || "Failed to update wishlist");
     }
   };
 
@@ -235,15 +185,6 @@ const ProductDetail = () => {
                   disabled={product.stock === 0}
                 >
                   Add to Cart
-                </button>
-                <button
-                  className={`wishlist-btn ${isInWishlist ? "active" : ""}`}
-                  onClick={toggleWishlist}
-                  title={
-                    isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"
-                  }
-                >
-                  {isInWishlist ? "❤️" : "🤍"}
                 </button>
               </div>
             </div>

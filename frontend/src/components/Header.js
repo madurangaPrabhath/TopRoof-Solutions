@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "../assets/styles/Header.css";
 import { Link, useNavigate } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
-import { FaShoppingCart, FaUser, FaUserCircle, FaHeart } from "react-icons/fa";
+import { FaShoppingCart, FaUser, FaUserCircle } from "react-icons/fa";
 import Logo from "../assets/images/logo.png";
 
 const Header = () => {
@@ -112,16 +112,6 @@ const Header = () => {
                 >
                   <FaShoppingCart className="dropdown-icon" />
                   My Cart
-                </button>
-                <button
-                  onClick={() => {
-                    setShowDropdown(false);
-                    navigate("/wishlist");
-                  }}
-                  className="dropdown-item"
-                >
-                  <FaHeart className="dropdown-icon" />
-                  My Wishlist
                 </button>
                 <div className="dropdown-divider"></div>
                 <button

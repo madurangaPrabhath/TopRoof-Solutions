@@ -19,12 +19,6 @@ export const API_ENDPOINTS = {
   // Order endpoints
   ORDERS: `${API_BASE_URL}/api/orders`,
 
-  // Wishlist endpoints
-  WISHLIST_GET: `${API_BASE_URL}/api/wishlist/user`,
-  WISHLIST_ADD: `${API_BASE_URL}/api/wishlist/add`,
-  WISHLIST_REMOVE: `${API_BASE_URL}/api/wishlist/remove`,
-  WISHLIST_CHECK: `${API_BASE_URL}/api/wishlist/check`,
-
   // Admin endpoints
   ADMIN_PRODUCTS: `${API_BASE_URL}/api/admin/products`,
   ADMIN_USERS: `${API_BASE_URL}/api/admin/users`,

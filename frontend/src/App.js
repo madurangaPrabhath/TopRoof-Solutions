@@ -7,7 +7,6 @@ import ProductDetail from "./pages/ProductDetail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Cart from "./pages/Cart";
-import Wishlist from "./pages/Wishlist";
 import RoofingProducts from "./components/RoofingProducts";
 import TopSellingProducts from "./components/TopSellingProducts";
 import AccessoriesProducts from "./components/AccessoriesProducts";
@@ -22,7 +21,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/roofing-products" element={<RoofingProducts />} />
