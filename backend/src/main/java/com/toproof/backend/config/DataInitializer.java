@@ -9,11 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-/**
- * This class initializes sample data when the application starts.
- * Comment out the @Component annotation after first run if you don't want to
- * reset data.
- */
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -28,7 +23,6 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Only initialize if database is empty
         if (userRepository.count() == 0) {
             initializeUsers();
         }
@@ -41,7 +35,6 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void initializeUsers() {
-        // Create admin user
         User admin = new User();
         admin.setEmail("admin@toproof.com");
         admin.setPassword(passwordEncoder.encode("admin123"));
@@ -52,7 +45,6 @@ public class DataInitializer implements CommandLineRunner {
         admin.setRole("ADMIN");
         userRepository.save(admin);
 
-        // Create regular user
         User user = new User();
         user.setEmail("user@toproof.com");
         user.setPassword(passwordEncoder.encode("user123"));
@@ -69,76 +61,74 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void initializeProducts() {
-        // Roofing Products
         createProduct("Premium Clay Roof Tiles",
                 "High-quality clay roofing tiles with 50-year warranty. Weather-resistant and durable.",
-                45.99, "https://images.unsplash.com/photo-1632778149955-e80f8ceca2e8?w=400&h=300&fit=crop", "ROOFING",
+                45.99, "https://picsum.photos/seed/rooftile1/400/300", "ROOFING",
                 "TopRoof Premium", 500, true, true);
 
         createProduct("Concrete Roof Tiles",
                 "Durable concrete tiles suitable for all weather conditions. Easy to install.",
-                35.50, "https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=400&h=300&fit=crop", "ROOFING",
+                35.50, "https://picsum.photos/seed/rooftile2/400/300", "ROOFING",
                 "TopRoof", 750, true, true);
 
         createProduct("Metal Roofing Sheets",
                 "Lightweight galvanized metal sheets with anti-rust coating.",
-                28.99, "https://images.unsplash.com/photo-1513467535987-fd81bc7d62f8?w=400&h=300&fit=crop", "ROOFING",
+                28.99, "https://picsum.photos/seed/metalroof/400/300", "ROOFING",
                 "MetalGuard", 600, true, false);
 
         createProduct("Asphalt Shingles",
                 "Classic asphalt shingles in various colors. Fire-resistant and affordable.",
-                22.50, "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=400&h=300&fit=crop", "ROOFING",
+                22.50, "https://picsum.photos/seed/shingles/400/300", "ROOFING",
                 "ShinglePro", 1000, false, true);
 
         createProduct("Slate Roof Tiles",
                 "Natural slate tiles for premium aesthetic. Extremely durable with 100+ year lifespan.",
-                89.99, "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=400&h=300&fit=crop", "ROOFING",
+                89.99, "https://picsum.photos/seed/slatetile/400/300", "ROOFING",
                 "TopRoof Premium", 200, true, false);
 
         createProduct("Terracotta Roof Tiles",
                 "Traditional terracotta tiles with excellent thermal properties.",
-                42.00, "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400&h=300&fit=crop", "ROOFING",
+                42.00, "https://picsum.photos/seed/terracotta/400/300", "ROOFING",
                 "TerraTop", 450, false, true);
 
-        // Accessories
         createProduct("Ridge Caps",
                 "Weather-sealed ridge caps for roof peaks. Matches all tile colors.",
-                12.99, "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=400&h=300&fit=crop",
+                12.99, "https://picsum.photos/seed/ridgecap/400/300",
                 "ACCESSORIES", "TopRoof", 800, true, false);
 
         createProduct("Roof Valley Flashing",
                 "Waterproof valley flashing to prevent leaks at roof junctions.",
-                18.50, "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop",
+                18.50, "https://picsum.photos/seed/flashing/400/300",
                 "ACCESSORIES", "FlashGuard", 500, false, false);
 
         createProduct("Gutter System Complete Kit",
                 "Complete gutter system with brackets and downpipes. 6-meter length.",
-                65.00, "https://images.unsplash.com/photo-1599228103169-b5eeb2e977e9?w=400&h=300&fit=crop",
+                65.00, "https://picsum.photos/seed/gutter/400/300",
                 "ACCESSORIES", "FlowMaster", 300, true, true);
 
         createProduct("Roof Underlayment",
                 "Waterproof synthetic underlayment roll. 1000 sq ft coverage.",
-                55.99, "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=400&h=300&fit=crop",
+                55.99, "https://picsum.photos/seed/underlay/400/300",
                 "ACCESSORIES", "SealPro", 400, false, false);
 
         createProduct("Roofing Nails (5kg)",
                 "Galvanized roofing nails. Rust-resistant. 5kg pack.",
-                15.50, "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=400&h=300&fit=crop",
+                15.50, "https://picsum.photos/seed/nails/400/300",
                 "ACCESSORIES", "FastenPro", 1000, false, true);
 
         createProduct("Roof Ventilation System",
                 "Complete roof ventilation kit. Improves air circulation and reduces heat.",
-                85.00, "https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?w=400&h=300&fit=crop",
+                85.00, "https://picsum.photos/seed/ventilation/400/300",
                 "ACCESSORIES", "AirFlow", 150, true, false);
 
         createProduct("Roof Sealant (10L)",
                 "Professional-grade roof sealant. Waterproof and UV-resistant.",
-                32.99, "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400&h=300&fit=crop",
+                32.99, "https://picsum.photos/seed/sealant/400/300",
                 "ACCESSORIES", "SealMaster", 250, false, false);
 
         createProduct("Snow Guards",
                 "Prevent snow avalanche from roof. Set of 10 pieces.",
-                45.00, "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=400&h=300&fit=crop",
+                45.00, "https://picsum.photos/seed/snowguard/400/300",
                 "ACCESSORIES", "SnowStop", 200, false, false);
 
         System.out.println("✅ Sample products created: " + productRepository.count() + " products");

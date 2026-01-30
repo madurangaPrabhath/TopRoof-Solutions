@@ -7,6 +7,9 @@ import { API_ENDPOINTS } from "../config/api";
 import axios from "axios";
 import "../assets/styles/Products.css";
 
+const FALLBACK_IMAGE =
+  "https://via.placeholder.com/400x300/0f3c78/ffffff?text=TopRoof+Product";
+
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -377,7 +380,13 @@ const Products = () => {
                   onClick={() => navigate(`/products/${product.id}`)}
                   style={{ cursor: "pointer" }}
                 >
-                  <img src={product.imageUrl} alt={product.name} />
+                  <img
+                    src={product.imageUrl || FALLBACK_IMAGE}
+                    alt={product.name}
+                    onError={(e) => {
+                      e.target.src = FALLBACK_IMAGE;
+                    }}
+                  />
                   <h3>{product.name}</h3>
                   <p className="brand">{product.brand}</p>
                   <p className="category-tag">{product.category}</p>
@@ -491,7 +500,13 @@ const Products = () => {
                     onClick={() => navigate(`/products/${product.id}`)}
                     style={{ cursor: "pointer" }}
                   >
-                    <img src={product.imageUrl} alt={product.name} />
+                    <img
+                      src={product.imageUrl || FALLBACK_IMAGE}
+                      alt={product.name}
+                      onError={(e) => {
+                        e.target.src = FALLBACK_IMAGE;
+                      }}
+                    />
                     <h3>{product.name}</h3>
                     <p className="price">Rs. {product.price.toFixed(2)}</p>
                     <p className="description">{product.description}</p>
@@ -544,7 +559,13 @@ const Products = () => {
                     onClick={() => navigate(`/products/${product.id}`)}
                     style={{ cursor: "pointer" }}
                   >
-                    <img src={product.imageUrl} alt={product.name} />
+                    <img
+                      src={product.imageUrl || FALLBACK_IMAGE}
+                      alt={product.name}
+                      onError={(e) => {
+                        e.target.src = FALLBACK_IMAGE;
+                      }}
+                    />
                     <h3>{product.name}</h3>
                     <p className="price">Rs. {product.price.toFixed(2)}</p>
                     <p className="description">{product.description}</p>
