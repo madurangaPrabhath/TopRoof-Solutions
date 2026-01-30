@@ -12,6 +12,7 @@ import TopSellingProducts from "./components/TopSellingProducts";
 import AccessoriesProducts from "./components/AccessoriesProducts";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import Wishlist from "./pages/Wishlist";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/accessories-products" element={<AccessoriesProducts />} />
         <Route path="/dashboard" element={<UserDashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/wishlist" element={<Wishlist />} />
       </Routes>
     </Router>
   );

@@ -22,13 +22,30 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<CartItem> addToCart(@RequestBody Map<String, Object> request) {
-        Long userId = Long.valueOf(request.get("userId").toString());
-        Long productId = Long.valueOf(request.get("productId").toString());
-        int quantity = Integer.parseInt(request.get("quantity").toString());
+    public ResponseEntity<?> addToCart(@RequestBody Map<String, Object> request) {
+        try {
+            // Validate request parameters
+            if (request.get("userId") == null) {
+                return ResponseEntity.badRequest().body(Map.of("error", "userId is required"));
+            }
+            if (request.get("productId") == null) {
+                return ResponseEntity.badRequest().body(Map.of("error", "productId is required"));
+            }
+            if (request.get("quantity") == null) {
+                return ResponseEntity.badRequest().body(Map.of("error", "quantity is required"));
+            }
 
-        CartItem cartItem = cartService.addToCart(userId, productId, quantity);
-        return ResponseEntity.ok(cartItem);
+            Long userId = Long.valueOf(request.get("userId").toString());
+            Long productId = Long.valueOf(request.get("productId").toString());
+            int quantity = Integer.parseInt(request.get("quantity").toString());
+
+            CartItem cartItem = cartService.addToCart(userId, productId, quantity);
+            return ResponseEntity.ok(cartItem);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid number format for userId, productId, or quantity"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 
     @PutMapping("/{cartItemId}")

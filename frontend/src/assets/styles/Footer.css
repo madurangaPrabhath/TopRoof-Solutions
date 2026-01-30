@@ -102,6 +102,19 @@
 .footer-copy {
   text-align: center;
   flex-grow: 1;
+  line-height: 1.6;
+}
+
+.footer-copy .developer-link {
+  color: #ffc107;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.footer-copy .developer-link:hover {
+  color: #ffca2c;
+  text-decoration: underline;
 }
 
 .footer-socials {

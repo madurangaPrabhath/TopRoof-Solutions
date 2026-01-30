@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import NewsletterSection from "../components/NewsletterSection";
 import Footer from "../components/Footer";
+import { API_ENDPOINTS } from "../config/api";
 import "../assets/styles/Products.css";
 
 const FALLBACK_IMAGE =
@@ -15,6 +16,7 @@ const Products = () => {
   const [error, setError] = useState(null);
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [wishlistItems, setWishlistItems] = useState(new Set());
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -42,6 +44,7 @@ const Products = () => {
         setBrands(brandsData);
         setCategories(categoriesData);
         setLoading(false);
+        fetchWishlist();
       })
       .catch((err) => {
         setError(err.message);
@@ -73,6 +76,62 @@ const Products = () => {
   useEffect(() => {
     applyFilters();
   }, [applyFilters]);
+
+  const fetchWishlist = async () => {
+    const userData = localStorage.getItem("user");
+    if (!userData) return;
+
+    const user = JSON.parse(userData);
+    try {
+      const response = await fetch(`${API_ENDPOINTS.WISHLIST_GET}/${user.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        const wishlistProductIds = new Set(data.map((item) => item.product.id));
+        setWishlistItems(wishlistProductIds);
+      }
+    } catch (err) {
+      console.error("Error fetching wishlist:", err);
+    }
+  };
+
+  const toggleWishlist = async (productId) => {
+    const userData = localStorage.getItem("user");
+    if (!userData) {
+      alert("Please login to add items to wishlist");
+      navigate("/login");
+      return;
+    }
+
+    const user = JSON.parse(userData);
+    const isInWishlist = wishlistItems.has(productId);
+
+    try {
+      if (isInWishlist) {
+        const response = await fetch(
+          `${API_ENDPOINTS.WISHLIST_REMOVE}?userId=${user.id}&productId=${productId}`,
+          { method: "DELETE" },
+        );
+        if (response.ok) {
+          setWishlistItems((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(productId);
+            return newSet;
+          });
+        }
+      } else {
+        const response = await fetch(
+          `${API_ENDPOINTS.WISHLIST_ADD}?userId=${user.id}&productId=${productId}`,
+          { method: "POST" },
+        );
+        if (response.ok) {
+          setWishlistItems((prev) => new Set([...prev, productId]));
+        }
+      }
+    } catch (err) {
+      console.error("Error toggling wishlist:", err);
+      alert("Failed to update wishlist");
+    }
+  };
 
   const clearFilters = () => {
     setSearchTerm("");
@@ -305,6 +364,20 @@ const Products = () => {
                 {product.featured && (
                   <span className="badge featured-badge">Featured</span>
                 )}
+                <button
+                  className={`wishlist-btn ${wishlistItems.has(product.id) ? "in-wishlist" : ""}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleWishlist(product.id);
+                  }}
+                  title={
+                    wishlistItems.has(product.id)
+                      ? "Remove from wishlist"
+                      : "Add to wishlist"
+                  }
+                >
+                  {wishlistItems.has(product.id) ? "❤️" : "🤍"}
+                </button>
                 <div
                   onClick={() => navigate(`/products/${product.id}`)}
                   style={{ cursor: "pointer" }}

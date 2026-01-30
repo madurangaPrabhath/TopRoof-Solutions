@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import ProductReviews from "../components/ProductReviews";
+import { API_ENDPOINTS } from "../config/api";
 import "../assets/styles/ProductDetail.css";
 
 const ProductDetail = () => {
@@ -12,12 +12,9 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [isInWishlist, setIsInWishlist] = useState(false);
 
-  useEffect(() => {
-    fetchProduct();
-  }, [id]);
-
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
       const response = await fetch(`http://localhost:8080/api/products/${id}`);
       if (!response.ok) throw new Error("Product not found");
@@ -27,6 +24,63 @@ const ProductDetail = () => {
     } catch (err) {
       setError(err.message);
       setLoading(false);
+    }
+  }, [id]);
+
+  const checkWishlist = useCallback(async () => {
+    const userData = localStorage.getItem("user");
+    if (!userData) return;
+
+    const user = JSON.parse(userData);
+    try {
+      const response = await fetch(
+        `${API_ENDPOINTS.WISHLIST_CHECK}?userId=${user.id}&productId=${id}`,
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setIsInWishlist(data.inWishlist);
+      }
+    } catch (err) {
+      console.error("Error checking wishlist:", err);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchProduct();
+    checkWishlist();
+  }, [fetchProduct, checkWishlist]);
+
+  const toggleWishlist = async () => {
+    const userData = localStorage.getItem("user");
+    if (!userData) {
+      alert("Please login to add items to wishlist");
+      navigate("/login");
+      return;
+    }
+
+    const user = JSON.parse(userData);
+
+    try {
+      if (isInWishlist) {
+        const response = await fetch(
+          `${API_ENDPOINTS.WISHLIST_REMOVE}?userId=${user.id}&productId=${product.id}`,
+          { method: "DELETE" },
+        );
+        if (response.ok) {
+          setIsInWishlist(false);
+        }
+      } else {
+        const response = await fetch(
+          `${API_ENDPOINTS.WISHLIST_ADD}?userId=${user.id}&productId=${product.id}`,
+          { method: "POST" },
+        );
+        if (response.ok) {
+          setIsInWishlist(true);
+        }
+      }
+    } catch (err) {
+      console.error("Error toggling wishlist:", err);
+      alert("Failed to update wishlist");
     }
   };
 
@@ -136,9 +190,9 @@ const ProductDetail = () => {
             </div>
 
             <div className="product-stock">
-              {product.stock > 0 ? (
+              {product.stockQuantity > 0 ? (
                 <span className="in-stock">
-                  ✓ In Stock ({product.stock} available)
+                  ✓ In Stock ({product.stockQuantity} available)
                 </span>
               ) : (
                 <span className="out-of-stock">✗ Out of Stock</span>
@@ -154,25 +208,54 @@ const ProductDetail = () => {
               <div className="quantity-selector">
                 <label>Quantity:</label>
                 <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  disabled={quantity <= 1}
+                  onClick={() => setQuantity(Math.max(1, Number(quantity) - 1))}
+                  disabled={Number(quantity) <= 1}
+                  type="button"
                 >
                   -
                 </button>
                 <input
                   type="number"
                   value={quantity}
-                  onChange={(e) =>
-                    setQuantity(Math.max(1, parseInt(e.target.value) || 1))
-                  }
+                  onChange={(e) => {
+                    const inputValue = e.target.value;
+
+                    if (inputValue === "") {
+                      setQuantity(1);
+                      return;
+                    }
+
+                    const value = parseInt(inputValue, 10);
+                    if (!isNaN(value)) {
+                      if (value >= 1 && value <= product.stockQuantity) {
+                        setQuantity(value);
+                      } else if (value > product.stockQuantity) {
+                        setQuantity(product.stockQuantity);
+                      } else if (value < 1) {
+                        setQuantity(1);
+                      }
+                    }
+                  }}
+                  onBlur={(e) => {
+                    if (
+                      e.target.value === "" ||
+                      parseInt(e.target.value, 10) < 1 ||
+                      isNaN(parseInt(e.target.value, 10))
+                    ) {
+                      setQuantity(1);
+                    }
+                  }}
                   min="1"
-                  max={product.stock}
+                  max={product.stockQuantity}
                 />
                 <button
                   onClick={() =>
-                    setQuantity(Math.min(product.stock, quantity + 1))
+                    setQuantity(
+                      Math.min(product.stockQuantity, Number(quantity) + 1),
+                    )
                   }
-                  disabled={quantity >= product.stock}
+                  disabled={Number(quantity) >= product.stockQuantity}
+                  type="button"
                 >
                   +
                 </button>
@@ -182,18 +265,22 @@ const ProductDetail = () => {
                 <button
                   className="add-to-cart-btn"
                   onClick={handleAddToCart}
-                  disabled={product.stock === 0}
+                  disabled={product.stockQuantity === 0}
                 >
                   Add to Cart
+                </button>
+                <button
+                  className={`wishlist-btn ${isInWishlist ? "active" : ""}`}
+                  onClick={toggleWishlist}
+                  title={
+                    isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"
+                  }
+                >
+                  {isInWishlist ? "❤️" : "🤍"}
                 </button>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Reviews Section */}
-        <div className="reviews-section">
-          <ProductReviews productId={parseInt(id)} />
         </div>
       </div>
 

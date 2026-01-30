@@ -28,6 +28,7 @@ public class SecurityConfig {
             .requestMatchers("/api/orders/**").permitAll()
             .requestMatchers("/api/users/**").permitAll()
             .requestMatchers("/api/admin/**").permitAll()
+            .requestMatchers("/api/wishlist/**").permitAll()
             .anyRequest().authenticated());
 
     return http.build();

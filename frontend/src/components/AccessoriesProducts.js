@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import '../assets/styles/AccessoriesProducts.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import "../assets/styles/AccessoriesProducts.css";
+import { useNavigate } from "react-router-dom";
 
 const AccessoriesProducts = () => {
   const [products, setProducts] = useState([]);
@@ -8,49 +8,50 @@ const AccessoriesProducts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch accessories products from backend
-    fetch('http://localhost:8080/api/products')
-      .then(res => res.json())
-      .then(data => {
-        const accessoriesProducts = data.filter(p => p.category?.toLowerCase() === 'accessories');
+    fetch("http://localhost:8080/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        const accessoriesProducts = data.filter(
+          (p) => p.category?.toLowerCase() === "accessories",
+        );
         setProducts(accessoriesProducts);
         setLoading(false);
       })
-      .catch(err => {
-        console.error('Error fetching products:', err);
+      .catch((err) => {
+        console.error("Error fetching products:", err);
         setLoading(false);
       });
   }, []);
 
   const handleAddToCart = async (product) => {
-    const userData = localStorage.getItem('user');
+    const userData = localStorage.getItem("user");
     if (!userData) {
-      alert('Please login to add items to cart');
-      navigate('/login');
+      alert("Please login to add items to cart");
+      navigate("/login");
       return;
     }
 
     const user = JSON.parse(userData);
-    
+
     try {
-      const response = await fetch('http://localhost:8080/api/cart/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:8080/api/cart/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId: user.id,
           productId: product.id,
-          quantity: 1
-        })
+          quantity: 1,
+        }),
       });
 
       if (response.ok) {
         alert(`${product.name} added to cart!`);
       } else {
-        alert('Failed to add to cart');
+        alert("Failed to add to cart");
       }
     } catch (error) {
-      console.error('Error adding to cart:', error);
-      alert('Failed to add to cart');
+      console.error("Error adding to cart:", error);
+      alert("Failed to add to cart");
     }
   };
 
@@ -61,22 +62,38 @@ const AccessoriesProducts = () => {
         <div className="underline"></div>
       </div>
       {loading ? (
-        <p style={{ textAlign: 'center', padding: '40px' }}>Loading products...</p>
+        <p style={{ textAlign: "center", padding: "40px" }}>
+          Loading products...
+        </p>
       ) : products.length > 0 ? (
         <div className="accessories-grid">
           {products.map((product) => (
             <div className="accessory-card" key={product.id}>
-              <img src={product.imageUrl} alt={product.name} className="product-image" />
-              <h3 className="product-name">{product.name}</h3>
-              <p className="product-price">Rs. {product.price.toFixed(2)}</p>
-              <button className="add-to-cart-btn" onClick={() => handleAddToCart(product)}>
+              <div
+                onClick={() => navigate(`/products/${product.id}`)}
+                style={{ cursor: "pointer" }}
+              >
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  className="product-image"
+                />
+                <h3 className="product-name">{product.name}</h3>
+                <p className="product-price">Rs. {product.price.toFixed(2)}</p>
+              </div>
+              <button
+                className="add-to-cart-btn"
+                onClick={() => handleAddToCart(product)}
+              >
                 Add to Cart
               </button>
             </div>
           ))}
         </div>
       ) : (
-        <p style={{ textAlign: 'center', padding: '40px' }}>No accessories products available</p>
+        <p style={{ textAlign: "center", padding: "40px" }}>
+          No accessories products available
+        </p>
       )}
     </section>
   );

@@ -1,9 +1,9 @@
-import React from 'react';
-import { HashLink } from 'react-router-hash-link';
-import '../assets/styles/Footer.css';
-import { FaFacebookF, FaTwitter, FaLinkedinIn } from 'react-icons/fa';
-import { IoGlobeOutline } from 'react-icons/io5';
-import Logo from '../assets/images/logo.png';
+import React from "react";
+import { HashLink } from "react-router-hash-link";
+import "../assets/styles/Footer.css";
+import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
+import { IoGlobeOutline } from "react-icons/io5";
+import Logo from "../assets/images/logo.png";
 
 const Footer = () => {
   return (
@@ -16,9 +16,12 @@ const Footer = () => {
             <h3 className="footer-title">TopRoof Solutions</h3>
           </div>
           <p>
-            Head Office<br />
-            752, Baseline Road,<br />
-            Colombo 09,<br />
+            Head Office
+            <br />
+            752, Baseline Road,
+            <br />
+            Colombo 09,
+            <br />
             Sri Lanka
           </p>
         </div>
@@ -26,19 +29,47 @@ const Footer = () => {
         <div className="footer-col">
           <h4>Product</h4>
           <ul>
-            <li><HashLink smooth to="/#roofing-products">Roofing Products</HashLink></li>
-            <li><HashLink smooth to="/#top-selling-products">Top Selling Products</HashLink></li>
-            <li><HashLink smooth to="/#accessories-products">Accessories Products</HashLink></li>
+            <li>
+              <HashLink smooth to="/#roofing-products">
+                Roofing Products
+              </HashLink>
+            </li>
+            <li>
+              <HashLink smooth to="/#top-selling-products">
+                Top Selling Products
+              </HashLink>
+            </li>
+            <li>
+              <HashLink smooth to="/#accessories-products">
+                Accessories Products
+              </HashLink>
+            </li>
           </ul>
         </div>
 
         <div className="footer-col">
           <h4>Company</h4>
           <ul>
-            <li><HashLink smooth to="/#about">About us</HashLink></li>
-            <li><HashLink smooth to="/#about">Careers</HashLink></li>
-            <li><HashLink smooth to="/#showrooms">Help Center</HashLink></li>
-            <li><HashLink smooth to="/#showrooms">Showrooms</HashLink></li>
+            <li>
+              <HashLink smooth to="/#about">
+                About us
+              </HashLink>
+            </li>
+            <li>
+              <HashLink smooth to="/#about">
+                Careers
+              </HashLink>
+            </li>
+            <li>
+              <HashLink smooth to="/#showrooms">
+                Help Center
+              </HashLink>
+            </li>
+            <li>
+              <HashLink smooth to="/#showrooms">
+                Showrooms
+              </HashLink>
+            </li>
           </ul>
         </div>
 
@@ -47,7 +78,11 @@ const Footer = () => {
           <p>+94 77 255 0770</p>
           <p>Monday – Friday: 9:00AM – 5:00PM</p>
           <p>Saturday: 9:00AM – 1:00PM</p>
-          <p><a href="mailto:info@toproofsolutions.lk">Info@toproofsolutions.lk</a></p>
+          <p>
+            <a href="mailto:info@toproofsolutions.lk">
+              Info@toproofsolutions.lk
+            </a>
+          </p>
         </div>
       </div>
 
@@ -56,15 +91,37 @@ const Footer = () => {
           <IoGlobeOutline />
           <span>English</span>
         </div>
-        <div className="footer-copy">Copyright © 2025 TopRoof Solutions</div>
+        <div className="footer-copy">
+          Copyright © 2025 TopRoof Solutions | Developed by{" "}
+          <a
+            href="https://madurangaprabhath.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="developer-link"
+          >
+            Maduranga Prabhath
+          </a>
+        </div>
         <div className="footer-socials">
-          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://www.facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <FaFacebookF />
           </a>
-          <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://www.twitter.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <FaTwitter />
           </a>
-          <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://www.linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <FaLinkedinIn />
           </a>
         </div>
