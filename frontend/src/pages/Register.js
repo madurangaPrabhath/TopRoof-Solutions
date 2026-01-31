@@ -10,6 +10,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [fullName, setFullName] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -79,7 +80,7 @@ const Register = () => {
       const response = await fetch(API_ENDPOINTS.REGISTER, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, fullName }),
       });
 
       const result = await response.json();
@@ -118,7 +119,27 @@ const Register = () => {
           </div>
         )}
         <form className="register-form" onSubmit={handleRegister}>
-          <input type="text" placeholder="Full Name" disabled />
+          <div>
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={fullName}
+              onChange={(e) => {
+                setFullName(e.target.value);
+                if (errors.fullName)
+                  setErrors({ ...errors, fullName: undefined });
+              }}
+              style={{ borderColor: errors.fullName ? "red" : "" }}
+            />
+            {errors.fullName && (
+              <div
+                className="error-text"
+                style={{ color: "red", fontSize: "12px", marginTop: "5px" }}
+              >
+                {errors.fullName}
+              </div>
+            )}
+          </div>
           <div>
             <input
               type="email"
