@@ -30,7 +30,7 @@ public class User {
   @Size(max = 100, message = "Full name cannot exceed 100 characters")
   private String fullName;
   
-  @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Phone number should be valid")
+  @Size(max = 20, message = "Phone number cannot exceed 20 characters")
   private String phone;
   
   @Size(max = 255, message = "Address cannot exceed 255 characters")

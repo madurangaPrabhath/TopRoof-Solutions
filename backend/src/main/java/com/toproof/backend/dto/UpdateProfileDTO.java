@@ -1,6 +1,5 @@
 package com.toproof.backend.dto;
 
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class UpdateProfileDTO {
@@ -14,16 +13,14 @@ public class UpdateProfileDTO {
     @Size(max = 100, message = "Full name cannot exceed 100 characters")
     private String fullName;
     
-    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Phone number should be valid")
+    @Size(max = 20, message = "Phone number cannot exceed 20 characters")
     private String phone;
     
     @Size(max = 255, message = "Address cannot exceed 255 characters")
     private String address;
     
-    @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
     
-    @Size(min = 6, message = "Current password is required")
     private String currentPassword;
 
     public UpdateProfileDTO() {

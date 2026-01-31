@@ -11,7 +11,6 @@ const UserDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("orders");
-  const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -122,7 +121,6 @@ const UserDashboard = () => {
         setUser(storedUser);
 
         setFormData((prev) => ({ ...prev, password: "", currentPassword: "" }));
-        setEditMode(false);
         setMessage({ type: "success", text: "Profile updated successfully!" });
       } else {
         const error = await response.json();
@@ -207,10 +205,6 @@ const UserDashboard = () => {
             Edit Profile
           </button>
         </div>
-
-        {message.text && (
-          <div className={`message ${message.type}`}>{message.text}</div>
-        )}
 
         <div className="dashboard-content user-dashboard-content">
           {activeTab === "orders" && (
@@ -364,10 +358,13 @@ const UserDashboard = () => {
           {activeTab === "profile" && (
             <div className="profile-section">
               <h2>Edit Profile</h2>
+              {message.text && (
+                <div className={`message ${message.type}`}>{message.text}</div>
+              )}
               <form onSubmit={handleUpdateProfile} className="profile-form">
                 <div className="form-group">
                   <label>Email</label>
-                  <input type="email" value={user?.email} disabled />
+                  <input type="email" value={user?.email || ""} disabled />
                 </div>
 
                 <div className="form-row">
@@ -378,7 +375,6 @@ const UserDashboard = () => {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleInputChange}
-                      disabled={!editMode}
                     />
                   </div>
                   <div className="form-group">
@@ -388,7 +384,6 @@ const UserDashboard = () => {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleInputChange}
-                      disabled={!editMode}
                     />
                   </div>
                 </div>
@@ -400,7 +395,6 @@ const UserDashboard = () => {
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleInputChange}
-                    disabled={!editMode}
                   />
                 </div>
 
@@ -411,7 +405,6 @@ const UserDashboard = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    disabled={!editMode}
                   />
                 </div>
 
@@ -421,74 +414,56 @@ const UserDashboard = () => {
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
-                    disabled={!editMode}
                     rows="3"
                   />
                 </div>
 
-                {editMode && (
-                  <>
-                    <div className="password-section">
-                      <h3>Change Password (Optional)</h3>
-                      <div className="form-group">
-                        <label>Current Password</label>
-                        <input
-                          type="password"
-                          name="currentPassword"
-                          value={formData.currentPassword}
-                          onChange={handleInputChange}
-                          placeholder="Enter current password to change"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>New Password</label>
-                        <input
-                          type="password"
-                          name="password"
-                          value={formData.password}
-                          onChange={handleInputChange}
-                          placeholder="Enter new password (min 6 characters)"
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
+                <div className="password-section">
+                  <h3>Change Password (Optional)</h3>
+                  <div className="form-group">
+                    <label>Current Password</label>
+                    <input
+                      type="password"
+                      name="currentPassword"
+                      value={formData.currentPassword}
+                      onChange={handleInputChange}
+                      placeholder="Enter current password to change"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>New Password</label>
+                    <input
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      placeholder="Enter new password (min 6 characters)"
+                    />
+                  </div>
+                </div>
 
                 <div className="form-actions">
-                  {!editMode ? (
-                    <button
-                      type="button"
-                      onClick={() => setEditMode(true)}
-                      className="edit-btn"
-                    >
-                      Edit Profile
-                    </button>
-                  ) : (
-                    <>
-                      <button type="submit" className="save-btn">
-                        Save Changes
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setEditMode(false);
-                          setFormData({
-                            firstName: user?.firstName || "",
-                            lastName: user?.lastName || "",
-                            fullName: user?.fullName || "",
-                            phone: user?.phone || "",
-                            address: user?.address || "",
-                            password: "",
-                            currentPassword: "",
-                          });
-                          setMessage({ type: "", text: "" });
-                        }}
-                        className="cancel-btn"
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  )}
+                  <button type="submit" className="save-btn">
+                    Save Changes
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({
+                        firstName: user?.firstName || "",
+                        lastName: user?.lastName || "",
+                        fullName: user?.fullName || "",
+                        phone: user?.phone || "",
+                        address: user?.address || "",
+                        password: "",
+                        currentPassword: "",
+                      });
+                      setMessage({ type: "", text: "" });
+                    }}
+                    className="cancel-btn"
+                  >
+                    Reset
+                  </button>
                 </div>
               </form>
 
