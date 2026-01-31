@@ -10,9 +10,6 @@ public class UpdateProfileDTO {
     @Size(max = 50, message = "Last name cannot exceed 50 characters")
     private String lastName;
     
-    @Size(max = 100, message = "Full name cannot exceed 100 characters")
-    private String fullName;
-    
     @Size(max = 20, message = "Phone number cannot exceed 20 characters")
     private String phone;
     
@@ -40,14 +37,6 @@ public class UpdateProfileDTO {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 
     public String getPhone() {

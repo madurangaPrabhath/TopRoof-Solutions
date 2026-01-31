@@ -74,9 +74,6 @@ public class UserService {
           if (updateDTO.getLastName() != null) {
             user.setLastName(updateDTO.getLastName());
           }
-          if (updateDTO.getFullName() != null) {
-            user.setFullName(updateDTO.getFullName());
-          }
           if (updateDTO.getPhone() != null) {
             user.setPhone(updateDTO.getPhone());
           }

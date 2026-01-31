@@ -81,7 +81,9 @@ const Header = () => {
               onClick={() => setShowDropdown(!showDropdown)}
             >
               <FaUserCircle className="user-icon" />
-              <span className="user-name">{user.email?.split("@")[0]}</span>
+              <span className="user-name">
+                {user.firstName || user.email?.split("@")[0]}
+              </span>
             </button>
 
             {showDropdown && (
@@ -90,7 +92,9 @@ const Header = () => {
                   <FaUserCircle className="dropdown-avatar" />
                   <div className="dropdown-user-info">
                     <p className="dropdown-name">
-                      {user.fullName || user.email}
+                      {user.firstName && user.lastName
+                        ? `${user.firstName} ${user.lastName}`
+                        : user.email}
                     </p>
                     <p className="dropdown-role">{user.role}</p>
                   </div>

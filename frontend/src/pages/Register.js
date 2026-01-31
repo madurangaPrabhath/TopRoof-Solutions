@@ -10,7 +10,8 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ const Register = () => {
       const response = await fetch(API_ENDPOINTS.REGISTER, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, fullName }),
+        body: JSON.stringify({ email, password, firstName, lastName }),
       });
 
       const result = await response.json();
@@ -122,21 +123,42 @@ const Register = () => {
           <div>
             <input
               type="text"
-              placeholder="Full Name"
-              value={fullName}
+              placeholder="First Name"
+              value={firstName}
               onChange={(e) => {
-                setFullName(e.target.value);
-                if (errors.fullName)
-                  setErrors({ ...errors, fullName: undefined });
+                setFirstName(e.target.value);
+                if (errors.firstName)
+                  setErrors({ ...errors, firstName: undefined });
               }}
-              style={{ borderColor: errors.fullName ? "red" : "" }}
+              style={{ borderColor: errors.firstName ? "red" : "" }}
             />
-            {errors.fullName && (
+            {errors.firstName && (
               <div
                 className="error-text"
                 style={{ color: "red", fontSize: "12px", marginTop: "5px" }}
               >
-                {errors.fullName}
+                {errors.firstName}
+              </div>
+            )}
+          </div>
+          <div>
+            <input
+              type="text"
+              placeholder="Last Name"
+              value={lastName}
+              onChange={(e) => {
+                setLastName(e.target.value);
+                if (errors.lastName)
+                  setErrors({ ...errors, lastName: undefined });
+              }}
+              style={{ borderColor: errors.lastName ? "red" : "" }}
+            />
+            {errors.lastName && (
+              <div
+                className="error-text"
+                style={{ color: "red", fontSize: "12px", marginTop: "5px" }}
+              >
+                {errors.lastName}
               </div>
             )}
           </div>

@@ -14,7 +14,6 @@ const UserDashboard = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    fullName: "",
     phone: "",
     address: "",
     password: "",
@@ -39,7 +38,6 @@ const UserDashboard = () => {
     setFormData({
       firstName: parsedUser.firstName || "",
       lastName: parsedUser.lastName || "",
-      fullName: parsedUser.fullName || "",
       phone: parsedUser.phone || "",
       address: parsedUser.address || "",
       password: "",
@@ -87,7 +85,6 @@ const UserDashboard = () => {
       const updateData = {
         firstName: formData.firstName,
         lastName: formData.lastName,
-        fullName: formData.fullName,
         phone: formData.phone,
         address: formData.address,
       };
@@ -389,16 +386,6 @@ const UserDashboard = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Full Name</label>
-                  <input
-                    type="text"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                  />
-                </div>
-
-                <div className="form-group">
                   <label>Phone</label>
                   <input
                     type="tel"
@@ -452,7 +439,6 @@ const UserDashboard = () => {
                       setFormData({
                         firstName: user?.firstName || "",
                         lastName: user?.lastName || "",
-                        fullName: user?.fullName || "",
                         phone: user?.phone || "",
                         address: user?.address || "",
                         password: "",

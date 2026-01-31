@@ -38,8 +38,11 @@ public class AdminController {
         return userRepository.findById(id)
                 .map(user -> {
                     // Update user fields
-                    if (updatedUser.getFullName() != null) {
-                        user.setFullName(updatedUser.getFullName());
+                    if (updatedUser.getFirstName() != null) {
+                        user.setFirstName(updatedUser.getFirstName());
+                    }
+                    if (updatedUser.getLastName() != null) {
+                        user.setLastName(updatedUser.getLastName());
                     }
                     if (updatedUser.getPhone() != null) {
                         user.setPhone(updatedUser.getPhone());

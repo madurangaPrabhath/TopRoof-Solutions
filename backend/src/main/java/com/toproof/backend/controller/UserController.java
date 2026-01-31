@@ -61,7 +61,6 @@ public class UserController {
           response.put("email", user.getEmail());
           response.put("firstName", user.getFirstName());
           response.put("lastName", user.getLastName());
-          response.put("fullName", user.getFullName());
           response.put("phone", user.getPhone());
           response.put("address", user.getAddress());
           response.put("role", user.getRole());
@@ -79,7 +78,6 @@ public class UserController {
       response.put("email", updatedUser.getEmail());
       response.put("firstName", updatedUser.getFirstName());
       response.put("lastName", updatedUser.getLastName());
-      response.put("fullName", updatedUser.getFullName());
       response.put("phone", updatedUser.getPhone());
       response.put("address", updatedUser.getAddress());
       response.put("role", updatedUser.getRole());
