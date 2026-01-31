@@ -1523,3 +1523,356 @@ body.user-dashboard-page {
     width: 100%;
   }
 }
+
+/* Reports & Analytics Section */
+.reports-section {
+  padding: 20px;
+}
+
+.reports-section h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #e74c3c;
+  padding-bottom: 10px;
+}
+
+.report-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.report-section h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Revenue Stats */
+.revenue-stats .stat-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+}
+
+.revenue-stats .stat-card.monthly {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.revenue-stats .stat-card.weekly {
+  background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);
+}
+
+.revenue-stats .stat-card.today {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.revenue-stats .stat-card .stat-info h3,
+.revenue-stats .stat-card .stat-info p {
+  color: #fff;
+}
+
+/* Status Breakdown */
+.status-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.status-item .status-label {
+  min-width: 140px;
+  font-weight: 600;
+  color: #333;
+}
+
+.status-item .status-count {
+  font-weight: 700;
+  font-size: 18px;
+  min-width: 50px;
+  text-align: center;
+}
+
+.status-item .status-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.status-item.pending .status-bar {
+  background: #f39c12;
+}
+
+.status-item.confirmed .status-bar {
+  background: #3498db;
+}
+
+.status-item.shipped .status-bar {
+  background: #9b59b6;
+}
+
+.status-item.delivered .status-bar {
+  background: #27ae60;
+}
+
+.status-item.cancelled .status-bar {
+  background: #e74c3c;
+}
+
+/* Metrics Grid */
+.metrics-grid .metric-card {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.metrics-grid .metric-card .stat-icon {
+  font-size: 28px;
+}
+
+/* Inventory Stats */
+.inventory-stats .inventory-card {
+  background: #fff;
+  border: 2px solid #e0e0e0;
+}
+
+.inventory-stats .inventory-card.warning {
+  border-color: #f39c12;
+  background: #fff8e1;
+}
+
+.inventory-stats .inventory-card.danger {
+  border-color: #e74c3c;
+  background: #ffebee;
+}
+
+/* Chart Container */
+.chart-container {
+  padding: 20px 0;
+}
+
+.bar-chart {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 250px;
+  padding: 20px 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  max-width: 100px;
+}
+
+.bar {
+  width: 50px;
+  background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%);
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 8px;
+  min-height: 20px;
+  transition: height 0.5s ease;
+}
+
+.orders-chart .bar.orders-bar {
+  background: linear-gradient(180deg, #3498db 0%, #2980b9 100%);
+}
+
+.bar-value {
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.bar-label {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+}
+
+/* Category Sales */
+.category-sales {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.category-item {
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.category-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.category-revenue {
+  font-weight: 700;
+  color: #e74c3c;
+}
+
+.category-bar-container {
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.category-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* Payment Stats */
+.payment-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.payment-method-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+
+.payment-method-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.payment-method-icon {
+  font-size: 32px;
+}
+
+.payment-method-info h4 {
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.payment-method-info p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.payment-revenue {
+  font-weight: 700;
+  color: #27ae60 !important;
+}
+
+/* Report Actions */
+.report-actions {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.refresh-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  padding: 12px 30px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.refresh-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  font-size: 18px;
+  color: #666;
+}
+
+/* No Data Message */
+.no-data-message {
+  text-align: center;
+  padding: 50px;
+  color: #666;
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  padding: 20px;
+}
+
+/* Reports Responsive */
+@media (max-width: 768px) {
+  .bar-chart {
+    height: 200px;
+  }
+  
+  .bar {
+    width: 30px;
+  }
+  
+  .bar-value {
+    font-size: 8px;
+  }
+  
+  .bar-label {
+    font-size: 10px;
+  }
+  
+  .payment-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .status-item {
+    flex-wrap: wrap;
+  }
+  
+  .status-item .status-label {
+    min-width: 100px;
+  }
+}
+

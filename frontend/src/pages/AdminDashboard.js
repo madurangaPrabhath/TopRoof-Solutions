@@ -18,6 +18,8 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [orderFilter, setOrderFilter] = useState("ALL");
+  const [reportData, setReportData] = useState(null);
+  const [reportLoading, setReportLoading] = useState(false);
 
   const [products, setProducts] = useState([]);
   const [productFormData, setProductFormData] = useState({
@@ -37,7 +39,8 @@ const AdminDashboard = () => {
   const [userFormData, setUserFormData] = useState({
     email: "",
     password: "",
-    fullName: "",
+    firstName: "",
+    lastName: "",
     phone: "",
     address: "",
     role: "USER",
@@ -65,8 +68,26 @@ const AdminDashboard = () => {
     fetchDashboardData();
     fetchProducts();
     fetchUsers();
+    fetchReportData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
+
+  const fetchReportData = async () => {
+    setReportLoading(true);
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/admin/reports/dashboard",
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setReportData(data);
+      }
+    } catch (error) {
+      console.error("Error fetching report data:", error);
+    } finally {
+      setReportLoading(false);
+    }
+  };
 
   const fetchDashboardData = async () => {
     try {
@@ -345,7 +366,8 @@ const AdminDashboard = () => {
       setUserFormData({
         email: "",
         password: "",
-        fullName: "",
+        firstName: "",
+        lastName: "",
         phone: "",
         address: "",
         role: "USER",
@@ -363,7 +385,8 @@ const AdminDashboard = () => {
     setUserFormData({
       email: user.email,
       password: "",
-      fullName: user.fullName || "",
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
       phone: user.phone || "",
       address: user.address || "",
       role: user.role,
@@ -438,6 +461,15 @@ const AdminDashboard = () => {
           >
             👥 Manage Users
           </button>
+          <button
+            className={activeTab === "reports" ? "tab-btn active" : "tab-btn"}
+            onClick={() => {
+              setActiveTab("reports");
+              fetchReportData();
+            }}
+          >
+            📈 Reports & Analytics
+          </button>
         </div>
 
         <div className="dashboard-content">
@@ -501,7 +533,13 @@ const AdminDashboard = () => {
                     <h4>Manage Users</h4>
                     <p>View all users</p>
                   </div>
-                  <div className="action-card">
+                  <div
+                    className="action-card"
+                    onClick={() => {
+                      setActiveTab("reports");
+                      fetchReportData();
+                    }}
+                  >
                     <i className="icon">📊</i>
                     <h4>View Reports</h4>
                     <p>Sales and analytics</p>
@@ -621,7 +659,9 @@ const AdminDashboard = () => {
                           </td>
                           <td>
                             <div className="customer-info">
-                              <span>{order.user?.fullName || "N/A"}</span>
+                              <span>
+                                {order.user?.firstName} {order.user?.lastName}
+                              </span>
                               <small>{order.user?.email || "N/A"}</small>
                             </div>
                           </td>
@@ -699,7 +739,7 @@ const AdminDashboard = () => {
                                 onClick={() => {
                                   const details = `
 Order #${order.id}
-Customer: ${order.user?.fullName || "N/A"} (${order.user?.email || "N/A"})
+Customer: ${order.user?.firstName || ""} ${order.user?.lastName || ""} (${order.user?.email || "N/A"})
 Phone: ${order.user?.phone || "N/A"}
 Address: ${order.shippingAddress || order.user?.address || "N/A"}
 Date: ${new Date(order.createdAt).toLocaleString()}
@@ -952,14 +992,25 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                 </div>
                 <div className="form-row">
                   <div className="form-group">
-                    <label>Full Name:</label>
+                    <label>First Name:</label>
                     <input
                       type="text"
-                      name="fullName"
-                      value={userFormData.fullName}
+                      name="firstName"
+                      value={userFormData.firstName}
                       onChange={handleUserChange}
                     />
                   </div>
+                  <div className="form-group">
+                    <label>Last Name:</label>
+                    <input
+                      type="text"
+                      name="lastName"
+                      value={userFormData.lastName}
+                      onChange={handleUserChange}
+                    />
+                  </div>
+                </div>
+                <div className="form-row">
                   <div className="form-group">
                     <label>Phone:</label>
                     <input
@@ -1005,7 +1056,8 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                         setUserFormData({
                           email: "",
                           password: "",
-                          fullName: "",
+                          firstName: "",
+                          lastName: "",
                           phone: "",
                           address: "",
                           role: "USER",
@@ -1026,7 +1078,7 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                     <tr>
                       <th>ID</th>
                       <th>Email</th>
-                      <th>Full Name</th>
+                      <th>Name</th>
                       <th>Phone</th>
                       <th>Address</th>
                       <th>Role</th>
@@ -1038,7 +1090,9 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                       <tr key={user.id}>
                         <td>{user.id}</td>
                         <td>{user.email}</td>
-                        <td>{user.fullName || "N/A"}</td>
+                        <td>
+                          {user.firstName} {user.lastName}
+                        </td>
                         <td>{user.phone || "N/A"}</td>
                         <td>{user.address || "N/A"}</td>
                         <td>
@@ -1070,6 +1124,501 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                   </tbody>
                 </table>
               </div>
+            </div>
+          )}
+
+          {activeTab === "reports" && (
+            <div className="manage-section reports-section">
+              <h2>📈 Sales & Analytics Report</h2>
+
+              {reportLoading ? (
+                <div className="loading-spinner">Loading report data...</div>
+              ) : reportData ? (
+                <>
+                  {/* Revenue Overview */}
+                  <div className="report-section">
+                    <h3>💰 Revenue Overview</h3>
+                    <div className="stats-grid revenue-stats">
+                      <div className="stat-card revenue-card">
+                        <div className="stat-icon">💵</div>
+                        <div className="stat-info">
+                          <h3>
+                            Rs.{" "}
+                            {reportData.totalRevenue?.toLocaleString(
+                              undefined,
+                              {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              },
+                            )}
+                          </h3>
+                          <p>Total Revenue</p>
+                        </div>
+                      </div>
+                      <div className="stat-card revenue-card monthly">
+                        <div className="stat-icon">📅</div>
+                        <div className="stat-info">
+                          <h3>
+                            Rs.{" "}
+                            {reportData.monthlyRevenue?.toLocaleString(
+                              undefined,
+                              {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              },
+                            )}
+                          </h3>
+                          <p>This Month</p>
+                        </div>
+                      </div>
+                      <div className="stat-card revenue-card weekly">
+                        <div className="stat-icon">📆</div>
+                        <div className="stat-info">
+                          <h3>
+                            Rs.{" "}
+                            {reportData.weeklyRevenue?.toLocaleString(
+                              undefined,
+                              {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              },
+                            )}
+                          </h3>
+                          <p>This Week</p>
+                        </div>
+                      </div>
+                      <div className="stat-card revenue-card today">
+                        <div className="stat-icon">🕐</div>
+                        <div className="stat-info">
+                          <h3>
+                            Rs.{" "}
+                            {reportData.todayRevenue?.toLocaleString(
+                              undefined,
+                              {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              },
+                            )}
+                          </h3>
+                          <p>Today</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Order Statistics */}
+                  <div className="report-section">
+                    <h3>📦 Order Statistics</h3>
+                    <div className="stats-grid order-stats">
+                      <div className="stat-card">
+                        <div className="stat-icon">📋</div>
+                        <div className="stat-info">
+                          <h3>{reportData.totalOrders}</h3>
+                          <p>Total Orders</p>
+                        </div>
+                      </div>
+                      <div className="stat-card">
+                        <div className="stat-icon">📅</div>
+                        <div className="stat-info">
+                          <h3>{reportData.monthlyOrders}</h3>
+                          <p>This Month</p>
+                        </div>
+                      </div>
+                      <div className="stat-card">
+                        <div className="stat-icon">📆</div>
+                        <div className="stat-info">
+                          <h3>{reportData.weeklyOrders}</h3>
+                          <p>This Week</p>
+                        </div>
+                      </div>
+                      <div className="stat-card">
+                        <div className="stat-icon">🕐</div>
+                        <div className="stat-info">
+                          <h3>{reportData.todayOrders}</h3>
+                          <p>Today</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Order Status Breakdown */}
+                  <div className="report-section">
+                    <h3>📊 Order Status Breakdown</h3>
+                    <div className="status-breakdown">
+                      <div className="status-item pending">
+                        <span className="status-label">⏳ Pending</span>
+                        <span className="status-count">
+                          {reportData.pendingOrders}
+                        </span>
+                        <div
+                          className="status-bar"
+                          style={{
+                            width: `${reportData.totalOrders > 0 ? (reportData.pendingOrders / reportData.totalOrders) * 100 : 0}%`,
+                          }}
+                        ></div>
+                      </div>
+                      <div className="status-item confirmed">
+                        <span className="status-label">✅ Confirmed</span>
+                        <span className="status-count">
+                          {reportData.confirmedOrders}
+                        </span>
+                        <div
+                          className="status-bar"
+                          style={{
+                            width: `${reportData.totalOrders > 0 ? (reportData.confirmedOrders / reportData.totalOrders) * 100 : 0}%`,
+                          }}
+                        ></div>
+                      </div>
+                      <div className="status-item shipped">
+                        <span className="status-label">🚚 Shipped</span>
+                        <span className="status-count">
+                          {reportData.shippedOrders}
+                        </span>
+                        <div
+                          className="status-bar"
+                          style={{
+                            width: `${reportData.totalOrders > 0 ? (reportData.shippedOrders / reportData.totalOrders) * 100 : 0}%`,
+                          }}
+                        ></div>
+                      </div>
+                      <div className="status-item delivered">
+                        <span className="status-label">📦 Delivered</span>
+                        <span className="status-count">
+                          {reportData.deliveredOrders}
+                        </span>
+                        <div
+                          className="status-bar"
+                          style={{
+                            width: `${reportData.totalOrders > 0 ? (reportData.deliveredOrders / reportData.totalOrders) * 100 : 0}%`,
+                          }}
+                        ></div>
+                      </div>
+                      <div className="status-item cancelled">
+                        <span className="status-label">❌ Cancelled</span>
+                        <span className="status-count">
+                          {reportData.cancelledOrders}
+                        </span>
+                        <div
+                          className="status-bar"
+                          style={{
+                            width: `${reportData.totalOrders > 0 ? (reportData.cancelledOrders / reportData.totalOrders) * 100 : 0}%`,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Key Metrics */}
+                  <div className="report-section">
+                    <h3>📈 Key Metrics</h3>
+                    <div className="stats-grid metrics-grid">
+                      <div className="stat-card metric-card">
+                        <div className="stat-icon">💳</div>
+                        <div className="stat-info">
+                          <h3>
+                            Rs.{" "}
+                            {reportData.averageOrderValue?.toLocaleString(
+                              undefined,
+                              {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              },
+                            )}
+                          </h3>
+                          <p>Average Order Value</p>
+                        </div>
+                      </div>
+                      <div className="stat-card metric-card">
+                        <div className="stat-icon">✔️</div>
+                        <div className="stat-info">
+                          <h3>{reportData.orderCompletionRate?.toFixed(1)}%</h3>
+                          <p>Order Completion Rate</p>
+                        </div>
+                      </div>
+                      <div className="stat-card metric-card">
+                        <div className="stat-icon">👥</div>
+                        <div className="stat-info">
+                          <h3>{reportData.newUsersThisMonth}</h3>
+                          <p>New Users This Month</p>
+                        </div>
+                      </div>
+                      <div className="stat-card metric-card">
+                        <div className="stat-icon">📦</div>
+                        <div className="stat-info">
+                          <h3>{reportData.totalProducts}</h3>
+                          <p>Total Products</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Product Inventory Status */}
+                  <div className="report-section">
+                    <h3>📦 Product Inventory Status</h3>
+                    <div className="stats-grid inventory-stats">
+                      <div className="stat-card inventory-card">
+                        <div className="stat-icon">📦</div>
+                        <div className="stat-info">
+                          <h3>{reportData.totalProducts}</h3>
+                          <p>Total Products</p>
+                        </div>
+                      </div>
+                      <div className="stat-card inventory-card warning">
+                        <div className="stat-icon">⚠️</div>
+                        <div className="stat-info">
+                          <h3>{reportData.lowStockProducts}</h3>
+                          <p>Low Stock (≤10)</p>
+                        </div>
+                      </div>
+                      <div className="stat-card inventory-card danger">
+                        <div className="stat-icon">🚫</div>
+                        <div className="stat-info">
+                          <h3>{reportData.outOfStockProducts}</h3>
+                          <p>Out of Stock</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Revenue Trend Chart */}
+                  <div className="report-section">
+                    <h3>📉 Revenue Trend (Last 6 Months)</h3>
+                    <div className="chart-container">
+                      <div className="bar-chart">
+                        {reportData.revenueByMonth?.map((month, index) => (
+                          <div key={index} className="bar-item">
+                            <div
+                              className="bar"
+                              style={{
+                                height: `${Math.max(5, (month.revenue / Math.max(...reportData.revenueByMonth.map((m) => m.revenue || 1))) * 100)}%`,
+                              }}
+                            >
+                              <span className="bar-value">
+                                Rs. {(month.revenue / 1000).toFixed(1)}K
+                              </span>
+                            </div>
+                            <span className="bar-label">{month.month}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Orders Trend Chart */}
+                  <div className="report-section">
+                    <h3>📊 Orders Trend (Last 6 Months)</h3>
+                    <div className="chart-container">
+                      <div className="bar-chart orders-chart">
+                        {reportData.ordersByMonth?.map((month, index) => (
+                          <div key={index} className="bar-item">
+                            <div
+                              className="bar orders-bar"
+                              style={{
+                                height: `${Math.max(5, (month.orders / Math.max(...reportData.ordersByMonth.map((m) => m.orders || 1))) * 100)}%`,
+                              }}
+                            >
+                              <span className="bar-value">{month.orders}</span>
+                            </div>
+                            <span className="bar-label">{month.month}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Top Selling Products */}
+                  <div className="report-section">
+                    <h3>🏆 Top Selling Products</h3>
+                    <div className="table-container">
+                      <table className="data-table">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Product Name</th>
+                            <th>Quantity Sold</th>
+                            <th>Revenue</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {reportData.topSellingProducts?.map(
+                            (product, index) => (
+                              <tr key={product.id}>
+                                <td>{index + 1}</td>
+                                <td>{product.name}</td>
+                                <td>{product.quantity}</td>
+                                <td>
+                                  Rs.{" "}
+                                  {product.revenue?.toLocaleString(undefined, {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  })}
+                                </td>
+                              </tr>
+                            ),
+                          )}
+                          {(!reportData.topSellingProducts ||
+                            reportData.topSellingProducts.length === 0) && (
+                            <tr>
+                              <td colSpan="4" style={{ textAlign: "center" }}>
+                                No sales data available
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Sales by Category */}
+                  <div className="report-section">
+                    <h3>📁 Sales by Category</h3>
+                    <div className="category-sales">
+                      {reportData.salesByCategory?.map((cat, index) => (
+                        <div key={index} className="category-item">
+                          <div className="category-header">
+                            <span className="category-name">
+                              {cat.category}
+                            </span>
+                            <span className="category-revenue">
+                              Rs.{" "}
+                              {cat.revenue?.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })}
+                            </span>
+                          </div>
+                          <div className="category-bar-container">
+                            <div
+                              className="category-bar"
+                              style={{
+                                width: `${(cat.revenue / Math.max(...reportData.salesByCategory.map((c) => c.revenue || 1))) * 100}%`,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                      ))}
+                      {(!reportData.salesByCategory ||
+                        reportData.salesByCategory.length === 0) && (
+                        <p className="no-data">
+                          No category sales data available
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Payment Method Statistics */}
+                  <div className="report-section">
+                    <h3>💳 Payment Method Statistics</h3>
+                    <div className="payment-stats">
+                      {reportData.paymentMethodStats?.map((method, index) => (
+                        <div key={index} className="payment-method-card">
+                          <div className="payment-method-icon">
+                            {method.method === "Credit Card"
+                              ? "💳"
+                              : method.method === "Cash on Delivery"
+                                ? "💵"
+                                : method.method === "Bank Transfer"
+                                  ? "🏦"
+                                  : "💰"}
+                          </div>
+                          <div className="payment-method-info">
+                            <h4>{method.method}</h4>
+                            <p>{method.count} orders</p>
+                            <p className="payment-revenue">
+                              Rs.{" "}
+                              {method.revenue?.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                      {(!reportData.paymentMethodStats ||
+                        reportData.paymentMethodStats.length === 0) && (
+                        <p className="no-data">No payment data available</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Recent Orders Summary */}
+                  <div className="report-section">
+                    <h3>🕐 Recent Orders</h3>
+                    <div className="table-container">
+                      <table className="data-table">
+                        <thead>
+                          <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {reportData.recentOrders?.map((order) => (
+                            <tr key={order.id}>
+                              <td>#{order.id}</td>
+                              <td>{order.customerName}</td>
+                              <td>{order.itemCount}</td>
+                              <td>
+                                Rs.{" "}
+                                {order.total?.toLocaleString(undefined, {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                })}
+                              </td>
+                              <td>
+                                <span
+                                  className={`status-badge status-${order.status?.toLowerCase()}`}
+                                >
+                                  {order.status}
+                                </span>
+                              </td>
+                              <td>
+                                <span
+                                  className={`payment-status-badge payment-${order.paymentStatus?.toLowerCase()}`}
+                                >
+                                  {order.paymentStatus}
+                                </span>
+                              </td>
+                              <td>
+                                {order.date
+                                  ? new Date(order.date).toLocaleDateString()
+                                  : "N/A"}
+                              </td>
+                            </tr>
+                          ))}
+                          {(!reportData.recentOrders ||
+                            reportData.recentOrders.length === 0) && (
+                            <tr>
+                              <td colSpan="7" style={{ textAlign: "center" }}>
+                                No recent orders
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Refresh Button */}
+                  <div className="report-actions">
+                    <button onClick={fetchReportData} className="refresh-btn">
+                      🔄 Refresh Report Data
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="no-data-message">
+                  <p>Unable to load report data. Please try again.</p>
+                  <button onClick={fetchReportData} className="refresh-btn">
+                    🔄 Try Again
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
