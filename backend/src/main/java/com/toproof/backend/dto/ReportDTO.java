@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class ReportDTO {
     
-    // Overall Statistics
     private double totalRevenue;
     private double monthlyRevenue;
     private double weeklyRevenue;
@@ -29,7 +28,6 @@ public class ReportDTO {
     private int totalUsers;
     private int newUsersThisMonth;
     
-    // Charts Data
     private List<Map<String, Object>> revenueByMonth;
     private List<Map<String, Object>> ordersByMonth;
     private List<Map<String, Object>> topSellingProducts;
@@ -37,13 +35,11 @@ public class ReportDTO {
     private List<Map<String, Object>> recentOrders;
     private List<Map<String, Object>> paymentMethodStats;
     
-    // Average metrics
     private double averageOrderValue;
     private double orderCompletionRate;
     
     public ReportDTO() {}
 
-    // Getters and Setters
     public double getTotalRevenue() {
         return totalRevenue;
     }
