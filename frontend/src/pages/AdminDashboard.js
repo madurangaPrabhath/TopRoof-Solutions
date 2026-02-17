@@ -83,6 +83,7 @@ const AdminDashboard = () => {
     fetchUsers();
     fetchShippingOptions();
     fetchReportData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   const fetchReportData = async () => {
