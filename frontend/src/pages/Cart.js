@@ -10,6 +10,7 @@ import {
   FaUniversity,
   FaCreditCard,
   FaGlobe,
+  FaTruck,
 } from "react-icons/fa";
 import "../assets/styles/Cart.css";
 
@@ -22,6 +23,13 @@ const Cart = () => {
     shippingAddress: "",
     paymentMethod: "Cash on Delivery",
   });
+
+  const [shippingRegions, setShippingRegions] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState("");
+  const [shippingOptions, setShippingOptions] = useState([]);
+  const [selectedShippingOption, setSelectedShippingOption] = useState(null);
+  const [shippingCost, setShippingCost] = useState(0);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,6 +42,7 @@ const Cart = () => {
     const parsedUser = JSON.parse(userData);
     setUser(parsedUser);
     fetchCartItems(parsedUser.id);
+    fetchShippingRegions();
   }, [navigate]);
 
   const fetchCartItems = async (userId) => {
@@ -127,6 +136,66 @@ const Cart = () => {
     }, 0);
   };
 
+  const fetchShippingRegions = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/shipping/regions");
+      if (response.ok) {
+        const data = await response.json();
+        setShippingRegions(data);
+      }
+    } catch (error) {
+      console.error("Error fetching shipping regions:", error);
+    }
+  };
+
+  const fetchShippingOptionsByRegion = async (region) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/shipping/region/${encodeURIComponent(region)}`,
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setShippingOptions(data);
+        setSelectedShippingOption(null);
+        setShippingCost(0);
+      }
+    } catch (error) {
+      console.error("Error fetching shipping options:", error);
+    }
+  };
+
+  const handleRegionChange = (region) => {
+    setSelectedRegion(region);
+    if (region) {
+      fetchShippingOptionsByRegion(region);
+    } else {
+      setShippingOptions([]);
+      setSelectedShippingOption(null);
+      setShippingCost(0);
+    }
+  };
+
+  const handleShippingOptionSelect = async (option) => {
+    setSelectedShippingOption(option);
+    try {
+      const response = await fetch("http://localhost:8080/api/shipping/calculate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          shippingOptionId: option.id,
+          orderSubtotal: calculateTotal(),
+        }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setShippingCost(data.shippingCost);
+      }
+    } catch (error) {
+      console.error("Error calculating shipping:", error);
+      setShippingCost(option.cost);
+    }
+  };
+
   const handleCheckout = async () => {
     if (cartItems.length === 0) {
       alert("Your cart is empty!");
@@ -144,6 +213,16 @@ const Cart = () => {
       return;
     }
 
+    if (!selectedRegion) {
+      alert("Please select a shipping region");
+      return;
+    }
+
+    if (!selectedShippingOption) {
+      alert("Please select a shipping method");
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:8080/api/orders", {
         method: "POST",
@@ -152,13 +231,14 @@ const Cart = () => {
           userId: user.id,
           shippingAddress: checkoutForm.shippingAddress,
           paymentMethod: checkoutForm.paymentMethod,
+          shippingOptionId: selectedShippingOption.id,
         }),
       });
 
       if (response.ok) {
         const orderData = await response.json();
         alert(
-          `Order #${orderData.id} placed successfully!\nPayment Method: ${checkoutForm.paymentMethod}\nTotal: Rs. ${orderData.totalAmount?.toFixed(2) || calculateTotal().toFixed(2)}`,
+          `Order #${orderData.id} placed successfully!\nPayment Method: ${checkoutForm.paymentMethod}\nShipping: ${orderData.shippingMethod} (${orderData.shippingRegion})\nShipping Cost: Rs. ${orderData.shippingCost?.toFixed(2)}\nTotal: Rs. ${orderData.totalAmount?.toFixed(2)}`,
         );
         setCartItems([]);
         setShowCheckoutModal(false);
@@ -166,6 +246,10 @@ const Cart = () => {
           shippingAddress: "",
           paymentMethod: "Cash on Delivery",
         });
+        setSelectedRegion("");
+        setShippingOptions([]);
+        setSelectedShippingOption(null);
+        setShippingCost(0);
         navigate("/dashboard");
       } else {
         const errorData = await response.json();
@@ -260,11 +344,17 @@ const Cart = () => {
               </div>
               <div className="summary-row">
                 <span>Shipping:</span>
-                <span>Free</span>
+                <span>
+                  {shippingCost > 0
+                    ? `Rs. ${shippingCost.toFixed(2)}`
+                    : selectedShippingOption
+                      ? "Free"
+                      : "Select at checkout"}
+                </span>
               </div>
               <div className="summary-row total">
                 <span>Total:</span>
-                <span>Rs. {calculateTotal().toFixed(2)}</span>
+                <span>Rs. {(calculateTotal() + shippingCost).toFixed(2)}</span>
               </div>
               <button className="checkout-btn" onClick={handleCheckout}>
                 Proceed to Checkout
@@ -300,6 +390,75 @@ const Cart = () => {
                   required
                 />
               </div>
+
+              <div className="form-group">
+                <label>Shipping Region *</label>
+                <select
+                  className="shipping-region-select"
+                  value={selectedRegion}
+                  onChange={(e) => handleRegionChange(e.target.value)}
+                  required
+                >
+                  <option value="">-- Select your region --</option>
+                  {shippingRegions.map((region) => (
+                    <option key={region} value={region}>
+                      {region}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {selectedRegion && shippingOptions.length > 0 && (
+                <div className="form-group">
+                  <label>Shipping Method *</label>
+                  <div className="shipping-options">
+                    {shippingOptions.map((option) => (
+                      <label
+                        key={option.id}
+                        className={`shipping-option ${selectedShippingOption?.id === option.id ? "selected" : ""}`}
+                      >
+                        <input
+                          type="radio"
+                          name="shippingOption"
+                          value={option.id}
+                          checked={selectedShippingOption?.id === option.id}
+                          onChange={() => handleShippingOptionSelect(option)}
+                        />
+                        <FaTruck className="shipping-icon" />
+                        <div className="shipping-info">
+                          <span className="shipping-title">
+                            {option.methodName}
+                          </span>
+                          <span className="shipping-desc">
+                            {option.description}
+                          </span>
+                          <span className="shipping-details">
+                            <span className="shipping-days">
+                              Est. {option.estimatedDays === 0
+                                ? "Same day"
+                                : `${option.estimatedDays} day${option.estimatedDays > 1 ? "s" : ""}`}
+                            </span>
+                            <span className="shipping-cost">
+                              Rs. {option.cost.toFixed(2)}
+                              {option.freeShippingAbove && (
+                                <span className="free-shipping-note">
+                                  {" "}(Free above Rs. {option.freeShippingThreshold.toFixed(0)})
+                                </span>
+                              )}
+                            </span>
+                          </span>
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {selectedRegion && shippingOptions.length === 0 && (
+                <div className="no-shipping-message">
+                  <p>No shipping options available for this region. Please try "Island-wide" option.</p>
+                </div>
+              )}
 
               <div className="form-group">
                 <label>Payment Method *</label>
@@ -409,12 +568,28 @@ const Cart = () => {
                   <span>Rs. {calculateTotal().toFixed(2)}</span>
                 </div>
                 <div className="summary-row">
-                  <span>Shipping:</span>
-                  <span>Free</span>
+                  <span>Shipping ({selectedShippingOption?.methodName || "Not selected"}):</span>
+                  <span>
+                    {shippingCost > 0
+                      ? `Rs. ${shippingCost.toFixed(2)}`
+                      : selectedShippingOption
+                        ? "Free"
+                        : "--"}
+                  </span>
                 </div>
+                {selectedShippingOption && (
+                  <div className="summary-row shipping-info-row">
+                    <span>Estimated Delivery:</span>
+                    <span>
+                      {selectedShippingOption.estimatedDays === 0
+                        ? "Same day"
+                        : `${selectedShippingOption.estimatedDays} business day${selectedShippingOption.estimatedDays > 1 ? "s" : ""}`}
+                    </span>
+                  </div>
+                )}
                 <div className="summary-row total">
                   <span>Total:</span>
-                  <span>Rs. {calculateTotal().toFixed(2)}</span>
+                  <span>Rs. {(calculateTotal() + shippingCost).toFixed(2)}</span>
                 </div>
               </div>
 

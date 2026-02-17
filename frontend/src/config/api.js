@@ -35,6 +35,12 @@ export const API_ENDPOINTS = {
   ADMIN_PRODUCTS: `${API_BASE_URL}/api/admin/products`,
   ADMIN_USERS: `${API_BASE_URL}/api/admin/users`,
   ADMIN_STATS: `${API_BASE_URL}/api/admin/stats`,
+
+  // Shipping endpoints
+  SHIPPING: `${API_BASE_URL}/api/shipping`,
+  SHIPPING_REGIONS: `${API_BASE_URL}/api/shipping/regions`,
+  SHIPPING_CALCULATE: `${API_BASE_URL}/api/shipping/calculate`,
+  SHIPPING_ADMIN_ALL: `${API_BASE_URL}/api/shipping/admin/all`,
 };
 
 export default API_BASE_URL;

@@ -47,6 +47,19 @@ const AdminDashboard = () => {
   });
   const [editingUserId, setEditingUserId] = useState(null);
 
+  const [shippingOptions, setShippingOptions] = useState([]);
+  const [shippingFormData, setShippingFormData] = useState({
+    region: "",
+    methodName: "",
+    cost: "",
+    description: "",
+    estimatedDays: 3,
+    active: true,
+    freeShippingAbove: false,
+    freeShippingThreshold: 0,
+  });
+  const [editingShippingId, setEditingShippingId] = useState(null);
+
   const PRODUCT_API = API_ENDPOINTS.ADMIN_PRODUCTS;
   const USER_API = API_ENDPOINTS.ADMIN_USERS;
   const AUTH_API = API_ENDPOINTS.REGISTER.replace("/register", "");
@@ -68,8 +81,8 @@ const AdminDashboard = () => {
     fetchDashboardData();
     fetchProducts();
     fetchUsers();
+    fetchShippingOptions();
     fetchReportData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   const fetchReportData = async () => {
@@ -163,7 +176,6 @@ const AdminDashboard = () => {
         const updatedOrder = await response.json();
         console.log("Order status updated:", updatedOrder);
 
-        // Update both allOrders and recentOrders
         setAllOrders((prevOrders) =>
           prevOrders.map((order) =>
             order.id === orderId ? { ...order, status: newStatus } : order,
@@ -175,7 +187,6 @@ const AdminDashboard = () => {
           ),
         );
 
-        // Refresh stats
         await fetchDashboardData();
         alert("Order status updated successfully!");
       } else {
@@ -204,7 +215,6 @@ const AdminDashboard = () => {
         const updatedOrder = await response.json();
         console.log("Payment status updated:", updatedOrder);
 
-        // Update both allOrders and recentOrders
         setAllOrders((prevOrders) =>
           prevOrders.map((order) =>
             order.id === orderId
@@ -418,6 +428,107 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchShippingOptions = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/api/shipping/admin/all");
+      if (res.ok) {
+        const data = await res.json();
+        setShippingOptions(data);
+      }
+    } catch (error) {
+      console.error("Error fetching shipping options:", error);
+    }
+  };
+
+  const handleShippingChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setShippingFormData({
+      ...shippingFormData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const handleShippingSubmit = async (e) => {
+    e.preventDefault();
+    const method = editingShippingId ? "PUT" : "POST";
+    const url = editingShippingId
+      ? `http://localhost:8080/api/shipping/${editingShippingId}`
+      : "http://localhost:8080/api/shipping";
+
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(shippingFormData),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        alert("Failed to save shipping option: " + errorText);
+        return;
+      }
+
+      alert(
+        editingShippingId
+          ? "Shipping option updated successfully!"
+          : "Shipping option added successfully!",
+      );
+
+      setShippingFormData({
+        region: "",
+        methodName: "",
+        cost: "",
+        description: "",
+        estimatedDays: 3,
+        active: true,
+        freeShippingAbove: false,
+        freeShippingThreshold: 0,
+      });
+      setEditingShippingId(null);
+      fetchShippingOptions();
+    } catch (error) {
+      console.error("Error saving shipping option:", error);
+      alert("Failed to save shipping option. Please try again.");
+    }
+  };
+
+  const handleEditShipping = (option) => {
+    setShippingFormData({
+      region: option.region,
+      methodName: option.methodName,
+      cost: option.cost,
+      description: option.description || "",
+      estimatedDays: option.estimatedDays,
+      active: option.active,
+      freeShippingAbove: option.freeShippingAbove,
+      freeShippingThreshold: option.freeShippingThreshold,
+    });
+    setEditingShippingId(option.id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleDeleteShipping = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this shipping option?")) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`http://localhost:8080/api/shipping/${id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        alert("Shipping option deleted successfully!");
+        fetchShippingOptions();
+      } else {
+        alert("Failed to delete shipping option.");
+      }
+    } catch (error) {
+      console.error("Error deleting shipping option:", error);
+      alert("Failed to delete shipping option. Please try again.");
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -469,6 +580,15 @@ const AdminDashboard = () => {
             }}
           >
             📈 Reports & Analytics
+          </button>
+          <button
+            className={activeTab === "shipping" ? "tab-btn active" : "tab-btn"}
+            onClick={() => {
+              setActiveTab("shipping");
+              fetchShippingOptions();
+            }}
+          >
+            🚚 Shipping
           </button>
         </div>
 
@@ -744,6 +864,9 @@ Phone: ${order.user?.phone || "N/A"}
 Address: ${order.shippingAddress || order.user?.address || "N/A"}
 Date: ${new Date(order.createdAt).toLocaleString()}
 Payment: ${order.paymentMethod || "N/A"} - ${order.paymentStatus || "N/A"}
+Shipping: ${order.shippingMethod || "N/A"} (${order.shippingRegion || "N/A"})
+Shipping Cost: Rs. ${order.shippingCost?.toFixed(2) || "0.00"}
+Est. Delivery: ${order.estimatedDeliveryDays ? order.estimatedDeliveryDays + " days" : "N/A"}
 Status: ${order.status}
 Total: Rs. ${order.totalAmount?.toFixed(2) || "0.00"}
 
@@ -1135,7 +1258,6 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                 <div className="loading-spinner">Loading report data...</div>
               ) : reportData ? (
                 <>
-                  {/* Revenue Overview */}
                   <div className="report-section">
                     <h3>💰 Revenue Overview</h3>
                     <div className="stats-grid revenue-stats">
@@ -1206,7 +1328,6 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                     </div>
                   </div>
 
-                  {/* Order Statistics */}
                   <div className="report-section">
                     <h3>📦 Order Statistics</h3>
                     <div className="stats-grid order-stats">
@@ -1241,7 +1362,6 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                     </div>
                   </div>
 
-                  {/* Order Status Breakdown */}
                   <div className="report-section">
                     <h3>📊 Order Status Breakdown</h3>
                     <div className="status-breakdown">
@@ -1308,7 +1428,6 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                     </div>
                   </div>
 
-                  {/* Key Metrics */}
                   <div className="report-section">
                     <h3>📈 Key Metrics</h3>
                     <div className="stats-grid metrics-grid">
@@ -1352,7 +1471,6 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                     </div>
                   </div>
 
-                  {/* Product Inventory Status */}
                   <div className="report-section">
                     <h3>📦 Product Inventory Status</h3>
                     <div className="stats-grid inventory-stats">
@@ -1380,7 +1498,6 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                     </div>
                   </div>
 
-                  {/* Revenue Trend Chart */}
                   <div className="report-section">
                     <h3>📉 Revenue Trend (Last 6 Months)</h3>
                     <div className="chart-container">
@@ -1404,7 +1521,6 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                     </div>
                   </div>
 
-                  {/* Orders Trend Chart */}
                   <div className="report-section">
                     <h3>📊 Orders Trend (Last 6 Months)</h3>
                     <div className="chart-container">
@@ -1426,7 +1542,6 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                     </div>
                   </div>
 
-                  {/* Top Selling Products */}
                   <div className="report-section">
                     <h3>🏆 Top Selling Products</h3>
                     <div className="table-container">
@@ -1469,7 +1584,6 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                     </div>
                   </div>
 
-                  {/* Sales by Category */}
                   <div className="report-section">
                     <h3>📁 Sales by Category</h3>
                     <div className="category-sales">
@@ -1506,7 +1620,6 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                     </div>
                   </div>
 
-                  {/* Payment Method Statistics */}
                   <div className="report-section">
                     <h3>💳 Payment Method Statistics</h3>
                     <div className="payment-stats">
@@ -1541,7 +1654,6 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                     </div>
                   </div>
 
-                  {/* Recent Orders Summary */}
                   <div className="report-section">
                     <h3>🕐 Recent Orders</h3>
                     <div className="table-container">
@@ -1604,7 +1716,6 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                     </div>
                   </div>
 
-                  {/* Refresh Button */}
                   <div className="report-actions">
                     <button onClick={fetchReportData} className="refresh-btn">
                       🔄 Refresh Report Data
@@ -1619,6 +1730,202 @@ ${order.orderItems?.map((item) => `- ${item.product?.name || "Product"} x${item.
                   </button>
                 </div>
               )}
+            </div>
+          )}
+
+          {activeTab === "shipping" && (
+            <div className="manage-section">
+              <h2>{editingShippingId ? "Edit Shipping Option" : "Add Shipping Option"}</h2>
+              <form onSubmit={handleShippingSubmit} className="product-form">
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Region *</label>
+                    <input
+                      type="text"
+                      name="region"
+                      value={shippingFormData.region}
+                      onChange={handleShippingChange}
+                      placeholder="e.g., Colombo, Kandy, Island-wide"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Shipping Method Name *</label>
+                    <input
+                      type="text"
+                      name="methodName"
+                      value={shippingFormData.methodName}
+                      onChange={handleShippingChange}
+                      placeholder="e.g., Standard Delivery, Express Delivery"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Cost (Rs.) *</label>
+                    <input
+                      type="number"
+                      name="cost"
+                      value={shippingFormData.cost}
+                      onChange={handleShippingChange}
+                      step="0.01"
+                      min="0"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Estimated Delivery Days *</label>
+                    <input
+                      type="number"
+                      name="estimatedDays"
+                      value={shippingFormData.estimatedDays}
+                      onChange={handleShippingChange}
+                      min="0"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label>Description</label>
+                  <textarea
+                    name="description"
+                    value={shippingFormData.description}
+                    onChange={handleShippingChange}
+                    rows="2"
+                    placeholder="Describe this shipping option"
+                  ></textarea>
+                </div>
+                <div className="form-row checkbox-row">
+                  <div className="form-group checkbox-group">
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="active"
+                        checked={shippingFormData.active}
+                        onChange={handleShippingChange}
+                      />
+                      Active (visible to customers)
+                    </label>
+                  </div>
+                  <div className="form-group checkbox-group">
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="freeShippingAbove"
+                        checked={shippingFormData.freeShippingAbove}
+                        onChange={handleShippingChange}
+                      />
+                      Enable Free Shipping Above Threshold
+                    </label>
+                  </div>
+                </div>
+                {shippingFormData.freeShippingAbove && (
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Free Shipping Threshold (Rs.)</label>
+                      <input
+                        type="number"
+                        name="freeShippingThreshold"
+                        value={shippingFormData.freeShippingThreshold}
+                        onChange={handleShippingChange}
+                        step="0.01"
+                        min="0"
+                        placeholder="Min order amount for free shipping"
+                      />
+                    </div>
+                  </div>
+                )}
+                <div className="form-actions">
+                  <button type="submit" className="submit-btn">
+                    {editingShippingId ? "✓ Update Shipping Option" : "+ Add Shipping Option"}
+                  </button>
+                  {editingShippingId && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingShippingId(null);
+                        setShippingFormData({
+                          region: "",
+                          methodName: "",
+                          cost: "",
+                          description: "",
+                          estimatedDays: 3,
+                          active: true,
+                          freeShippingAbove: false,
+                          freeShippingThreshold: 0,
+                        });
+                      }}
+                      className="cancel-btn"
+                    >
+                      ✗ Cancel
+                    </button>
+                  )}
+                </div>
+              </form>
+
+              <h2 style={{ marginTop: "40px" }}>
+                All Shipping Options ({shippingOptions.length})
+              </h2>
+              <div className="table-container">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Region</th>
+                      <th>Method</th>
+                      <th>Cost (Rs.)</th>
+                      <th>Est. Days</th>
+                      <th>Free Above</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {shippingOptions.map((option) => (
+                      <tr key={option.id}>
+                        <td>{option.id}</td>
+                        <td>{option.region}</td>
+                        <td>{option.methodName}</td>
+                        <td>Rs. {option.cost?.toFixed(2)}</td>
+                        <td>
+                          {option.estimatedDays === 0
+                            ? "Same day"
+                            : `${option.estimatedDays} day${option.estimatedDays > 1 ? "s" : ""}`}
+                        </td>
+                        <td>
+                          {option.freeShippingAbove
+                            ? `Rs. ${option.freeShippingThreshold?.toFixed(0)}`
+                            : "N/A"}
+                        </td>
+                        <td>
+                          <span
+                            className={`status-badge ${
+                              option.active ? "status-confirmed" : "status-cancelled"
+                            }`}
+                          >
+                            {option.active ? "Active" : "Inactive"}
+                          </span>
+                        </td>
+                        <td>
+                          <button
+                            onClick={() => handleEditShipping(option)}
+                            className="edit-btn"
+                          >
+                            ✎ Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteShipping(option.id)}
+                            className="delete-btn"
+                          >
+                            🗑 Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
