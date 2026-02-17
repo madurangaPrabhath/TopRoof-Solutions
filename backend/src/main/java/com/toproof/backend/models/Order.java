@@ -24,14 +24,19 @@ public class Order {
   private List<OrderItem> orderItems = new ArrayList<>();
 
   @Column(nullable = false)
-  private String status = "PENDING"; // PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED
+  private String status = "PENDING";
 
   @Column(nullable = false)
   private double totalAmount;
 
   private String shippingAddress;
   private String paymentMethod;
-  private String paymentStatus = "PENDING"; // PENDING, PAID, FAILED
+  private String paymentStatus = "PENDING";
+
+  private double shippingCost = 0.0;
+  private String shippingMethod;
+  private String shippingRegion;
+  private int estimatedDeliveryDays;
 
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
@@ -46,19 +51,16 @@ public class Order {
     this.updatedAt = LocalDateTime.now();
   }
 
-  // Helper method to add order item
   public void addOrderItem(OrderItem item) {
     orderItems.add(item);
     item.setOrder(this);
   }
 
-  // Helper method to remove order item
   public void removeOrderItem(OrderItem item) {
     orderItems.remove(item);
     item.setOrder(null);
   }
 
-  // Getters and Setters
   public Long getId() {
     return id;
   }
@@ -137,5 +139,37 @@ public class Order {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  public double getShippingCost() {
+    return shippingCost;
+  }
+
+  public void setShippingCost(double shippingCost) {
+    this.shippingCost = shippingCost;
+  }
+
+  public String getShippingMethod() {
+    return shippingMethod;
+  }
+
+  public void setShippingMethod(String shippingMethod) {
+    this.shippingMethod = shippingMethod;
+  }
+
+  public String getShippingRegion() {
+    return shippingRegion;
+  }
+
+  public void setShippingRegion(String shippingRegion) {
+    this.shippingRegion = shippingRegion;
+  }
+
+  public int getEstimatedDeliveryDays() {
+    return estimatedDeliveryDays;
+  }
+
+  public void setEstimatedDeliveryDays(int estimatedDeliveryDays) {
+    this.estimatedDeliveryDays = estimatedDeliveryDays;
   }
 }

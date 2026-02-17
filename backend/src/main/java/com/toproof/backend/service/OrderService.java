@@ -2,6 +2,7 @@ package com.toproof.backend.service;
 
 import com.toproof.backend.models.*;
 import com.toproof.backend.repo.*;
+import com.toproof.backend.service.ShippingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +21,12 @@ public class OrderService {
   @Autowired
   private CartItemRepository cartItemRepository;
 
+  @Autowired
+  private ShippingService shippingService;
+
   @Transactional(readOnly = true)
   public List<Order> getAllOrders() {
     List<Order> orders = orderRepository.findAllWithItemsAndUser();
-    // Force initialization
     for (Order order : orders) {
       if (order.getOrderItems() != null) {
         order.getOrderItems().size();
@@ -50,7 +53,6 @@ public class OrderService {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new RuntimeException("User not found"));
     List<Order> orders = orderRepository.findByUserWithItemsOrderByCreatedAtDesc(user);
-    // Force initialization of orderItems and products
     for (Order order : orders) {
       order.getOrderItems().size();
       for (OrderItem item : order.getOrderItems()) {
@@ -68,17 +70,20 @@ public class OrderService {
 
   @Transactional
   public Order createOrder(Long userId, String shippingAddress, String paymentMethod) {
+    return createOrder(userId, shippingAddress, paymentMethod, null);
+  }
+
+  @Transactional
+  public Order createOrder(Long userId, String shippingAddress, String paymentMethod, Long shippingOptionId) {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new RuntimeException("User not found"));
 
-    // Get cart items
     List<CartItem> cartItems = cartItemRepository.findByUser(user);
 
     if (cartItems.isEmpty()) {
       throw new RuntimeException("Cart is empty");
     }
 
-    // Create order
     Order order = new Order();
     order.setUser(user);
     order.setShippingAddress(shippingAddress);
@@ -86,23 +91,39 @@ public class OrderService {
     order.setStatus("PENDING");
     order.setPaymentStatus("PENDING");
 
-    // Calculate total and create order items
-    double total = 0.0;
+    double subtotal = 0.0;
     for (CartItem cartItem : cartItems) {
       OrderItem orderItem = new OrderItem(
           cartItem.getProduct(),
           cartItem.getQuantity(),
           cartItem.getProduct().getPrice());
       order.addOrderItem(orderItem);
-      total += orderItem.getSubtotal();
+      subtotal += orderItem.getSubtotal();
     }
 
-    order.setTotalAmount(total);
+    double shippingCost = 0.0;
+    if (shippingOptionId != null) {
+      try {
+        ShippingOption shippingOption = shippingService.getShippingOptionById(shippingOptionId)
+            .orElseThrow(() -> new RuntimeException("Shipping option not found"));
+        shippingCost = shippingService.calculateShippingCost(shippingOptionId, subtotal);
+        order.setShippingCost(shippingCost);
+        order.setShippingMethod(shippingOption.getMethodName());
+        order.setShippingRegion(shippingOption.getRegion());
+        order.setEstimatedDeliveryDays(shippingOption.getEstimatedDays());
+      } catch (RuntimeException e) {
+        order.setShippingCost(0.0);
+        order.setShippingMethod("Free Shipping");
+      }
+    } else {
+      order.setShippingCost(0.0);
+      order.setShippingMethod("Free Shipping");
+    }
 
-    // Save order
+    order.setTotalAmount(subtotal + shippingCost);
+
     Order savedOrder = orderRepository.save(order);
 
-    // Clear cart after order
     cartItemRepository.deleteByUser(user);
 
     return savedOrder;
@@ -116,7 +137,6 @@ public class OrderService {
     order.setStatus(status);
     Order savedOrder = orderRepository.save(order);
     
-    // Force initialization
     if (savedOrder.getOrderItems() != null) {
       savedOrder.getOrderItems().size();
       for (OrderItem item : savedOrder.getOrderItems()) {
@@ -140,7 +160,6 @@ public class OrderService {
     order.setPaymentStatus(paymentStatus);
     Order savedOrder = orderRepository.save(order);
     
-    // Force initialization
     if (savedOrder.getOrderItems() != null) {
       savedOrder.getOrderItems().size();
       for (OrderItem item : savedOrder.getOrderItems()) {

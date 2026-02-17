@@ -45,7 +45,12 @@ public class OrderController {
       String shippingAddress = request.get("shippingAddress").toString();
       String paymentMethod = request.get("paymentMethod").toString();
 
-      Order order = orderService.createOrder(userId, shippingAddress, paymentMethod);
+      Long shippingOptionId = null;
+      if (request.containsKey("shippingOptionId") && request.get("shippingOptionId") != null) {
+        shippingOptionId = Long.valueOf(request.get("shippingOptionId").toString());
+      }
+
+      Order order = orderService.createOrder(userId, shippingAddress, paymentMethod, shippingOptionId);
       return ResponseEntity.ok(order);
     } catch (RuntimeException e) {
       return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
