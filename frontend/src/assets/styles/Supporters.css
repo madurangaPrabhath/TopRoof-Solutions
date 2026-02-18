@@ -1,7 +1,8 @@
 .supporters-section {
   background-color: #ffffff;
-  padding: 145px 20px;
+  padding: 60px 0;
   text-align: center;
+  overflow: hidden;
 }
 
 .supporters-title {
@@ -15,26 +16,115 @@
 .supporters-title .underline {
   display: block;
   width: 100px;
-  height: 4px;
-  background-color: #ffe57f;
+  height: 5px;
+  background-color: #f7c948;
   margin: 8px auto 0;
   border-radius: 2px;
 }
 
-.supporters-logos {
+/* Marquee wrapper — clips the scrolling track */
+.supporters-marquee-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  /* Fade edges */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+}
+
+/* The scrolling track — 3× duplicated logos side by side */
+.supporters-marquee-track {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 110px;
-  flex-wrap: wrap;
+  width: max-content;
+  animation: marquee-scroll 18s linear infinite;
 }
 
-.supporters-logos img {
-  max-height: 200px;
+.supporters-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Individual logo slot */
+.supporters-logo-item {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 50px;
+}
+
+.supporters-logo-item img {
+  max-height: 120px;
+  max-width: 180px;
   object-fit: contain;
-  transition: transform 0.3s ease;
+  filter: grayscale(20%);
+  opacity: 0.85;
+  transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
 }
 
-.supporters-logos img:hover {
-  transform: scale(1.05);
+.supporters-logo-item img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.08);
 }
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Shift left by exactly one third (one full set of logos) */
+    transform: translateX(-33.333%);
+  }
+}
+
+@media (max-width: 768px) {
+  .supporters-section {
+    padding: 50px 0;
+  }
+
+  .supporters-title {
+    font-size: 1.6rem;
+  }
+
+  .supporters-logo-item {
+    padding: 0 30px;
+  }
+
+  .supporters-logo-item img {
+    max-height: 90px;
+    max-width: 130px;
+  }
+}
+
+@media (max-width: 480px) {
+  .supporters-section {
+    padding: 40px 0;
+  }
+
+  .supporters-title {
+    font-size: 1.4rem;
+  }
+
+  .supporters-logo-item {
+    padding: 0 20px;
+  }
+
+  .supporters-logo-item img {
+    max-height: 70px;
+    max-width: 100px;
+  }
+}
+
