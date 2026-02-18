@@ -147,6 +147,8 @@
 
   .cta-button {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     padding: 14px 24px;
     text-align: center;
   }
@@ -188,6 +190,7 @@
   .cta-button {
     padding: 12px 20px;
     font-size: 14px;
+    box-sizing: border-box;
   }
 
   .hero-image img {
