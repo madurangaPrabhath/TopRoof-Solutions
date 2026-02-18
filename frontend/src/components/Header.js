@@ -8,7 +8,9 @@ import Logo from "../assets/images/logo.png";
 const Header = () => {
   const [user, setUser] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [dropdownTop, setDropdownTop] = useState(70);
   const dropdownRef = useRef(null);
+  const buttonRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,6 +35,14 @@ const Header = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleProfileClick = () => {
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setDropdownTop(rect.bottom + 8);
+    }
+    setShowDropdown(!showDropdown);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -78,7 +88,8 @@ const Header = () => {
           <div className="user-menu" ref={dropdownRef}>
             <button
               className="user-profile-btn"
-              onClick={() => setShowDropdown(!showDropdown)}
+              ref={buttonRef}
+              onClick={handleProfileClick}
             >
               <FaUserCircle className="user-icon" />
               <span className="user-name">
@@ -87,7 +98,7 @@ const Header = () => {
             </button>
 
             {showDropdown && (
-              <div className="user-dropdown">
+              <div className="user-dropdown" style={{ top: dropdownTop }}>
                 <div className="dropdown-header">
                   <FaUserCircle className="dropdown-avatar" />
                   <div className="dropdown-user-info">
