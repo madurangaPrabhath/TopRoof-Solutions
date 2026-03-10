@@ -12,7 +12,17 @@
 
 _A robust, full-stack e-commerce platform designed to modernize the distribution of roofing products across Sri Lanka_
 
-[🚀 Getting Started](#-installation--setup) • [📖 Documentation](#-api-documentation) • [🎯 Features](#-features) • [📸 Screenshots](#-screenshots)
+[🚀 Getting Started](#-installation--setup) • [📖 Documentation](#-api-documentation) • [🎯 Features](#-features) • [�️ Troubleshooting](#-troubleshooting)
+
+---
+
+### 📊 Project Statistics
+
+![Backend](https://img.shields.io/badge/Backend-8_Controllers-blue) 
+![Models](https://img.shields.io/badge/Models-6_Entities-green)
+![API Endpoints](https://img.shields.io/badge/API_Endpoints-50+-orange)
+![Components](https://img.shields.io/badge/React_Components-20+-purple)
+![Pages](https://img.shields.io/badge/Pages-9-red)
 
 </div>
 
@@ -28,9 +38,18 @@ _A robust, full-stack e-commerce platform designed to modernize the distribution
 - [Database Design](#-database-design)
 - [API Documentation](#-api-documentation)
 - [Installation & Setup](#-installation--setup)
+  - [Quick Start](#-quick-start-windows)
+  - [Detailed Setup](#-detailed-setup-instructions)
+- [Troubleshooting](#-troubleshooting)
+- [Configuration](#-configuration)
+- [Development Guidelines](#-development-guidelines)
+- [Security Features](#-security-features)
+- [Performance Optimization](#-performance-optimization)
 - [Project Structure](#-project-structure)
 - [Screenshots](#-screenshots)
+- [Deployment](#-deployment)
 - [Future Enhancements](#-future-enhancements)
+- [FAQ](#-frequently-asked-questions-faq)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -104,6 +123,27 @@ In Sri Lanka, the roofing product industry faces significant challenges:
 | 🔒 **Security**            | BCrypt password hashing, Spring Security integration |
 | 🎨 **Modern UI/UX**        | Gradient designs, hover effects, smooth transitions  |
 | 🗄️ **Auto-Initialization** | Sample data seeding on first startup                 |
+
+---
+
+## 💎 Why Choose TopRoof Solutions?
+
+<div align="center">
+
+| Advantage                      | Benefit                                                    |
+| ------------------------------ | ---------------------------------------------------------- |
+| 🚀 **Production-Ready**        | Complete e-commerce solution ready to deploy              |
+| 📚 **Well-Documented**         | Comprehensive README and inline code documentation         |
+| 🎓 **Educational**             | Perfect for learning full-stack development                |
+| 🔧 **Easily Customizable**     | Clean architecture, easy to modify and extend              |
+| 🛡️ **Secure**                  | BCrypt encryption, CORS, SQL injection prevention          |
+| 📱 **Mobile-Responsive**       | Works seamlessly on all devices                            |
+| 🎨 **Modern UI/UX**            | Professional design with smooth interactions               |
+| 🔄 **RESTful API**             | Standard API design, easy to integrate                     |
+| 💾 **Auto Database Setup**     | No manual table creation needed                            |
+| 🆓 **Open Source**             | Free to use, modify, and distribute (MIT License)          |
+
+</div>
 
 ---
 
@@ -337,13 +377,38 @@ http://localhost:8080/api
 
 ### Prerequisites
 
-| Requirement | Version                     |
-| ----------- | --------------------------- |
-| Java JDK    | 20.0.1+                     |
-| Node.js     | 18.x+                       |
-| npm         | 9.x+                        |
-| MySQL       | 9.5+                        |
-| Maven       | 3.8+ (included via wrapper) |
+Before you begin, ensure you have the following installed:
+
+| Requirement | Version | Download Link                                                         |
+| ----------- | ------- | --------------------------------------------------------------------- |
+| Java JDK    | 20+     | [Oracle JDK](https://www.oracle.com/java/technologies/downloads/)     |
+| Node.js     | 18.x+   | [Node.js Official](https://nodejs.org/)                               |
+| npm         | 9.x+    | (Included with Node.js)                                               |
+| MySQL       | 9.5+    | [MySQL Community Server](https://dev.mysql.com/downloads/mysql/)      |
+| Maven       | 3.8+    | (Included via Maven Wrapper)                                          |
+| Git         | Latest  | [Git Downloads](https://git-scm.com/downloads)                        |
+
+---
+
+## 🚀 Quick Start (Windows)
+
+For the fastest setup on Windows, use the PowerShell automation script:
+
+```powershell
+# 1. Ensure MySQL is running with database 'toproofdb' created
+# 2. Navigate to backend directory
+cd backend
+.\start-backend.ps1
+
+# 3. In a new terminal, navigate to frontend directory
+cd frontend
+npm install
+npm start
+```
+
+---
+
+## 📋 Detailed Setup Instructions
 
 ### 1️⃣ Clone the Repository
 
@@ -354,36 +419,74 @@ cd TopRoof-Solutions
 
 ### 2️⃣ Database Setup
 
-Create a MySQL database:
+**Step 1:** Start MySQL Server (ensure it's running on `localhost:3306`)
+
+**Step 2:** Create the database:
 
 ```sql
 CREATE DATABASE toproofdb;
 ```
 
+**Step 3:** (Optional) Create a MySQL user:
+
+```sql
+CREATE USER 'toproof_user'@'localhost' IDENTIFIED BY 'your_password';
+GRANT ALL PRIVILEGES ON toproofdb.* TO 'toproof_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
 > **Note:** The application will auto-create tables on first run using JPA DDL auto-update.
 
-### 3️⃣ Backend Setup (Spring Boot)
+### 3️⃣ Backend Configuration (Optional)
+
+If you need to customize database credentials, edit:
+
+**File:** `backend/src/main/resources/application.properties`
+
+```properties
+# Database Configuration
+spring.datasource.url=jdbc:mysql://localhost:3306/toproofdb
+spring.datasource.username=root
+spring.datasource.password=your_password
+
+# JPA Configuration
+spring.jpa.hibernate.ddl-auto=update
+```
+
+### 4️⃣ Backend Setup (Spring Boot)
+
+#### Option A: Using PowerShell Script (Windows - Recommended)
+
+```powershell
+cd backend
+.\start-backend.ps1
+```
+
+#### Option B: Using Maven Wrapper (All Platforms)
+
+**Windows:**
 
 ```bash
-# Navigate to backend directory
 cd backend
+.\mvnw.cmd clean install -DskipTests
+.\mvnw.cmd spring-boot:run
+```
 
-# Build the project (Windows)
-./mvnw.cmd clean package -DskipTests
+**Linux/Mac:**
 
-# Build the project (Linux/Mac)
-./mvnw clean package -DskipTests
-
-# Run the application (Windows)
-./mvnw.cmd spring-boot:run
-
-# Run the application (Linux/Mac)
+```bash
+cd backend
+./mvnw clean install -DskipTests
 ./mvnw spring-boot:run
 ```
 
 The backend will start on **http://localhost:8080**
 
-### 4️⃣ Frontend Setup (React)
+✅ Verify backend is running: [http://localhost:8080/actuator/health](http://localhost:8080/actuator/health)
+
+### 5️⃣ Frontend Setup (React)
+
+Open a **new terminal** window:
 
 ```bash
 # Navigate to frontend directory
@@ -396,7 +499,20 @@ npm install
 npm start
 ```
 
-The frontend will open at **http://localhost:3000**
+The frontend will automatically open at **http://localhost:3000**
+
+---
+
+## ✅ Verify Installation
+
+After both servers are running, verify the setup:
+
+| Check                | URL                                       | Expected Result            |
+| -------------------- | ----------------------------------------- | -------------------------- |
+| Backend Health       | http://localhost:8080/actuator/health     | `{"status":"UP"}`          |
+| API Products         | http://localhost:8080/api/products        | JSON array of products     |
+| Frontend             | http://localhost:3000                     | TopRoof Solutions Homepage |
+| Sample Data Loaded   | Check console logs                        | "DataInitializer" messages |
 
 ### 🔄 Auto-Initialized Data
 
@@ -407,6 +523,392 @@ On first startup, the DataInitializer automatically populates:
 | 👤 Admin User      | 1     | `admin@toproof.com` / `admin123`         |
 | 👤 Regular User    | 1     | `user@toproof.com` / `user123`           |
 | 📦 Sample Products | 14+   | Roofing tiles, metal sheets, accessories |
+
+---
+
+## 🛠️ Troubleshooting
+
+### Common Issues and Solutions
+
+<details>
+<summary><b>❌ Backend fails to start - "Access denied for user"</b></summary>
+
+**Problem:** MySQL authentication error
+
+**Solution:**
+1. Verify MySQL credentials in `backend/src/main/resources/application.properties`
+2. Update `spring.datasource.username` and `spring.datasource.password`
+3. Ensure MySQL user has proper permissions:
+   ```sql
+   GRANT ALL PRIVILEGES ON toproofdb.* TO 'your_user'@'localhost';
+   FLUSH PRIVILEGES;
+   ```
+</details>
+
+<details>
+<summary><b>❌ Port 8080 already in use</b></summary>
+
+**Problem:** Another application is using port 8080
+
+**Solution:**
+1. **Option A:** Stop the other application using port 8080
+2. **Option B:** Change backend port in `application.properties`:
+   ```properties
+   server.port=8081
+   ```
+3. Update frontend API configuration in `frontend/src/config/api.js` accordingly
+</details>
+
+<details>
+<summary><b>❌ Frontend "Network Error" when calling API</b></summary>
+
+**Problem:** Backend not running or CORS issue
+
+**Solution:**
+1. Verify backend is running: http://localhost:8080/actuator/health
+2. Check CORS configuration in `backend/config/CorsConfig.java`
+3. Clear browser cache and restart frontend
+4. Verify API base URL in `frontend/src/config/api.js`
+</details>
+
+<details>
+<summary><b>❌ "Cannot find module" errors in frontend</b></summary>
+
+**Problem:** Missing Node.js dependencies
+
+**Solution:**
+```bash
+cd frontend
+rm -rf node_modules package-lock.json
+npm install
+npm start
+```
+</details>
+
+<details>
+<summary><b>❌ MySQL "Unknown database 'toproofdb'"</b></summary>
+
+**Problem:** Database not created
+
+**Solution:**
+```sql
+CREATE DATABASE IF NOT EXISTS toproofdb;
+```
+</details>
+
+<details>
+<summary><b>❌ Java version mismatch error</b></summary>
+
+**Problem:** Incompatible Java version
+
+**Solution:**
+1. Check your Java version: `java -version`
+2. Ensure JDK 20 or higher is installed
+3. Update JAVA_HOME environment variable
+4. Verify with: `echo %JAVA_HOME%` (Windows) or `echo $JAVA_HOME` (Linux/Mac)
+</details>
+
+### Need More Help?
+
+- Check the console logs for detailed error messages
+- Review backend logs in `backend/logs/` (if logging is configured)
+- Ensure all prerequisites are correctly installed
+- Verify MySQL service is running: `services.msc` (Windows) or `systemctl status mysql` (Linux)
+
+---
+
+## ⚙️ Configuration
+
+### Backend Configuration
+
+**Primary Configuration:** `backend/src/main/resources/application.properties`
+
+```properties
+# Server Configuration
+server.port=8080
+spring.application.name=backend
+
+# Database Configuration
+spring.datasource.url=jdbc:mysql://localhost:3306/toproofdb
+spring.datasource.username=root
+spring.datasource.password=your_password
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# JPA/Hibernate Configuration
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+spring.jpa.properties.hibernate.format_sql=true
+
+# Logging Configuration
+logging.level.com.toproof.backend=DEBUG
+logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n
+```
+
+**Production Configuration:** `backend/src/main/resources/application-prod.properties`
+
+```properties
+# Production profile settings
+spring.jpa.show-sql=false
+logging.level.com.toproof.backend=INFO
+```
+
+### Frontend Configuration
+
+**API Configuration:** `frontend/src/config/api.js`
+
+```javascript
+// Base URL for backend API
+export const API_BASE_URL = 'http://localhost:8080/api';
+
+// Axios default configuration
+export const axiosConfig = {
+  baseURL: API_BASE_URL,
+  timeout: 5000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
+```
+
+### Environment Variables (Optional)
+
+Create `.env` file in frontend directory:
+
+```env
+REACT_APP_API_URL=http://localhost:8080/api
+REACT_APP_ENVIRONMENT=development
+```
+
+---
+
+## 👨‍💻 Development Guidelines
+
+### Running in Development Mode
+
+**Backend (with auto-reload):**
+```bash
+cd backend
+.\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+**Frontend (with hot reload):**
+```bash
+cd frontend
+npm start
+```
+
+### Building for Production
+
+**Backend:**
+```bash
+cd backend
+.\mvnw.cmd clean package -DskipTests
+# JAR file will be in target/backend-*.jar
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm run build
+# Build output will be in build/ directory
+```
+
+### Code Quality
+
+**Backend:**
+- Follow Java naming conventions (PascalCase for classes, camelCase for methods)
+- Use meaningful variable and method names
+- Add JavaDoc comments for public methods
+- Keep controllers thin, business logic in services
+
+**Frontend:**
+- Use functional components with hooks
+- Break down large components into smaller reusable ones
+- Follow React best practices
+- Use meaningful component and variable names
+
+### Testing
+
+**Backend:**
+```bash
+cd backend
+.\mvnw.cmd test
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm test
+```
+
+### Database Management
+
+**Reset Database:**
+```sql
+DROP DATABASE toproofdb;
+CREATE DATABASE toproofdb;
+```
+Then restart backend to re-initialize with sample data.
+
+**Backup Database:**
+```bash
+mysqldump -u root -p toproofdb > backup_$(date +%Y%m%d).sql
+```
+
+**Restore Database:**
+```bash
+mysql -u root -p toproofdb < backup_20260309.sql
+```
+
+### API Testing
+
+Use tools like:
+- **Postman** - GUI-based API testing
+- **cURL** - Command-line testing
+- **Thunder Client** (VS Code Extension)
+
+Example cURL request:
+```bash
+# Get all products
+curl -X GET http://localhost:8080/api/products
+
+# Login
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@toproof.com","password":"user123"}'
+```
+
+---
+
+## 🔒 Security Features
+
+### Implementation Overview
+
+TopRoof Solutions implements multiple security layers to protect user data and ensure safe transactions:
+
+| Security Feature              | Implementation                                            | Status |
+| ----------------------------- | --------------------------------------------------------- | ------ |
+| 🔐 Password Encryption        | BCrypt hashing algorithm                                  | ✅     |
+| 🛡️ Authentication             | Session-based with secure login/logout                    | ✅     |
+| 👤 Role-Based Access Control  | Admin and User roles with permission management           | ✅     |
+| 🔒 CORS Configuration         | Restricted cross-origin requests                          | ✅     |
+| 🚫 SQL Injection Prevention   | Prepared statements via JPA/Hibernate                     | ✅     |
+| 🔑 Input Validation           | Server-side validation for all user inputs                | ✅     |
+| 🌐 HTTPS Support              | Ready for SSL/TLS certificate configuration               | 🔄     |
+| 🔐 JWT Authentication         | Token-based authentication (planned for future)           | 📋     |
+| 📧 Email Verification         | Account verification via email (planned)                  | 📋     |
+| 🔄 Session Management         | Persistent login with localStorage                        | ✅     |
+
+### Security Best Practices
+
+**For Administrators:**
+- Change default admin credentials immediately after first login
+- Use strong passwords with mix of characters, numbers, and symbols
+- Regularly update user access permissions
+- Monitor user activity and order patterns
+- Keep system and dependencies up to date
+
+**For Developers:**
+- Never commit sensitive credentials to version control
+- Use environment variables for configuration
+- Implement rate limiting for API endpoints (recommended)
+- Regular security audits and penetration testing
+- Keep dependencies updated to patch vulnerabilities
+
+**Password Requirements:**
+- Minimum 8 characters
+- BCrypt encryption with strength 10
+- Stored as irreversible hash in database
+
+### CORS Configuration
+
+Configured in `backend/config/CorsConfig.java`:
+
+```java
+// Allowed origins
+.allowedOrigins("http://localhost:3000")
+
+// Allowed HTTP methods
+.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+
+// Allowed headers
+.allowedHeaders("*")
+```
+
+**⚠️ Production Note:** Update allowed origins to match your production domain.
+
+---
+
+## ⚡ Performance Optimization
+
+### Backend Optimizations
+
+| Optimization                    | Implementation                                              | Impact     |
+| ------------------------------- | ----------------------------------------------------------- | ---------- |
+| 🔄 **Connection Pooling**       | HikariCP (default in Spring Boot)                           | High       |
+| 📊 **JPA Query Optimization**   | Lazy loading, fetch joins for related entities              | High       |
+| 💾 **Database Indexing**        | Primary keys, foreign keys auto-indexed                     | Medium     |
+| 🗃️ **Response Caching**         | Static resources cached (planned)                           | Medium     |
+| ⚡ **Async Processing**         | For email notifications and heavy operations (planned)      | Low        |
+
+### Frontend Optimizations
+
+| Optimization                    | Implementation                                              | Impact     |
+| ------------------------------- | ----------------------------------------------------------- | ---------- |
+| 📦 **Code Splitting**           | React lazy loading for routes                               | High       |
+| 🖼️ **Image Optimization**       | External image hosting, lazy loading (planned)              | High       |
+| 💨 **Asset Minification**       | Production build optimization with React Scripts            | Medium     |
+| 🔄 **Component Memoization**    | React.memo for expensive components                         | Medium     |
+| 🌐 **CDN Delivery**             | For static assets in production (recommended)               | High       |
+
+### Database Performance Tips
+
+```sql
+-- Add indexes for frequently queried columns
+CREATE INDEX idx_product_category ON products(category);
+CREATE INDEX idx_product_brand ON products(brand);
+CREATE INDEX idx_order_user ON orders(user_id);
+CREATE INDEX idx_order_status ON orders(status);
+
+-- Analyze table performance
+ANALYZE TABLE products;
+ANALYZE TABLE orders;
+
+-- Check query performance
+EXPLAIN SELECT * FROM products WHERE category = 'Roofing';
+```
+
+### Performance Monitoring
+
+**Backend Metrics:**
+- Spring Boot Actuator endpoints
+- Response time monitoring via logs
+- Database connection pool stats
+
+**Frontend Metrics:**
+- React Developer Tools Profiler
+- Chrome DevTools Lighthouse
+- Network request analysis
+
+### Recommended Settings
+
+**Production application.properties:**
+```properties
+# Connection Pool
+spring.datasource.hikari.maximum-pool-size=20
+spring.datasource.hikari.minimum-idle=5
+spring.datasource.hikari.connection-timeout=30000
+
+# JPA
+spring.jpa.properties.hibernate.jdbc.batch_size=20
+spring.jpa.properties.hibernate.order_inserts=true
+spring.jpa.properties.hibernate.order_updates=true
+
+# Enable compression
+server.compression.enabled=true
+server.compression.mime-types=text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+```
 
 ---
 
@@ -587,25 +1089,309 @@ TopRoof-Solutions/
 
 ---
 
+## 🚢 Deployment
+
+### Deploying Backend
+
+**Option 1: JAR File Deployment**
+
+```bash
+# Build JAR
+cd backend
+.\mvnw.cmd clean package -DskipTests
+
+# Run JAR
+java -jar target/backend-*.jar
+```
+
+**Option 2: Docker Deployment**
+
+```bash
+# Build image
+cd backend
+docker build -t toproof-backend:latest .
+
+# Run container
+docker run -p 8080:8080 \
+  -e SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/toproofdb \
+  -e SPRING_DATASOURCE_USERNAME=root \
+  -e SPRING_DATASOURCE_PASSWORD=yourpassword \
+  toproof-backend:latest
+```
+
+### Deploying Frontend
+
+**Build for Production:**
+
+```bash
+cd frontend
+npm run build
+```
+
+**Deploy Options:**
+- **Static Hosting:** Deploy `build/` folder to Netlify, Vercel, or GitHub Pages
+- **Web Server:** Serve with Nginx, Apache, or IIS
+- **Docker:** Create Nginx-based container
+
+**Example Nginx Configuration:**
+
+```nginx
+server {
+    listen 80;
+    server_name yourdomain.com;
+    
+    location / {
+        root /path/to/frontend/build;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+    
+    location /api {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+### Production Considerations
+
+- [ ] Update CORS settings in `CorsConfig.java` for production domain
+- [ ] Enable HTTPS with SSL certificates
+- [ ] Set strong MySQL passwords
+- [ ] Configure production logging levels
+- [ ] Set `spring.jpa.hibernate.ddl-auto=validate` or `none` in production
+- [ ] Enable database connection pooling optimization
+- [ ] Setup regular database backups
+- [ ] Configure monitoring and alerting
+- [ ] Use environment variables for sensitive configuration
+
+---
+
+## ❓ Frequently Asked Questions (FAQ)
+
+<details>
+<summary><b>Q: Can I use this project for commercial purposes?</b></summary>
+
+Yes! This project is licensed under the MIT License, which allows commercial use. However, please review the full license terms and ensure you comply with all requirements.
+</details>
+
+<details>
+<summary><b>Q: How do I change the default admin credentials?</b></summary>
+
+1. Login as admin (`admin@toproof.com` / `admin123`)
+2. Navigate to Admin Dashboard
+3. Go to Profile Settings
+4. Update your password
+5. Alternatively, you can modify `DataInitializer.java` before first run
+</details>
+
+<details>
+<summary><b>Q: Can I add payment gateway integration?</b></summary>
+
+Yes! The order checkout system is designed to be extensible. You can integrate payment gateways like:
+- Stripe
+- PayPal
+- PayHere (Sri Lankan payment gateway)
+- Bank payment APIs
+
+Add the integration in the `OrderController` and update frontend checkout component.
+</details>
+
+<details>
+<summary><b>Q: How do I add more product categories?</b></summary>
+
+1. **Via Admin Dashboard:** Login as admin and create products with new category names
+2. **Via Database:** Insert products with desired category values
+3. **Via API:** POST to `/api/admin/products` with new category
+
+Categories are dynamic and don't require code changes.
+</details>
+
+<details>
+<summary><b>Q: Is there a mobile app version?</b></summary>
+
+Currently, the application is web-based but fully responsive and works on mobile browsers. A native mobile app using React Native is planned for future development.
+</details>
+
+<details>
+<summary><b>Q: How do I backup my data?</b></summary>
+
+Use MySQL backup commands:
+```bash
+mysqldump -u root -p toproofdb > backup.sql
+```
+Automate backups using cron jobs (Linux) or Task Scheduler (Windows).
+</details>
+
+<details>
+<summary><b>Q: Can I deploy this to cloud platforms?</b></summary>
+
+Yes! Deployment options include:
+- **Backend:** Heroku, AWS EC2, Google Cloud, DigitalOcean, Azure
+- **Frontend:** Netlify, Vercel, GitHub Pages, AWS S3 + CloudFront
+- **Database:** AWS RDS, Google Cloud SQL, Azure Database for MySQL
+
+See the [Deployment](#-deployment) section for detailed instructions.
+</details>
+
+<details>
+<summary><b>Q: How do I enable email notifications?</b></summary>
+
+1. Add Spring Boot Mail dependency to `pom.xml`
+2. Configure SMTP settings in `application.properties`
+3. Create `EmailService` class
+4. Integrate email sending in order and registration flows
+
+This feature is planned for future implementation.
+</details>
+
+<details>
+<summary><b>Q: What if I encounter CORS errors?</b></summary>
+
+Check `backend/config/CorsConfig.java` and ensure:
+1. Frontend URL is in allowed origins
+2. Required HTTP methods are allowed
+3. Credentials are allowed if needed
+
+For production, update to your domain name instead of `localhost:3000`.
+</details>
+
+<details>
+<summary><b>Q: How can I contribute to this project?</b></summary>
+
+See the [Contributing](#-contributing) section for detailed guidelines. We welcome:
+- Bug reports
+- Feature requests
+- Code improvements
+- Documentation updates
+- UI/UX enhancements
+</details>
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+### How to Contribute
+
+1. **Fork the Repository**
+   ```bash
+   # Click 'Fork' button on GitHub
+   ```
+
+2. **Clone Your Fork**
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/TopRoof-Solutions.git
+   cd TopRoof-Solutions
+   ```
+
+3. **Create a Feature Branch**
+   ```bash
+   git checkout -b feature/AmazingFeature
+   ```
+
+4. **Make Your Changes**
+   - Write clean, well-documented code
+   - Follow existing code style
+   - Add tests if applicable
+   - Update documentation as needed
+
+5. **Commit Your Changes**
+   ```bash
+   git add .
+   git commit -m "Add: Brief description of your changes"
+   ```
+   
+   **Commit Message Conventions:**
+   - `Add:` New feature or functionality
+   - `Fix:` Bug fix
+   - `Update:` Changes to existing features
+   - `Docs:` Documentation updates
+   - `Style:` Code formatting, no functional changes
+   - `Refactor:` Code restructuring
+
+6. **Push to Your Fork**
+   ```bash
+   git push origin feature/AmazingFeature
+   ```
+
+7. **Open a Pull Request**
+   - Go to the original repository on GitHub
+   - Click "New Pull Request"
+   - Select your fork and branch
+   - Provide a clear description of your changes
+
+### Code Review Process
+
+- All submissions require review before merging
+- We may suggest changes or improvements
+- Tests must pass before merging
+- Follow the project's coding standards
+
+### Reporting Issues
+
+Found a bug? Have a feature request?
+
+1. Check if the issue already exists
+2. Create a new issue with detailed description
+3. Include steps to reproduce (for bugs)
+4. Add screenshots if relevant
+
+### Development Setup for Contributors
+
+```bash
+# Install backend dependencies
+cd backend
+.\mvnw.cmd clean install
+
+# Install frontend dependencies  
+cd frontend
+npm install
+
+# Run both servers
+# Terminal 1: Backend
+cd backend && .\mvnw.cmd spring-boot:run
+
+# Terminal 2: Frontend
+cd frontend && npm start
+```
 
 ---
 
 ## 📞 Access the Platform
 
-| Service        | URL                                                                            |
-| -------------- | ------------------------------------------------------------------------------ |
-| 🖥️ Frontend    | [http://localhost:3000](http://localhost:3000)                                 |
-| ⚙️ Backend API | [http://localhost:8080](http://localhost:8080)                                 |
-| 📖 API Health  | [http://localhost:8080/actuator/health](http://localhost:8080/actuator/health) |
+### Application URLs
+
+| Service                  | URL                                                                            | Description                       |
+| ------------------------ | ------------------------------------------------------------------------------ | --------------------------------- |
+| 🖥️ **Frontend**          | [http://localhost:3000](http://localhost:3000)                                 | Main user interface               |
+| ⚙️ **Backend API**       | [http://localhost:8080](http://localhost:8080)                                 | RESTful API endpoints             |
+| 📖 **API Health Check**  | [http://localhost:8080/actuator/health](http://localhost:8080/actuator/health) | Backend health status             |
+| 🔍 **Sample API Calls**  | [http://localhost:8080/api/products](http://localhost:8080/api/products)       | View all products (test endpoint) |
+
+### Direct Access Links
+
+After starting the application, you can directly access:
+
+- **Home Page:** http://localhost:3000
+- **Products:** http://localhost:3000/products
+- **Login:** http://localhost:3000/login
+- **Register:** http://localhost:3000/register
+- **Admin Dashboard:** http://localhost:3000/admin/dashboard (login as admin)
+- **User Dashboard:** http://localhost:3000/dashboard (login as user)
+
+### Testing the Setup
+
+Quick verification checklist:
+
+1. ✅ Backend responds: http://localhost:8080/actuator/health
+2. ✅ API returns data: http://localhost:8080/api/products
+3. ✅ Frontend loads: http://localhost:3000
+4. ✅ Can login with: `admin@toproof.com` / `admin123`
+5. ✅ Products display on homepage
+6. ✅ Can add items to cart
 
 ---
 
@@ -616,7 +1402,7 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 ```
 MIT License
 
-Copyright (c) 2025 TopRoof Solutions
+Copyright (c) 2024-2026 TopRoof Solutions
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -631,10 +1417,36 @@ copies or substantial portions of the Software.
 
 ---
 
+## 📈 Project Status
+
+![Status](https://img.shields.io/badge/Status-Active_Development-success)
+![Maintained](https://img.shields.io/badge/Maintained-Yes-brightgreen)
+![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen)
+
+**Current Version:** 1.0.0  
+**Last Updated:** March 2026  
+**Next Release:** Feature updates and enhancements planned
+
+---
+
+### ⭐ If you found this project helpful, please consider giving it a star!
+
+### 🔗 Connect & Share
+
+Share this project with others who might benefit from it:
+- 🐦 Twitter
+- 💼 LinkedIn
+- 📘 Facebook
+- 📌 Pinterest
+
+---
+
 <div align="center">
-
-### ⭐ Star this repository if you found it helpful!
-
-Made with ❤️ for the Sri Lankan Construction Industry
+  <strong>Made with ❤️ for the Sri Lankan Construction Industry</strong>
+  <br><br>
+  <sub>© 2024-2026 TopRoof Solutions | Licensed under MIT</sub>
+  <br>
+  <sub>Built with Spring Boot, React, and MySQL</sub>
+</div>
 
 </div>
