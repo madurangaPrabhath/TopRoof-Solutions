@@ -1091,7 +1091,35 @@ TopRoof-Solutions/
 
 ## 🚢 Deployment
 
-### Deploying Backend
+### 🆓 Free Hosting Guide (Recommended for Beginners)
+
+Host your complete project **100% FREE** on Railway and Vercel! Perfect for students and portfolios.
+
+**📚 Complete Deployment Guides:**
+
+| Guide | Description | Time |
+|-------|-------------|------|
+| **[🚀 QUICK_START.md](./QUICK_START.md)** | Simple 3-step guide - Start here! | 45 min |
+| **[📋 DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)** | Step-by-step checklist format | 60 min |
+| **[📖 DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** | Detailed beginner-friendly guide | Full guide |
+| **[🚂 backend/RAILWAY_SETUP.md](./backend/RAILWAY_SETUP.md)** | Backend deployment on Railway | Reference |
+| **[▲ frontend/VERCEL_SETUP.md](./frontend/VERCEL_SETUP.md)** | Frontend deployment on Vercel | Reference |
+
+**What's Included:**
+- ✅ MySQL Database (Railway)
+- ✅ Spring Boot Backend (Railway)
+- ✅ React Frontend (Vercel)
+- ✅ Automatic HTTPS/SSL
+- ✅ CI/CD auto-deployment
+- ✅ **Total Cost: $0/month**
+
+**Quick Setup:**
+1. Push code to GitHub
+2. Deploy database + backend on Railway
+3. Deploy frontend on Vercel
+4. Connect everything - Done! 🎉
+
+### 🛠️ Manual Deployment Options
 
 **Option 1: JAR File Deployment**
 
